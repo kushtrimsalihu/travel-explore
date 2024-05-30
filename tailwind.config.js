@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./*.{php,html,js}", "./*/*.{php,html,js}"],
+  content: [
+    './src/**/*.{html,js,jsx,ts,tsx,php}',
+    './*.{html,js,jsx,ts,tsx,php}',
+    './**/*.{html,js,jsx,ts,tsx,php}',
+    './wp-content/themes/travel-explore/**/*.php'
+  ],
   theme: {
     extend: {},
   },
