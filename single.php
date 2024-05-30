@@ -10,7 +10,7 @@ get_header();
 <section class="page">
     <div class="container">
 
-        <h2><?php the_title(); ?></h2>
+    <h1 class="text-3xl font-bold text-blue-500 underline"><?php the_title(); ?></h1>
           
             <?php foreach ($location as $post): ?>
 
