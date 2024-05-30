@@ -7,7 +7,7 @@
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
-<h1 class="text-3xl font-bold text-blue-500">Rinesaa</h1>
+<h1 class="text-3xl font-bold text-green-500">Rinesaa</h1>
 <h1 class="text-4xl font-bold text-blue-500">Welcome to Vite with Tailwind CSS</h1>
 
 <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
