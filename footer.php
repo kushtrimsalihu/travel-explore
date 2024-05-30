@@ -1,6 +1,6 @@
 <footer class="bg-gray-800 text-white py-6">
     <div class="container mx-auto text-center">
-        <p class="text-sm text-red-500">&copy; <?php echo date('Y'); ?> Your Site Name. All rights reserved.</p>
+        <p class="text-sm text-green-500">&copy; <?php echo date('Y'); ?> Your Site Name. All rights reserved.</p>
         <nav class="mt-4">
             <?php
             wp_nav_menu(array(

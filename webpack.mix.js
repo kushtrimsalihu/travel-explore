@@ -1,15 +1,19 @@
-let mix = require('laravel-mix');
+const mix = require('laravel-mix');
 
-var themename = "travel-explore";
-
-mix.setPublicPath(`assets`);
-
-mix.sass(`src/scss/app.scss`, `assets/css`).sourceMaps();
-mix.js(`src/js/app.js`, `assets/js`);
-
-mix.options({
-  processCssUrls: false,
-  postCss: [require('tailwindcss'), require('autoprefixer')],
+mix.setPublicPath('dist')
+   .js('src/js/app.js', 'dist/js')
+   .sass('src/sass/app.scss', 'dist/css', {
+       implementation: require('sass')
+   })
+   .options({
+       postCss: [require('tailwindcss'), require('autoprefixer')],
+       processCssUrls: false
+   })
+   .version()
+   mix.webpackConfig({
+    watchOptions: {
+        ignored: /dist/,
+        aggregateTimeout: 300,
+        poll: 5000,
+    }
 });
-
-
