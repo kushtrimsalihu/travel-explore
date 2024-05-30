@@ -41,7 +41,25 @@
             echo nl2br($other_description);
         endif; ?>
 
-       
+        <!-- php
+            if (have_rows('flexible_content')):
+                while (have_rows('flexible_content')): the_row();
+                    
+                    if (get_row_layout() == 'header'):
+                        get_template_part('template-parts/flexible-content', 'header');
+                    
+                    elseif (get_row_layout() == 'footer'):
+                        get_template_part('template-parts/flexible-content', 'footer');
+                    
+                    
+                    endif;
+                
+                endwhile;
+            else:
+                
+                the_content();
+            endif;
+        ?> -->
     
     </div>
 </section>
