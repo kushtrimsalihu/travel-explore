@@ -6,6 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      maxWidth: {
+        '1440': '90rem',
+      },
       colors: {
         black: "#000000",
         white: {
@@ -126,14 +129,11 @@ module.exports = {
         }
       },
       fontFamily: {
-        sans: ['Roboto', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
       },
       
-      fontWeight: {
-        medium: 500,
-        regular: 400,
-        bold: 700,
-      },
+      
+   
       lineHeight: {
         none: 1,
         tight: 1.25,
@@ -150,6 +150,9 @@ module.exports = {
         wider: '0.05em',
         widest: '0.1em',
       },
+
+     
+    
     },
   },
   plugins: [
