@@ -4,7 +4,7 @@
 <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php bloginfo('name'); ?></title>
-    <link rel="preload" href="<?php echo get_template_directory_uri(); ?>/src/sass/assets/fonts/front.scss" as="font" type="font" crossorigin="anonymous"> 
+    <link rel="preload" href="<?php echo get_template_directory_uri(); ?>/src/sass/assets/fonts/front.scss" as="font" crossorigin="anonymous"> 
      <?php wp_head();?>
 </head>
 
