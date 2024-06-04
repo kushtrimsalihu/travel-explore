@@ -33,7 +33,7 @@ add_theme_support('post-thumbnails');
 add_image_size('small', 600, 600, false);
 
 
-add_action('init', 'my_second_post_type');
+
 // Register 'Alternative Torism' post type
 function register_alternative_tourism_cpt() {
     $labels = array(
