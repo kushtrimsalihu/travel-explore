@@ -6,3 +6,11 @@
 body {
     font-family: 'Roboto';
   }
+
+h1 {
+    @apply font-roboto text-2xl;
+    }
+
+h2 {
+      @apply font-roboto;
+      }
