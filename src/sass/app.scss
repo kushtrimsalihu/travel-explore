@@ -3,6 +3,181 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+h1 {
+    @apply font-roboto text-2xl;
+    }
+
+
 body {
     font-family: 'Roboto';
   }
+html {
+    scroll-behavior: smooth;
+}
+
+
+// ===========MAIN MENUS===========
+.menus{
+    ul {
+        display: flex;
+        flex-direction: row;
+        gap: 24px;
+        padding: 0;
+        li{
+            list-style-type: none;
+            border-radius: 4px;
+            padding: 8px 12px 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            a{
+                text-decoration: none;
+                color: #745944;
+                font-family: "Roboto", sans-serif;
+                font-weight: 400;
+                font-size: 14px;      
+            }
+        }
+        li:hover{
+            background-color: #ECEEF3;
+        }
+    }
+}
+
+
+// ===========SUB MENUS===========
+
+.sub-menu {
+    display: none;
+    flex-direction: column !important;
+    position: absolute;
+    margin-top: 70px;
+    top: 0;
+    width: 200px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 8px !important;
+    gap: 4px !important;
+    border: 1px solid #88511D;
+    box-shadow: 0px 1px 4px 0px #88511D;
+    z-index: 999;
+    visibility: hidden;
+
+    li{
+        padding: 8px 12px 8px 12px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        a{
+            font-size: 14px;
+            color: #88511D;
+        }
+    }
+    li:hover{
+        background-color: #ECEEF3;
+    }
+}
+
+
+
+
+// ===========MOBILE===========
+
+@media only screen and (max-width: 768px) {
+
+    // ===========MAIN MENUS===========
+
+    .menus{
+        width: 100% !important;
+        .menu-main-navigation-container{
+            width: 100%;
+            ul {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 0 !important;
+                li{
+                    position: relative !important;
+                    padding: 20px 0;
+                    text-align: center;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    border-bottom: 1px solid #745944;
+                    a{
+                        font-size: 16px;
+                    }
+                }
+                li:hover{
+                    background-color: white !important;
+                }
+
+            }
+        }
+    }
+
+
+    // =========== RIGHT SIDE OF MAIN MENU===========
+
+    .main{
+        .navbar{
+            .right{
+                z-index: 40;
+                flex-direction: column !important;
+                .right-side{
+                    flex-direction: column !important;
+                }
+            }
+        }
+    }
+
+
+
+    // =========== SUB MENUS===========
+
+    .sub-menu {
+        display: none;
+        flex-direction: column !important;
+        position: relative;
+        width: 100%;
+        margin: 0px !important;
+        background-color: white;
+        padding: 8px !important;
+        gap: 4px !important;
+        border: 0px solid #88511D;
+        box-shadow: none;
+        visibility: visible;
+    
+        li{
+            padding: 8px 12px 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            border: 0px !important;
+            a{
+                font-size: 14px;
+                color: #88511D;
+            }
+        }
+        li:hover{
+            background-color: white !important;
+        }
+    }
+
+}
+
+
+
+
+.menu-parent-item::after {
+    content: url('../../assets/images/down-arrow.png');
+    padding: 9px 6.5px 9px 6.5px;
+}
+
+
+.active{
+    background-color: #ECEEF3;
+}
