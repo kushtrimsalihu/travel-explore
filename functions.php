@@ -17,8 +17,6 @@ function travel_enqueue_scripts() {
     wp_enqueue_script('theme-script', get_template_directory_uri() . '/dist/js/app.js', array(), filemtime(get_template_directory() . '/dist/js/app.js'), true);
 }
 add_action('wp_enqueue_scripts', 'travel_enqueue_scripts');
-
-
 // Register navigation menus
 register_nav_menus(array(
     'top-menu' => __('Top Menu', 'theme'),
@@ -32,51 +30,48 @@ add_theme_support('post-thumbnails');
 // Add custom image size
 add_image_size('small', 600, 600, false);
 
-// Register 'Team Members' post type
-function my_first_post_type() {
-    $args = array(
-        'labels' => array(
-            'name' => 'Team Members',
-            'singular_name' => 'Team Member',
-        ),
-        'supports' => array(
-            'title',
-            'editor',
-            'excerpt',
-            'thumbnail',
-            'revisions',
-        ),
-        'hierarchical' => false,
-        'public' => true,
-        'menu_icon' => 'dashicons-businessperson',
-        'has_archive' => true,
-    );
-    register_post_type('team_member', $args);
-}
-add_action('init', 'my_first_post_type');
 
-// Register 'Locations' post type
-function my_second_post_type() {
-    $args = array(
-        'labels' => array(
-            'name' => 'Locations',
-            'singular_name' => 'Location',
-        ),
-        'supports' => array(
-            'title',
-            'editor',
-            'excerpt',
-            'thumbnail',
-            'revisions',
-        ),
-        'hierarchical' => false,
-        'public' => true,
-        'menu_icon' => 'dashicons-location',
-        'has_archive' => true,
+
+// Register 'Alternative Torism' post type
+function register_alternative_tourism_cpt() {
+    $labels = array(
+        'name' => 'Alternative Tourisms',
+        'singular_name' => 'Alternative Tourism',
+        'menu_name' => 'Alternative Tourisms',
+        'name_admin_bar' => 'Alternative Tourism',
+        'add_new' => 'Add New',
+        'add_new_item' => 'Add New Alternative Tourism',
+        'new_item' => 'New Alternative Tourism',
+        'edit_item' => 'Edit Alternative Tourism',
+        'view_item' => 'View Alternative Tourism',
+        'all_items' => 'All Alternative Tourisms',
+        'search_items' => 'Search Alternative Tourisms',
+        'parent_item_colon' => 'Parent Alternative Tourisms:',
+        'not_found' => 'No alternative tourisms found.',
+        'not_found_in_trash' => 'No alternative tourisms found in Trash.',
     );
-    register_post_type('location', $args);
+
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'publicly_queryable' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'query_var' => true,
+        'rewrite' => array('slug' => 'alternative-tourism'),
+        'capability_type' => 'post',
+        'has_archive' => true,
+        'hierarchical' => false,
+        'menu_position' => null,
+        'supports' => array('title', 'editor', 'custom-fields', 'thumbnail'),
+        'menu_icon' => 'dashicons-palmtree',
+        'show_in_rest' => true,
+    );
+
+    register_post_type('alternative_tourism', $args);
 }
-add_action('init', 'my_second_post_type');
+
+add_action('init', 'register_alternative_tourism_cpt');
 
 ?>
 
