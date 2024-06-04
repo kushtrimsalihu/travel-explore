@@ -2,12 +2,12 @@
 $title = get_sub_field('title');
 $description = get_sub_field('description');
 $button = get_sub_field('button');
-$img = get_sub_field('banner-image');
+$img = get_sub_field('image');
 ?>
 
 <div class="banner bg-[#FFF8F5] flex flex-col items-center py-12 relative top-[88px] gap-[40px]">
     <div class="text-center w-[614px] h-[245px] max-w-[800px] l-[] z-10">
-        <h1 class="font-roboto text-[45px] font-normal leading-[52px] text-gray-800">
+        <h1 class="font-roboto text-[45px] font-normal leading-[52px] text-red-400">
             <?php echo $title; ?>
         </h1>
         <p class="mt-6 text-lg text-gray-600 font-roboto text-[16px] leading-[24px] tracking-[0.5px]">

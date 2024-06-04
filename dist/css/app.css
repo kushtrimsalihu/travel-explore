@@ -738,6 +738,14 @@ video {
   --tw-text-opacity: 1;
   color: rgb(255 137 125 / var(--tw-text-opacity));
 }
+.text-red-800 {
+  --tw-text-opacity: 1;
+  color: rgb(65 0 2 / var(--tw-text-opacity));
+}
+.text-red-400 {
+  --tw-text-opacity: 1;
+  color: rgb(255 218 214 / var(--tw-text-opacity));
+}
 .underline {
   text-decoration-line: underline;
 }
