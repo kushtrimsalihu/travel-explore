@@ -4,19 +4,15 @@
 @tailwind utilities;
 
 
-
-h1 {
-    @apply font-roboto text-2xl;
-    }
-
-
-body {
-    font-family: 'Roboto';
-  }
 html {
     scroll-behavior: smooth;
 }
-
+body {
+    font-family: 'Roboto';
+  }
+h1 {
+    @apply font-roboto text-2xl;
+    }
 
 // ===========MAIN MENUS===========
 .menus{
@@ -81,9 +77,6 @@ html {
     }
 }
 
-
-
-
 // ===========MOBILE===========
 
 @media only screen and (max-width: 768px) {
@@ -134,9 +127,7 @@ html {
         }
     }
 
-
-
-    // =========== SUB MENUS===========
+// =========== SUB MENUS===========
 
     .sub-menu {
         display: none;
@@ -168,10 +159,6 @@ html {
     }
 
 }
-
-
-
-
 .menu-parent-item::after {
     content: url('../../assets/images/down-arrow.png');
     padding: 9px 6.5px 9px 6.5px;

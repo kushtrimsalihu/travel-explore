@@ -73,16 +73,6 @@ function register_alternative_tourism_cpt() {
 
 add_action('init', 'register_alternative_tourism_cpt');
 
-?>
-
-
-
-
-
-
-
-
-<?php
 
 function list_searcheable_acf(){
   $list_searcheable_acf = array("title", "sub_title", "excerpt_short", "excerpt_long", "xyz", "myACF");
@@ -147,3 +137,5 @@ function advanced_custom_search( $where, &$wp_query ) {
 }
  
 add_filter( 'posts_search', 'advanced_custom_search', 500, 2 );
+
+?>
