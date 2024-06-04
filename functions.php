@@ -17,8 +17,6 @@ function travel_enqueue_scripts() {
     wp_enqueue_script('theme-script', get_template_directory_uri() . '/dist/js/app.js', array(), filemtime(get_template_directory() . '/dist/js/app.js'), true);
 }
 add_action('wp_enqueue_scripts', 'travel_enqueue_scripts');
-
-
 // Register navigation menus
 register_nav_menus(array(
     'top-menu' => __('Top Menu', 'theme'),
