@@ -5,7 +5,12 @@ $button = get_sub_field('button');
 $img = get_sub_field('image');
 ?>
 
-<div class="banner bg-light-p90 flex flex-col items-center py-12 relative top-[88px] gap-[40px]">
+<div class="banner bg-light-p80 flex flex-col items-center py-12 relative lg:mt-22 mt-18 gap-10 rounded-b-2xl">
+
+
+
+
+
     <div class="text-center w-full max-w-[614px] px-4 z-10">
         <h1 class="font-roboto text-[45px] font-normal leading-[52px] text-red-400">
             <?php echo $title; ?>
@@ -27,7 +32,7 @@ $img = get_sub_field('image');
         <?php if ($img): ?>
             <div class="mt-20 w-full px-4 lg:px-0 relative"> 
                 <div class="relative flex justify-center items-center">
-                    <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['alt']; ?>" class="w-full max-w-[1328px] h-auto rounded-tl-[32px] rounded-tr-[32px] z-10" />
+                    <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['alt']; ?>" class="w-full max-w-[1328px] h-auto rounded-2xl z-10" />
                     <div class="absolute top-0 left-0 h-1/2 w-full bg-[#FFF8F5] "></div>
                 </div>
             </div>
