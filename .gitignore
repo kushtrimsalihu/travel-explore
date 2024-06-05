@@ -1,3 +1,6 @@
 node_modules
 /dist/*
 mix-manifest.json
+/dist/css/*
+/dist/js/*
+/dist/mix-manifest.json
