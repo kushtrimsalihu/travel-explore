@@ -8,7 +8,7 @@
 
             <?php while (have_rows('flexible_content')): the_row(); ?>
                 <?php if (get_row_layout() == 'banner'): ?>
-                 
+
 
                     <?php get_template_part('template-parts/content','banner'); ?>
                 <?php else: ?>
