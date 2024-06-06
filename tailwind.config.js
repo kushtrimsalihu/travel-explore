@@ -132,11 +132,9 @@ module.exports = {
         roboto: ['Roboto', 'sans-serif'],
       },
       spacing: {
-        '47.5625': '47.5625rem',  // Shtoni këtë vlerë për paddingun e majtë
-        '166': '10.375rem',  // custom class for padding top and bottom
-        '47.5625': '47.5625rem',  // Custom value for padding-left (or any other spacing)
-        '666': '41.625rem',      // Custom value for padding-right
-        '215': '13.4375rem', //215px
+        '166': '10.375rem',  
+        '666': '41.625rem',      
+        '215': '13.4375rem', 
         '67' : '4.1875rem',
         '681': '42.5625rem'
       },
@@ -149,8 +147,8 @@ module.exports = {
         normal: 1.5,
         relaxed: 1.625,
         loose: 2,
-        3.25: 3.25, //52px 
-        10: 2.5,  // equivalent to 40px
+        3.25: 3.25, 
+        10: 2.5,  
          
         
         
