@@ -131,7 +131,13 @@ module.exports = {
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
       },
-      
+      spacing: {
+        '166': '10.375rem',  
+        '666': '41.625rem',      
+        '215': '13.4375rem', 
+        '67' : '4.1875rem',
+        '681': '42.5625rem'
+      },
       
    
       lineHeight: {
@@ -141,6 +147,11 @@ module.exports = {
         normal: 1.5,
         relaxed: 1.625,
         loose: 2,
+        3.25: 3.25, 
+        10: 2.5,  
+         
+        
+        
       },
       letterSpacing: {
         tighter: '-0.05em',
