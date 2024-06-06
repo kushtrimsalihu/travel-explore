@@ -10,7 +10,7 @@
                 <?php if (get_row_layout() == 'banner'): ?>
 
 
-                    <?php get_template_part('template-parts/content','banner'); ?>
+                    <?php get_template_part('template-parts/banner'); ?>
                 <?php else: ?>
                     <p>Other layout: <?php the_row_layout(); ?></p>
                 <?php endif; ?>
