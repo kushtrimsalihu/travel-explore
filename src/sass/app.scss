@@ -142,29 +142,29 @@ h1 {
         box-shadow: none;
         visibility: visible;
     
-        li{
-            padding: 8px 12px 8px 12px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            border: 0px !important;
-            a{
-                font-size: 14px;
-                color: #88511D;
-            }
-        }
-        li:hover{
-            background-color: white !important;
-        }
-    }
-
-}
-.menu-parent-item::after {
-    content: url('../../assets/images/down-arrow.png');
-    padding: 9px 6.5px 9px 6.5px;
-}
-
-
-.active{
-    background-color: #ECEEF3;
-}
+     li{
+         padding: 8px 12px 8px 12px;
+         border-radius: 4px;
+         display: flex;
+         align-items: center;
+         border: 0px !important;
+     a{
+         font-size: 14px;
+         color: #88511D;
+                         }
+                    }
+                     li:hover{
+                         background-color: white !important;
+                     }
+                 }
+            
+             }
+             .menu-parent-item::after {
+                 content: url('../../assets/images/down-arrow.png');
+                 padding: 9px 6.5px 9px 6.5px;
+             }
+            
+            
+             .active{
+                 background-color: #ECEEF3;
+             }
