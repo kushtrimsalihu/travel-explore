@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       maxWidth: {
         '1440': '90rem',
+        '1384':'86.5rem',
       },
       colors: {
         black: "#000000",
@@ -15,6 +16,7 @@ module.exports = {
           100: "#FFFFFF",
           99: "#FFFBFF"
         },
+        
         brown: {
           800: "#291808",
           750: "#412C1B",
