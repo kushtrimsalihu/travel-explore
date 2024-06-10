@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (submenu.style.display === 'none' || submenu.style.visibility === 'hidden') {
                     submenu.style.display = 'flex';
                     submenu.style.visibility = 'visible';
+                    item.querySelector('a').classList.add('toggled');
 
                     const links = submenu.querySelectorAll('.sub-menu li a');
                         links.forEach(link => {
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 } else {
                     submenu.style.display = 'none';
+                    item.querySelector('a').classList.remove('toggled');
                 }
 
                 event.preventDefault();
@@ -79,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (menuList.style.display === 'none' || menuList.style.display === '') {
             menuList.style.display = 'flex';
             closeIcon.style.display = 'block';
+            burgerButton.style.display = 'none';
         } else {
             menuList.style.display = 'none';
         }
@@ -86,7 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeIcon.addEventListener('click', () => {
         menuList.style.display = 'none';
-        closeIcon.style.display = 'none'
+        burgerButton.style.display = 'flex';
+        closeIcon.style.display = 'none';
     });
 
 });
@@ -96,22 +100,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById('closeIcon').addEventListener('click', function() {
     document.getElementById('searchModal').style.visibility = 'hidden';
-    const closeIcon = document.getElementById('close_Icon');
-    closeIcon.style.display = "block";
 });
 document.getElementById('search-Icon').addEventListener('click', function() {
     document.getElementById('searchModal').style.visibility = 'visible';
-    const closeIcon = document.getElementById('close_Icon');
-    closeIcon.style.display = "none";
+});
+document.getElementById('search-Icon-mobile').addEventListener('click', function() {
+    document.getElementById('searchModal').style.visibility = 'visible';
 });
 
     // ======= SEARCH MODULE RESULTS =======
 
-    document.getElementById('searchInput').addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            document.getElementById('search-form').submit(); // Submit the form programmatically
-        }
-    });
+    // document.getElementById('searchInput').addEventListener('keydown', (event) => {
+    //     if (event.key === 'Enter') {
+    //         document.getElementById('search-form').submit(); // Submit the form programmatically
+    //     }
+    // });
     
 
 
