@@ -12,12 +12,14 @@ $img = get_sub_field('image');
         <h1 class="text-light-p10 font-roboto text-4xl lg:text-45 leading-40 lg:leading-52 font-normal text-left "><?php echo $title; ?></h1>
         <p class="text-light-p10 lg:pb-6 pb-4 font-roboto text-sm lg:text-base lg:tracking-0.5 text-left lg:mx-auto"><?php echo $description; ?></p>
         <div class="flex justify-start lg:mt-10 mt-8">
+            <?php if ($button): ?> 
                 <a href="<?php echo $button['url']; ?>" class="inline-block bg-transparent text-light-p40 py-2.5 px-6 rounded-full border border-light-p40 text-center hover:bg-light-p40 hover:text-white-100">
                             Learn More
                 <svg class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
                 </a>
+            <?php endif; ?>
         </div>
 
         </div>
