@@ -541,17 +541,11 @@ video {
 .mb-2 {
   margin-bottom: 0.5rem;
 }
-.mb-24 {
-  margin-bottom: 6rem;
-}
 .mb-4 {
   margin-bottom: 1rem;
 }
 .mb-6 {
   margin-bottom: 1.5rem;
-}
-.mb-7 {
-  margin-bottom: 1.75rem;
 }
 .mb-8 {
   margin-bottom: 2rem;
@@ -573,9 +567,6 @@ video {
 }
 .mt-6 {
   margin-top: 1.5rem;
-}
-.mt-7 {
-  margin-top: 1.75rem;
 }
 .mt-8 {
   margin-top: 2rem;
@@ -640,17 +631,17 @@ video {
 .w-8\/12 {
   width: 66.666667%;
 }
-.w-\[920px\] {
-  width: 920px;
+.w-96 {
+  width: 24rem;
 }
 .w-full {
   width: 100%;
 }
+.max-w-1384 {
+  max-width: 86.5rem;
+}
 .max-w-7xl {
   max-width: 80rem;
-}
-.flex-1 {
-  flex: 1 1 0%;
 }
 .cursor-pointer {
   cursor: pointer;
@@ -669,6 +660,9 @@ video {
 }
 .flex-col {
   flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
 }
 .items-start {
   align-items: flex-start;
@@ -700,11 +694,11 @@ video {
 .gap-6 {
   gap: 1.5rem;
 }
+.gap-64 {
+  gap: 16rem;
+}
 .gap-7 {
   gap: 1.75rem;
-}
-.gap-72 {
-  gap: 18rem;
 }
 .space-y-3 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
@@ -744,21 +738,17 @@ video {
   --tw-border-opacity: 1;
   border-color: rgb(136 81 29 / var(--tw-border-opacity));
 }
-.border-\[\#FFEBCD\] {
+.border-brown-400 {
   --tw-border-opacity: 1;
-  border-color: rgb(255 235 205 / var(--tw-border-opacity));
+  border-color: rgb(255 220 194 / var(--tw-border-opacity));
 }
 .border-light-p40 {
   --tw-border-opacity: 1;
   border-color: rgb(136 81 29 / var(--tw-border-opacity));
 }
-.bg-\[\#2C1608\] {
+.bg-brown-800 {
   --tw-bg-opacity: 1;
-  background-color: rgb(44 22 8 / var(--tw-bg-opacity));
-}
-.bg-\[\#88511D\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(136 81 29 / var(--tw-bg-opacity));
+  background-color: rgb(41 24 8 / var(--tw-bg-opacity));
 }
 .bg-light-n98 {
   --tw-bg-opacity: 1;
@@ -843,20 +833,8 @@ video {
 .pb-4 {
   padding-bottom: 1rem;
 }
-.pb-6 {
-  padding-bottom: 1.5rem;
-}
-.pl-6 {
-  padding-left: 1.5rem;
-}
 .pl-7 {
   padding-left: 1.75rem;
-}
-.pr-6 {
-  padding-right: 1.5rem;
-}
-.pt-24 {
-  padding-top: 6rem;
 }
 .text-left {
   text-align: left;
@@ -925,25 +903,17 @@ video {
 .leading-relaxed {
   line-height: 1.625;
 }
-.text-\[\#2C1608\] {
-  --tw-text-opacity: 1;
-  color: rgb(44 22 8 / var(--tw-text-opacity));
-}
-.text-\[\#FFDCC2\] {
-  --tw-text-opacity: 1;
-  color: rgb(255 220 194 / var(--tw-text-opacity));
-}
-.text-\[\#FFEBCD\] {
-  --tw-text-opacity: 1;
-  color: rgb(255 235 205 / var(--tw-text-opacity));
-}
-.text-\[\#FFEFFF\] {
-  --tw-text-opacity: 1;
-  color: rgb(255 239 255 / var(--tw-text-opacity));
-}
 .text-blue-500 {
   --tw-text-opacity: 1;
   color: rgb(128 176 222 / var(--tw-text-opacity));
+}
+.text-brown-400 {
+  --tw-text-opacity: 1;
+  color: rgb(255 220 194 / var(--tw-text-opacity));
+}
+.text-grey-400 {
+  --tw-text-opacity: 1;
+  color: rgb(231 225 223 / var(--tw-text-opacity));
 }
 .text-light-p10 {
   --tw-text-opacity: 1;
@@ -1145,6 +1115,12 @@ h1 {
   .md\:mb-0 {
     margin-bottom: 0px;
   }
+  .md\:mb-24 {
+    margin-bottom: 6rem;
+  }
+  .md\:mb-4 {
+    margin-bottom: 1rem;
+  }
   .md\:ml-4 {
     margin-left: 1rem;
   }
@@ -1153,6 +1129,9 @@ h1 {
   }
   .md\:mt-10 {
     margin-top: 2.5rem;
+  }
+  .md\:mt-2 {
+    margin-top: 0.5rem;
   }
   .md\:block {
     display: block;
@@ -1177,9 +1156,6 @@ h1 {
   }
   .md\:w-auto {
     width: auto;
-  }
-  .md\:flex-1 {
-    flex: 1 1 0%;
   }
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1210,6 +1186,9 @@ h1 {
   }
   .md\:gap-6 {
     gap: 1.5rem;
+  }
+  .md\:gap-72 {
+    gap: 18rem;
   }
   .md\:rounded-\[32px\] {
     border-radius: 32px;
@@ -1257,10 +1236,28 @@ h1 {
 }
 
 @media (min-width: 1024px) {
+  .lg\:m-0 {
+    margin: 0px;
+  }
+  .lg\:mb-8 {
+    margin-bottom: 2rem;
+  }
+  .lg\:min-w-52 {
+    min-width: 13rem;
+  }
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .lg\:justify-start {
     justify-content: flex-start;
+  }
+  .lg\:pt-24 {
+    padding-top: 6rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:flex-nowrap {
+    flex-wrap: nowrap;
   }
 }
