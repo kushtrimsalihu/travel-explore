@@ -81,7 +81,8 @@ module.exports = {
           nv50: "#847469",
           nv80: "#D6C3B6",
           n20: "#382F28",
-          n95: "#FEEEE4"
+          n95: "#FEEEE4",
+          hover: "#ECEEF3"
         },
         dark: {
           p80: "#FFBD86",

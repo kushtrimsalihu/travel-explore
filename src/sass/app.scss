@@ -176,3 +176,20 @@ h1 {
     box-shadow: none;
     border: none !important;
 }
+
+
+#search-results::-webkit-scrollbar {
+    border-radius: 8px;
+    height: 6px;
+    width: 6px;
+}
+
+#search-results::-webkit-scrollbar-track {
+    background-color: #E9E1DD;
+    border-radius: 8px;
+}
+
+#search-results::-webkit-scrollbar-thumb {
+    background-color: #968F8C;
+    border-radius: 8px;
+}

@@ -25,7 +25,7 @@
       </svg>
     </form>
 
-    <div id="search-results" class="overflow-y-scroll lg:w-520 w-343 h-auto bg-white-100 border-t rounded-b-lg p-3 gap-2 shadow-md hidden"></div>
+    <div id="search-results" class="overflow-auto lg:w-520 w-343 max-h-72 bg-white-100 border-t rounded-b-lg gap-2 py-3.5 px-3 shadow-md hidden"></div>
 
 </div>
 
