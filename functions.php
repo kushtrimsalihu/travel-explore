@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+
 add_filter('acf/settings/save_json', 'my_acf_json_save_point');
 function my_acf_json_save_point($path) {
     $path = get_stylesheet_directory() . '/acf-json';
@@ -132,68 +134,117 @@ function register_alternative_tourism_taxonomies() {
 add_action('init', 'register_alternative_tourism_taxonomies');
 
 
-function list_searcheable_acf(){
-  $list_searcheable_acf = array("title", "sub_title", "excerpt_short", "excerpt_long", "xyz", "myACF");
-  return $list_searcheable_acf;
+function enqueue_live_search_script() {
+    wp_enqueue_script('live-search', get_template_directory_uri() . '/src/js/live-search.js', array(), '1.0', true);
+    wp_localize_script('live-search', 'live_search_params', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+    ));
 }
+add_action('wp_enqueue_scripts', 'enqueue_live_search_script');
 
-function advanced_custom_search( $where, &$wp_query ) {
+function live_search_handler() {
+    if (!isset($_GET['query'])) {
+        wp_die('No query parameter');
+    }
+
+    $query = sanitize_text_field($_GET['query']);
+    $args = array(
+        's' => $query,
+        'posts_per_page' => 10,
+    );
+
+    $search_query = new WP_Query($args);
+
+    if ($search_query->have_posts()) {
+        echo '<ul>';
+        while ($search_query->have_posts()) {
+            $search_query->the_post();
+            $has_banner = false;
+            $banner_content = '';
+            if ($has_banner) {
+                echo $banner_content;
+            } else {
+                echo '<li class="search-result-item m-2 flex item-center gap-5 hover:bg-light-hover">';
+                echo '<div class="search-result-thumbnail w-1/12">' . get_the_post_thumbnail(null, 'full', array('class' => 'w-full')) . '</div>';
+                echo '<div class="search-result-content flex items-center">';
+                echo '<a href="' . get_permalink() . '" class="font-roboto font-medium">' . get_the_title() . '</a>';
+                echo '</div>';
+                echo '</li>';
+            }
+        }
+        echo '</ul>';
+    } else {
+        echo 'No results found';
+    }
+
+    wp_reset_postdata();
+    wp_die();
+}
+add_action('wp_ajax_live_search', 'live_search_handler');
+add_action('wp_ajax_nopriv_live_search', 'live_search_handler');
+
+function list_searcheable_acf() {
+    return array('flexible_content');
+} 
+
+function advanced_custom_search($where, &$wp_query) {
     global $wpdb;
- 
-    if ( empty( $where ))
+
+    if (empty($where)) {
         return $where;
- 
-    $terms = $wp_query->query_vars[ 's' ];
-    
-    $exploded = explode( ' ', $terms );
-    if( $exploded === FALSE || count( $exploded ) == 0 )
-        $exploded = array( 0 => $terms );
-         
+    }
+
+    $terms = $wp_query->query_vars['s'];
+    $exploded = explode(' ', $terms);
+
+    if ($exploded === FALSE || count($exploded) == 0) {
+        $exploded = array(0 => $terms);
+    }
+
     $where = '';
-    
     $list_searcheable_acf = list_searcheable_acf();
-    foreach( $exploded as $tag ) :
-        $where .= " 
-          AND (
-            (wp_posts.post_title LIKE '%$tag%')
-            OR (wp_posts.post_content LIKE '%$tag%')
-            OR EXISTS (
-              SELECT * FROM wp_postmeta
-                WHERE post_id = wp_posts.ID
-                  AND (";
-        foreach ($list_searcheable_acf as $searcheable_acf) :
-          if ($searcheable_acf == $list_searcheable_acf[0]):
-            $where .= " (meta_key LIKE '%" . $searcheable_acf . "%' AND meta_value LIKE '%$tag%') ";
-          else :
-            $where .= " OR (meta_key LIKE '%" . $searcheable_acf . "%' AND meta_value LIKE '%$tag%') ";
-          endif;
-        endforeach;
-          $where .= ")
-            )
-            OR EXISTS (
-              SELECT * FROM wp_comments
-              WHERE comment_post_ID = wp_posts.ID
-                AND comment_content LIKE '%$tag%'
-            )
-            OR EXISTS (
-              SELECT * FROM wp_terms
-              INNER JOIN wp_term_taxonomy
-                ON wp_term_taxonomy.term_id = wp_terms.term_id
-              INNER JOIN wp_term_relationships
-                ON wp_term_relationships.term_taxonomy_id = wp_term_taxonomy.term_taxonomy_id
-              WHERE (
-                  taxonomy = 'post_tag'
-                    OR taxonomy = 'category'                  
-                    OR taxonomy = 'myCustomTax'
-                  )
-                  AND object_id = wp_posts.ID
-                  AND wp_terms.name LIKE '%$tag%'
-            )
-        )";
-    endforeach;
+
+    foreach ($exploded as $tag) {
+        $where .= "
+            AND (
+                (wp_posts.post_title LIKE '%$tag%')
+                OR (wp_posts.post_content LIKE '%$tag%')
+                OR EXISTS (
+                    SELECT * FROM wp_postmeta
+                    WHERE post_id = wp_posts.ID
+                    AND (";
+        foreach ($list_searcheable_acf as $searcheable_acf) {
+            if ($searcheable_acf == $list_searcheable_acf[0]) {
+                $where .= " (meta_key LIKE '%" . $searcheable_acf . "%' AND meta_value LIKE '%$tag%') ";
+            } else {
+                $where .= " OR (meta_key LIKE '%" . $searcheable_acf . "%' AND meta_value LIKE '%$tag%') ";
+            }
+        }
+        $where .= ")
+                )
+                OR EXISTS (
+                    SELECT * FROM wp_comments
+                    WHERE comment_post_ID = wp_posts.ID
+                    AND comment_content LIKE '%$tag%'
+                )
+                OR EXISTS (
+                    SELECT * FROM wp_terms
+                    INNER JOIN wp_term_taxonomy
+                    ON wp_term_taxonomy.term_id = wp_terms.term_id
+                    INNER JOIN wp_term_relationships
+                    ON wp_term_relationships.term_taxonomy_id = wp_term_taxonomy.term_taxonomy_id
+                    WHERE (
+                        taxonomy = 'post_tag'
+                        OR taxonomy = 'category'
+                        OR taxonomy = 'myCustomTax'
+                    )
+                    AND object_id = wp_posts.ID
+                    AND wp_terms.name LIKE '%$tag%'
+                )
+            )";
+    }
+
     return $where;
 }
- 
-add_filter( 'posts_search', 'advanced_custom_search', 500, 2 );
 
-?>
+add_filter('posts_search', 'advanced_custom_search', 500, 2);
