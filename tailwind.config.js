@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       maxWidth: {
         '1440': '90rem',
+        '1384':'86.5rem',
       },
       colors: {
         black: "#000000",
@@ -15,6 +16,7 @@ module.exports = {
           100: "#FFFFFF",
           99: "#FFFBFF"
         },
+        
         brown: {
           800: "#291808",
           750: "#412C1B",
@@ -131,27 +133,29 @@ module.exports = {
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
       },
+      fontSize: {
+        '45': '2.8125rem',
+        '32': '2rem'
+      },
       spacing: {
         '166': '10.375rem',  
         '666': '41.625rem',      
         '215': '13.4375rem', 
         '67' : '4.1875rem',
-        '681': '42.5625rem'
+        '681': '42.5625rem',
+        '40': '2.5rem', 
+        '67': '4.1875rem'
       },
-      
-   
-      lineHeight: {
+        lineHeight: {
         none: 1,
         tight: 1.25,
         snug: 1.375,
         normal: 1.5,
         relaxed: 1.625,
-        loose: 2,
-        3.25: 3.25, 
-        10: 2.5,  
-         
-        
-        
+        loose: 2, 
+        '40': '2.5rem',
+        '52': '3.25rem'
+       
       },
       letterSpacing: {
         tighter: '-0.05em',
@@ -160,10 +164,25 @@ module.exports = {
         wide: '0.025em',
         wider: '0.05em',
         widest: '0.1em',
+        0.5: '0.03125 rem'
       },
-
-     
-    
+      width: {
+        '311': '19.4375rem',  
+        '599': '37.4375rem',
+        '681': '42.5625rem',
+        '614': '38.375rem',
+        '520': '32.5rem',
+        '343': '21.438rem'  
+      },
+      height: {
+        '376': '23.5rem',    
+        '587': '36.6875rem',   
+        '88': '5.5rem'
+      },
+      borderRadius: {
+        '20': '1.25rem',      
+        '32': '2rem'          
+      }
     },
   },
 };

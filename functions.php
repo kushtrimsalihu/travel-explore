@@ -21,6 +21,10 @@ add_action('wp_enqueue_scripts', 'travel_enqueue_scripts');
 register_nav_menus(array(
     'top-menu' => __('Top Menu', 'theme'),
     'footer-menu' => __('Footer Menu', 'theme'),
+    'footer-menu-product' => __('Footer Menu Product', 'theme'),
+    'footer-menu-company' => __('Footer Menu Company', 'theme'),
+    'footer-menu-legals' => __('Footer Menu Legals', 'theme'),
+    'footer-menu-social-media' => __('Footer Menu Social Media', 'theme'),
 ));
 
 // Add theme support
@@ -112,9 +116,7 @@ function live_search_handler() {
                         $banner_image = get_sub_field('image');
                         $banner_description = get_sub_field('description');
     
-                        $banner_description = trim($banner_description);
-                        $banner_description = htmlspecialchars($banner_description, ENT_QUOTES, 'UTF-8');
-                        $banner_description = strip_tags($banner_description);
+                        $banner_description = wp_strip_all_tags($banner_description);
 
     
                         if (stripos($banner_title, $query) !== false || stripos($banner_description, $query) !== false) {
