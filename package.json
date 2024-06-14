@@ -7,7 +7,8 @@
     "dev": "mix",
     "watch": "mix watch",
     "production": "mix --production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:css": "tailwindcss build styles.css -o output.css --watch"
   },
   "keywords": [],
   "author": "",

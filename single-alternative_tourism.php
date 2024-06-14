@@ -1,38 +1,17 @@
-<?php get_header(); ?>
-
 <?php
-while ( have_posts() ) : the_post();
-?>
-    
-    <div class="content">
-        <?php the_content(); ?>
-    </div>
-    
-        <?php if ( have_rows( 'flexible_content' ) ) : ?>
-            <?php while ( have_rows( 'flexible_content' ) ) : the_row(); ?>
-                
-                <?php if (get_row_layout() == 'banner'): ?>
 
-                    <?php get_template_part('template-parts/Banner'); ?>
+use Timber\Timber;
 
-                <?php elseif (get_row_layout()=='cards'): ?>
+$context = Timber::context();
 
-                    <?php get_template_part('template-parts/Cards'); ?>
+$context['flexible_content'] = get_field('flexible_content');
 
-                <?php else: ?>
-                    <p>Other layout: <?php the_row_layout(); ?></p>
-                <?php endif; ?>
+Timber::render('partials/head.twig', $context);
 
-            <?php endwhile; ?>
-        <?php else: ?>
-            <p>No rows found.</p>
-        <?php endif; ?>
+Timber::render('partials/HeaderNavigation.twig', $context);
 
-    <div class="featured-image">
-        <?php if ( has_post_thumbnail() ) {
-            the_post_thumbnail();
-        } ?>
-    </div>
-<?php endwhile; ?>
+Timber::render('templates/page.twig', $context);
 
-<?php get_footer(); ?>
+Timber::render('partials/footer.twig', $context);
+
+wp_footer();

@@ -1,23 +1,18 @@
-<?php get_header();?>
+<?php
 
+use Timber\Timber;
 
-<section class="page">
-    <div class="container">
+$context = Timber::context();
 
+$context['flexible_content'] = get_field('flexible_content');
 
+Timber::render('partials/head.twig', $context);
 
-    <h1 class="text-3xl font-bold text-red-500 underline"><?php the_title(); ?></h1>
+Timber::render('partials/HeaderNavigation.twig', $context);
 
-            
-                <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+Timber::render('templates/page.twig', $context);
 
-                <?php the_content(); ?>
+Timber::render('partials/footer.twig', $context);
 
-                <?php endwhile; else: endif; ?>
-
-
-
-    </div>
-</section>
-
-<?php get_footer();?>
+wp_footer();
+?>
