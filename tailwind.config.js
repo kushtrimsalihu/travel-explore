@@ -3,6 +3,10 @@ module.exports = {
     './*.php',
     './**/*.php',
     './src/js/**/*.js',
+    './**/*.twig',
+    './views/**/*.twig',
+    './views/templates/*.twig',
+    './views/layouts/*.twig'
   ],
   theme: {
     extend: {

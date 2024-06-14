@@ -1,0 +1,64 @@
+<footer class="px-4 pt-16 pb-6 text-white bg-light-p10 md:pt-24 md:px-6">
+	<div class="flex flex-col mb-16 md:hidden">
+		<h3 class="text-3xl text-white-100">Logo here</h3>
+		<p class="mt-2 text-sm text-brown-400">Lorem ipsum dolor sit amet constetur adipicing text</p>
+	</div>
+
+	<div class="grid grid-cols-2 md:mb-24 md:justify-between md:flex md:flex-row">
+		<div class="hidden md:w-[178px] md:flex md:flex-col md:mx-6">
+			<h3 class="text-3xl text-white-100">Logo here</h3>
+			<p class="mt-2 text-sm text-brown-400">Lorem ipsum dolor sit amet constetur adipicing text</p>
+		</div>
+		<div class="flex flex-col px-4 mb-10 md:px-0 md:mb-0">
+			<h3 class="mb-4 text-sm font-medium text-white-100">Product</h3>
+			<div class="space-y-3 text-sm font-normal leading-5 text-brown-400 child-items font-roboto">
+				{{ function('wp_nav_menu', { 'theme_location': 'footer-menu-product', 'container': false }) }}
+
+			</div>
+		</div>
+
+		<div class="flex flex-col px-4 mb-10 md:px-0 md:mb-0">
+			<h3 class="mb-4 text-sm font-medium text-white-100">Company</h3>
+			<div class="space-y-3 text-sm font-normal leading-5 text-brown-400 child-items font-roboto">
+				{{ function('wp_nav_menu', { 'theme_location': 'footer-menu-company', 'container': false }) }}
+
+			</div>
+		</div>
+
+		<div class="flex flex-col px-4 mb-10 md:px-0 md:mb-0">
+			<h3 class="mb-4 text-sm font-medium text-white-100">Legals</h3>
+			<div class="space-y-3 text-sm font-normal leading-5 text-brown-400 child-items font-roboto">
+				{{ function('wp_nav_menu', { 'theme_location': 'footer-menu-legals', 'container': false }) }}
+
+			</div>
+		</div>
+
+		<div class="flex flex-col px-4 mb-10 md:px-0 md:mb-0 md:pr-9">
+			<h3 class="mb-4 text-sm font-medium text-white-100">Social Media</h3>
+			<div class="space-y-3 text-sm font-normal leading-5 text-brown-400 child-items font-roboto">
+				{{ function('wp_nav_menu', { 'theme_location': 'footer-menu-social-media', 'container': false }) }}
+
+			</div>
+		</div>
+	</div>
+	<div class="mb-12 border-b md:mb-8 border-brown-400"></div>
+
+	<div class="flex flex-col items-start mb-12 md:justify-between md:mb-0 md:flex-row md:items-center">
+		<div class="flex flex-col w-full mb-10 md:mb-8">
+			<h3 class="mb-2 text-xl text-white-100">Join our newsletter</h3>
+			<p class="text-base text-brown-400">We’ll send you a nice letter once per week. No spam.</p>
+		</div>
+		<div class="flex flex-col items-center w-full md:justify-end md:flex-row">
+			<form action="/subscribe" method="POST" class="flex flex-col items-center inline-block w-full md:w-auto md:flex-row">
+				<input type="email" name="email" placeholder="Enter your email" required class="w-full md:w-72 px-4 py-2.5 bg-white border rounded-full font-roboto text-sm text-[#2C1608]">
+				<button type="submit" class="w-full px-4 py-2 mt-4 rounded-full bg-light-p40 text-white-100 md:w-auto md:ml-4 md:mt-0">Subscribe</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="mb-4 border-b md:mb-6 border-brown-400"></div>
+
+	<div class="text-brown-400">
+		&copy; 2023 Starlabs. All rights reserved
+	</div>
+</footer>

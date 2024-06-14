@@ -1,0 +1,14 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+    {% if flexible_content %}
+        {% for item in flexible_content %}
+            {% set template = 'templates/' ~ item.acf_fc_layout|capitalize ~ '.twig' %}
+            <div class="{{ item.acf_fc_layout ~ '-module' }}">
+                {# Debugging output #}
+                <pre>Trying to include template: {{ template }}</pre>
+                {% include template with { 'data': item } only %}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
