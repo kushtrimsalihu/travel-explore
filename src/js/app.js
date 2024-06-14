@@ -1,5 +1,3 @@
-import 'tailwindcss/tailwind.css';
-
 document.addEventListener('DOMContentLoaded', () => {
 
     const menuItems = document.querySelectorAll('.menu-item');
