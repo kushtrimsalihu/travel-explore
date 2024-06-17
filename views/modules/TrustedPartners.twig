@@ -1,0 +1,26 @@
+{% set counter = 0 %}
+{% for image in data.image %}
+    {% if image %}
+        {% set counter = counter + 1 %}
+    {% endif %}
+{% endfor %}
+
+<div class="our-trusted-partners w-full bg-light-n98 py-24 px-12 flex flex-col items-center">
+    <div class="w-full bg-light-n98 py-6 lg:py-12 px-6 mb-10 text-center">
+        <h2 class="font-roboto font-normal text-2xl lg:text-4xl leading-10">Our Trusted Partners</h2>
+    </div>
+    <div class="w-full max-w-[1440px] mx-auto">
+        <div class="grid gap-6 grid-cols-2 md:grid-cols-3
+            {% if counter > 6 %}
+                lg:grid-cols-6
+            {% else %}
+                lg:grid-cols-{{ counter }}
+            {% endif %}
+        ">
+        {% for data in data.image %}
+            {% if data.image %}
+                <img src="{{ data.image.url }}" alt="{{ data.image.alt ? data.image.alt : 'Partner image'}}" class="w-full max-w-[216px] max-h-[123px] xl:min-w-[216px] min-h-[123px] rounded-lg" />
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
