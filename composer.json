@@ -1,6 +1,7 @@
 {
     "require": {
-        "timber/timber": "^2.2"
+        "timber/timber": "^2.2",
+        "symfony/var-dumper": "^7.1"
     }
 
 }

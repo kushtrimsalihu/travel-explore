@@ -1,0 +1,7 @@
+<div class="content">
+	{% for data in flexible_content %}
+		<div class="{{ data.acf_fc_layout ~ '-module' }}">
+			{{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
+		</div>
+	{% endfor %}
+</div>
