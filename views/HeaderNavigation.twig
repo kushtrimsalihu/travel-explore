@@ -27,9 +27,11 @@
 
 	<div class="navbar w-full h-88 bg-white-100 flex items-center lg:justify-center justify-between lg:p-6 py-4 px-3">
 		<div class="left lg:w-1/4 md:w-1/4 w-2/4 p-0">
-			<div class="logo-section">
-				<img src="{{ asset('/assets/images/logo.png') }}" alt="Logo" class="w-7/12">
-			</div>
+			<a href="{{ home_url() }}">
+				<div class="logo-section">
+					<img src="{{ asset('/assets/images/logo.png') }}" alt="Logo" class="w-7/12">
+				</div>
+			</a>
 		</div>
 
 		<div class="right h-screen lg:h-auto w-full lg:flex hidden lg:flex-row flex-column items-center lg:justify-center justify-start lg:bg-transparent bg-white-100 lg:py-0 py-6 lg:relative absolute lg:top-0 top-32 left-0 right-0 lg:gap-0 lg:gap-5 gap-0" id="menuList">

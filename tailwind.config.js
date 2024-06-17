@@ -1,12 +1,12 @@
 module.exports = {
   content: [
     './*.php',
-    './**/*.php',
-    './src/js/**/*.js',
-    './**/*.twig',
-    './views/**/*.twig',
-    './views/templates/*.twig',
-    './views/layouts/*.twig'
+    './**/*.php' ,
+    './src/js/**/*.js' ,
+    './**/*.twig' ,
+    './views/**/*.twig' ,
+    './views/templates/*.twig' ,
+    './views/modules/*.twig' 
   ],
   theme: {
     extend: {

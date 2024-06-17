@@ -4,7 +4,7 @@ namespace App;
 
 use Timber\Timber;
 
-$templates = array('templates/archive.twig', 'templates/index.twig');
+$templates = array('templates/archive.twig', 'templates/page.twig');
 
 $title = 'Archive';
 if (is_day()) {
