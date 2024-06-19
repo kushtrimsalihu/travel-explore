@@ -6,14 +6,14 @@
 {% endfor %}
 
 <div class="our-trusted-partners bg-light-n98 py-24 flex flex-col items-center">
-    <div class="bg-light-n98 px-6 text-center">
-        <div class="font-roboto font-normal text-2xl lg:text-4xl leading-10 pt-24 pb-10">
-            <div>
-                Our trusted partners
+    <div class="bg-light-n98 px-6 text-center w-full flex flex-col justify-center items-center">
+        <div class="w-full font-roboto font-normal text-2xl lg:text-4xl leading-10 pt-24 pb-10">
+           <div>
+                <h4 class="text-light-p10" > Our trusted partners </h4>
             </div>
         </div>
-        <div class="sw-full max-w-[1440px]">
-            <div class="grid gap-6 
+        <div class="w-full max-w-[1440px]">
+            <div class="grid gap-6
                 grid-cols-1
                 sm:grid-cols-2 
                 md:grid-cols-3 
@@ -26,7 +26,7 @@
                 {% for item in data.gallery_image %}
                     {% if item %}
                         <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
-                            <img src="{{ item.url }}" alt="{{ item.alt ? item.alt : 'Partner image' }}" class="w-full max-w-none max-h-[123px] min-h-[123px] rounded-lg hover:scale-105 transform transition duration-300" />
+                            <img src="{{ item.url }}" alt="{{ item.alt ? item.alt : 'Partner image' }}" class="w-full h-32 object-cover rounded-lg hover:scale-105 transform transition duration-300" />
                         </a>
                     {% endif %}
                 {% endfor %}
