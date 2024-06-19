@@ -95,3 +95,34 @@ document.getElementById('search-Icon').addEventListener('click', function() {
 document.getElementById('search-Icon-mobile').addEventListener('click', function() {
     document.getElementById('searchModal').style.visibility = 'visible';
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const faqSections = document.querySelectorAll('.faqsection');
+
+    faqSections.forEach(section => {
+        const plusIcon = section.querySelector('.plus');
+        const minusIcon = section.querySelector('.minus');
+        const answerDiv = section.querySelector('.answer');
+
+        plusIcon.addEventListener('click', function() {
+            plusIcon.classList.add('hidden'); 
+            minusIcon.classList.remove('hidden'); 
+            answerDiv.classList.remove('hidden'); 
+        });
+
+        minusIcon.addEventListener('click', function() {
+            minusIcon.classList.add('hidden'); 
+            plusIcon.classList.remove('hidden'); 
+            answerDiv.classList.add('hidden'); 
+        });
+    });
+});
+
+
+
+
+
+
+
+
