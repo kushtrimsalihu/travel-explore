@@ -5,14 +5,14 @@
 		{% include "HeaderNavigation.twig" %}
 		{{ function('wp_body_open') }}
 
-		<main>
+		
 			{% if is_404 %}
 				{% include "templates/errors/404.twig" %}
 			{% endif %}
 			{% block content %}
 				{% include 'modules.twig' %}
 			{% endblock %}
-		</main>
+		
 
 		{% include 'footer.twig' %}
 		{{ function('wp_footer') }}

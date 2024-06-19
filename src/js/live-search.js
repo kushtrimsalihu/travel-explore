@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var query = searchInput.value.trim();
 
         if (query.length >= 2) {
+            searchForm.classList.add('rounded-b-none');
             resultsDiv.style.display = "block";
             var xhr = new XMLHttpRequest();
             xhr.open('GET', live_search_params.ajax_url + '?action=live_search&query=' + encodeURIComponent(query), true);
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             resultsDiv.innerHTML = '';
             resultsDiv.style.display = "none";
+            searchForm.classList.remove('rounded-b-none');
         }
     });
 });

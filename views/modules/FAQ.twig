@@ -1,0 +1,19 @@
+<div class="flex flex-col items-center bg-white-100 py-24 lg:px-260 px-4">
+    {% if data.title %}
+        <div class="container">
+            <div class="w-full lg:h-20 flex items-center justify-center lg:mb-6 md:mb-6 mb-8">
+                <h1 class="lg:text-3xl text-center">Frequently asked questions</h1>
+            </div>
+            {% for item in data.title %}
+                <div class="faqsection lg:pb-4 md:pb-3.5 mb:3">
+                    <div class="flex items-center cursor-pointer bg-light-n98 lg:h-72 rounded-xl">
+                        <div class="text-base pl-5">{{ item.question }}</div>
+                        <img src="{{ asset('/assets/images/plus.png') }}" alt="plus" class="plus ml-auto" id="plus-icon">
+                        <img src="{{ asset('/assets/images/minus.png') }}" alt="plus" class="minus hidden ml-auto" id="minus-icon">
+                    </div>
+                    <div class="answer hidden mt-2 bg-white text-grey-300 pl-5">{{ item.answer }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

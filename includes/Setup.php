@@ -65,7 +65,7 @@ class Setup {
             while ($search_query->have_posts()) {
                 $search_query->the_post();
                 echo '<li class="search-result-item m-2 flex item-center p-2 gap-5 hover:bg-light-hover">';
-                echo '<div class="search-result-thumbnail w-1/12">' . get_the_post_thumbnail(null, 'full', ['class' => 'w-full']) . '</div>';
+                if(get_the_post_thumbnail()){ echo '<div class="search-result-thumbnail w-1/12">' . get_the_post_thumbnail(null, 'full', ['class' => 'w-full']) . '</div>';};
                 echo '<div class="search-result-content flex items-center">';
                 echo '<a href="' . get_permalink() . '" class="font-roboto font-medium">' . get_the_title() . '</a>';
                 echo '</div>';

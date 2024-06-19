@@ -31,6 +31,9 @@ module.exports = {
         '1440': '90rem',
         '1384':'86.5rem',
       },
+      safelist: [
+        'max-w-screen-lg'
+      ],
       colors: {
         black: "#000000",
         white: {
@@ -72,7 +75,8 @@ module.exports = {
           500: "#AFAAA8",
           450: "#CBC5C3",
           400: "#E7E1DF",
-          350: "#F6EFED"
+          350: "#F6EFED",
+          300: "#51606F"
         },
         'neutral-variant': {
           800: "#1E1B18",
@@ -166,7 +170,10 @@ module.exports = {
         '67' : '4.1875rem',
         '681': '42.5625rem',
         '40': '2.5rem', 
-        '67': '4.1875rem'
+        '67': '4.1875rem',
+        '260': '16.25rem',
+        '339': '21.1875rem',
+        '72': '4.5rem'
       },
         lineHeight: {
         none: 1,
