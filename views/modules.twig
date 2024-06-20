@@ -1,9 +1,7 @@
 {% for data in flexible_content %}
-    {% set additional_class = data.acf_fc_layout == 'cards' ? 'bg-white-100' : '' %}
-    
-    <div class="{{ data.acf_fc_layout ~ '-module' }} {{ additional_class }}">
-        <div class="flex mx-auto px-4 py-10 lg:py-12 2xl:px-0 max-w-screen-lg">
+    <div class="">
+        <div class="flex mx-auto px-4 py-10 lg:py-12 2xl:px-0 max-w-screen-xl {{ data.acf_fc_layout ~ '-module' }}">
             {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
         </div>
-    </div>
-{% endfor %}
+        </div>
+    {% endfor %}
