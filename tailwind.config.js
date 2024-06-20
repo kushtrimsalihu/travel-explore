@@ -24,12 +24,17 @@ module.exports = {
     'lg:grid-cols-4',
     'lg:grid-cols-5',
     'lg:grid-cols-6',
+    'max-w-screen-lg',
   ],
   theme: {
     extend: {
       maxWidth: {
         '1440': '90rem',
         '1384':'86.5rem',
+        '330': '20.625rem'
+      },
+      maxHeight: {
+        '200': '12.5rem'
       },
       safelist: [
         'max-w-screen-lg'
@@ -92,6 +97,7 @@ module.exports = {
         },
         light: {
           p40: "#88511D",
+          p30: "#745944",
           p10: "#2E1500",
           p80: "#FFB77B",
           s30: "#6B3A05",
@@ -161,7 +167,8 @@ module.exports = {
       },
       fontSize: {
         '45': '2.8125rem',
-        '32': '2rem'
+        '32': '2rem',
+        '14': '0.875rem'
       },
       spacing: {
         '166': '10.375rem',  
@@ -183,8 +190,10 @@ module.exports = {
         relaxed: 1.625,
         loose: 2, 
         '40': '2.5rem',
-        '52': '3.25rem'
-       
+        '52': '3.25rem',
+        '24': '1.5rem',
+        '32': '2rem',
+        '20': '1.25rem'
       },
       letterSpacing: {
         tighter: '-0.05em',
@@ -193,7 +202,8 @@ module.exports = {
         wide: '0.025em',
         wider: '0.05em',
         widest: '0.1em',
-        0.5: '0.03125 rem'
+        '0.5': '0.03125rem',
+        '0.25': '0.016rem'
       },
       width: {
         '311': '19.4375rem',  
@@ -201,16 +211,23 @@ module.exports = {
         '681': '42.5625rem',
         '614': '38.375rem',
         '520': '32.5rem',
-        '343': '21.438rem'  
+        '343': '21.438rem',
+        '121': '7.563rem',
+        '330': '20.625rem'
       },
       height: {
         '376': '23.5rem',    
         '587': '36.6875rem',   
-        '88': '5.5rem'
+        '88': '5.5rem',
+        '412': '25.75rem',
+        '212': '13.25rem',
+        '200': '12.5rem'
       },
       borderRadius: {
         '20': '1.25rem',      
-        '32': '2rem'          
+        '32': '2rem',
+        '16': '1rem',
+        '40': '2.5rem'
       }
     },
   },
