@@ -28,12 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.querySelector('a').classList.add('toggled');
                     item.classList.add('active');
 
-                    const links = submenu.querySelectorAll('.sub-menu li a');
-                        links.forEach(link => {
-                            link.addEventListener('click', (e) => {
-                                window.location.href = e.currentTarget.getAttribute('href');
-                            });
+                    const links = submenu.querySelectorAll('.sub-menu li');
+                    links.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            const anchor = link.querySelector('a');
+                            if (anchor) {
+                                window.location.href = anchor.getAttribute('href');
+                            }
                         });
+                    });
 
                 } else {
                     submenu.style.display = 'none';
@@ -97,27 +100,34 @@ document.getElementById('search-Icon-mobile').addEventListener('click', function
 });
 
 
+
 document.addEventListener('DOMContentLoaded', function() {
     const faqSections = document.querySelectorAll('.faqsection');
 
     faqSections.forEach(section => {
+        const questionDiv = section.querySelector('.flex.items-center.cursor-pointer');
         const plusIcon = section.querySelector('.plus');
         const minusIcon = section.querySelector('.minus');
         const answerDiv = section.querySelector('.answer');
 
-        plusIcon.addEventListener('click', function() {
-            plusIcon.classList.add('hidden'); 
-            minusIcon.classList.remove('hidden'); 
-            answerDiv.classList.remove('hidden'); 
-        });
+        questionDiv.addEventListener('click', function() {
+            const isAnswerHidden = answerDiv.classList.contains('hidden');
+            
+            faqSections.forEach(s => {
+                s.querySelector('.plus').classList.remove('hidden');
+                s.querySelector('.minus').classList.add('hidden');
+                s.querySelector('.answer').classList.add('hidden');
+            });
 
-        minusIcon.addEventListener('click', function() {
-            minusIcon.classList.add('hidden'); 
-            plusIcon.classList.remove('hidden'); 
-            answerDiv.classList.add('hidden'); 
+            if (isAnswerHidden) {
+                plusIcon.classList.add('hidden');
+                minusIcon.classList.remove('hidden');
+                answerDiv.classList.remove('hidden');
+            }
         });
     });
 });
+
 
 
 

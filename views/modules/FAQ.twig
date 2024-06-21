@@ -1,17 +1,19 @@
-<div class="flex flex-col items-center bg-white-100 py-24 lg:px-260 px-4">
+<div class="flex flex-col items-center justify-center w-full">
     {% if data.title %}
         <div class="container">
-            <div class="w-full lg:h-20 flex items-center justify-center lg:mb-6 md:mb-6 mb-8">
-                <h1 class="lg:text-3xl text-center">Frequently asked questions</h1>
+            <div class="flex items-center justify-center lg:mb-6 md:mb-6 mb-8 ">
+                <h1 class="text-32 text-center">Frequently asked questions</h1>
             </div>
-            {% for item in data.title %}
-                <div class="faqsection lg:pb-4 md:pb-3.5 mb:3">
-                    <div class="flex items-center cursor-pointer bg-light-n98 lg:h-72 rounded-xl">
-                        <div class="text-base pl-5">{{ item.question }}</div>
+             {% for item in data.title %}
+                <div class="faqsection lg:pb-4 md:pb-3.5 pb-3 flex flex-col items-center">
+                    <div class="flex items-center cursor-pointer bg-light-n95 lg:w-3/4 w-full h-72 rounded-xl">
+                        <div class="text-base lg:pl-5 pl-3">{{ item.question }}</div>
                         <img src="{{ asset('/assets/images/plus.png') }}" alt="plus" class="plus ml-auto" id="plus-icon">
-                        <img src="{{ asset('/assets/images/minus.png') }}" alt="plus" class="minus hidden ml-auto" id="minus-icon">
+                        <img src="{{ asset('/assets/images/minus.png') }}" alt="minus" class="minus hidden ml-auto" id="minus-icon">
                     </div>
-                    <div class="answer hidden mt-2 bg-white text-grey-300 pl-5">{{ item.answer }}</div>
+                    <div class="answer hidden mt-1 bg-white text-grey-300 pl-5 p-2 text-left w-full lg:w-3/4 bg-light-n98">
+                        {{ item.answer }}
+                    </div>
                 </div>
             {% endfor %}
         </div>
