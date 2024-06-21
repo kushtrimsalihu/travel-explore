@@ -1,36 +1,35 @@
 {% set counter = 0 %}
-{% for image in data.gallery_image %}
+{% for image in data.image %}
     {% if image %}
         {% set counter = counter + 1 %}
     {% endif %}
 {% endfor %}
 
-<div class="our-trusted-partners bg-light-n98 py-24 flex flex-col items-center">
-    <div class="bg-light-n98 px-6 text-center w-full flex flex-col justify-center items-center">
-        <div class="w-full font-roboto font-normal text-2xl lg:text-4xl leading-10 pt-24 pb-10">
-           <div>
-                <h4 class="text-light-p10" > Our trusted partners </h4>
-            </div>
+<div class="our-trusted-partners text-center w-full flex flex-col justify-center items-center">
+    <div class="font-roboto font-normal text-2xl lg:text-4xl leading-10 pb-10">
+        <div>
+            <h4 class="text-light-p10">Our trusted partners</h4>
         </div>
-        <div class="w-full max-w-[1440px]">
-            <div class="grid gap-6
-                grid-cols-1
-                sm:grid-cols-2 
-                md:grid-cols-3 
-                {% if counter > 6 %}
-                    lg:grid-cols-6
-                {% else %}
-                    lg:grid-cols-{{ counter }}
+    </div>
+    <div class="w-full">
+        <div class="grid gap-6
+            grid-cols-1
+            sm:grid-cols-2 
+            md:grid-cols-3 
+            {% if counter > 6 %}
+                lg:grid-cols-6
+            {% else %}
+                lg:grid-cols-{{ counter }}
+            {% endif %}
+            justify-center
+        ">
+            {% for data in data.image %}
+                {% if data.image %}
+                    <a href="{{ data.link }}" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ data.image.url }}" alt="{{ data.image.alt ? : 'Partner image' }}" class="w-full h-32 object-cover rounded-lg hover:scale-105 transform transition duration-300" />
+                    </a>
                 {% endif %}
-            ">
-                {% for item in data.gallery_image %}
-                    {% if item %}
-                        <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
-                            <img src="{{ item.url }}" alt="{{ item.alt ? item.alt : 'Partner image' }}" class="w-full h-32 object-cover rounded-lg hover:scale-105 transform transition duration-300" />
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
