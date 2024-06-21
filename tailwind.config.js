@@ -24,6 +24,8 @@ module.exports = {
     'lg:grid-cols-4',
     'lg:grid-cols-5',
     'lg:grid-cols-6',
+    'max-w-screen-xl',
+    'max-w-7xl',
     'max-w-screen-lg',
   ],
   theme: {
@@ -36,9 +38,6 @@ module.exports = {
       maxHeight: {
         '200': '12.5rem'
       },
-      safelist: [
-        'max-w-screen-lg'
-      ],
       colors: {
         black: "#000000",
         white: {
