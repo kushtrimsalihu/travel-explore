@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+use WP_Query;
+use Timber\Timber;
 
 class Setup {
     public function theme_supports() {
@@ -109,4 +111,50 @@ class Setup {
         }
         return $output;
     }
+  
+   
+    public function acf_load_post_types_choices( $field ) {
+             // Reset choices
+        $field['choices'] = array();
+    
+        // Get all post types
+        $post_types = get_post_types( array( 'public' => true ), 'objects' );
+    
+        // Loop through post types and populate choices
+        foreach ( $post_types as $post_type ) {
+            $field['choices'][ $post_type->name ] = $post_type->label;
+        }
+    
+        return $field;
+    }
+
+    public static function get_all_posts_by_type($post_type) {
+        $args = [
+            'post_type' => $post_type,
+            'posts_per_page' => -1,
+        ];
+
+        $query = new WP_Query($args);
+        $posts = Timber::get_posts($query);
+
+        // Ensure thumbnails are included
+        foreach ($posts as $key => $post) {
+            $posts[$key]->thumbnail = get_the_post_thumbnail_url($post->ID, 'full');
+            $posts[$key]->permalink = get_permalink($post->ID);
+            $posts[$key]->author_name = get_the_author_meta('display_name', $post->post_author);
+            $posts[$key]->author_image = get_avatar_url(get_the_author_meta('ID', $post->post_author));
+        }
+
+        return $posts;
+    }
+    
+    public static function get_post_type_from_flexible_content($flexible_content) {
+        foreach ($flexible_content as $module) {
+            if ($module['acf_fc_layout'] === 'cards_module') {
+                return $module['cards_module']['post_type_selector'];
+            }
+        }
+        return 'post'; // Default post type if not found
+    }
+    
 }
