@@ -5,10 +5,6 @@ use App\Setup;
 
 $context = Timber::context();
 $context['flexible_content'] = get_field('flexible_content'); 
-$context['footer'] = [
-    'logo' => get_field('footer_logo', 'option'),
-    'content' => get_field('footer_content', 'option'),
-];
 
 $post_type = Setup::get_post_type_from_flexible_content($context['flexible_content']);
 

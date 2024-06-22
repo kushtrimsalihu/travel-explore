@@ -30,4 +30,13 @@ class TwigExtension {
         return $twig;
     }
 
+    public function addToContext($context) {
+        $context['footer'] = [
+            'logo' => get_field('footer_logo', 'option'),
+            'content' => get_field('footer_content', 'option'),
+        ];
+    
+        return $context;
+    }
+
 }
