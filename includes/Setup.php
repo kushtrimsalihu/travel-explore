@@ -143,6 +143,7 @@ class Setup {
             $posts[$key]->permalink = get_permalink($post->ID);
             $posts[$key]->author_name = get_the_author_meta('display_name', $post->post_author);
             $posts[$key]->author_image = get_avatar_url(get_the_author_meta('ID', $post->post_author));
+            $posts[$key]->ribbon = get_field('ribbon', $post->ID);
         }
 
         return $posts;
