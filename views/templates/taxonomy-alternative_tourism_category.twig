@@ -1,0 +1,28 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <header class="page-header">
+        <h1 class="page-title">{{ title }}</h1>
+        {% if term_description %}
+            <div class="taxonomy-description">{{ term_description }}</div>
+        {% endif %}
+    </header>
+
+    {% if posts %}
+        <div >
+            {% for post in posts %}
+                <article >
+                    
+                    <div class="flex justify-center items-center">
+                        {% for module in post.meta('flexible_content') %}
+                            {% include "modules/#{ module.acf_fc_layout }.twig" with { data: module } %}
+                        {% endfor %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+        <div class="pagination">
+            {{ function('the_posts_pagination') }}
+        </div>
+    {% endif %}
+{% endblock %}
