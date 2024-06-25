@@ -26,6 +26,9 @@ class TwigExtension {
             return home_url();
         }));
 
+        $twig->addFunction(new TwigFunction('get_term_link', function ($term) {
+            return get_term_link($term);
+        }));
 
         return $twig;
     }

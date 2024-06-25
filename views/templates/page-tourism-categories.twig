@@ -1,0 +1,15 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+  <div class="categories">
+    {% for category in categories %}
+      <div class="category">
+        <h2><a href="{{ get_term_link(category) }}">{{ category.name }}</a></h2>
+        <div class="description">
+          {{ category.description }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
