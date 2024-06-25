@@ -7,11 +7,6 @@ namespace App;
 
 use Timber\Timber;
 
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $context = Timber::context();
 $context['title'] = 'Tourism Categories';
 
