@@ -31,10 +31,13 @@ document.addEventListener('DOMContentLoaded', function () {
           submenu.style.display = 'flex';
           item.querySelector('a').classList.add('toggled');
           item.classList.add('active');
-          var links = submenu.querySelectorAll('.sub-menu li a');
+          var links = submenu.querySelectorAll('.sub-menu li');
           links.forEach(function (link) {
             link.addEventListener('click', function (e) {
-              window.location.href = e.currentTarget.getAttribute('href');
+              var anchor = link.querySelector('a');
+              if (anchor) {
+                window.location.href = anchor.getAttribute('href');
+              }
             });
           });
         } else {
@@ -89,18 +92,22 @@ document.getElementById('search-Icon-mobile').addEventListener('click', function
 document.addEventListener('DOMContentLoaded', function () {
   var faqSections = document.querySelectorAll('.faqsection');
   faqSections.forEach(function (section) {
+    var questionDiv = section.querySelector('.flex.items-center.cursor-pointer');
     var plusIcon = section.querySelector('.plus');
     var minusIcon = section.querySelector('.minus');
     var answerDiv = section.querySelector('.answer');
-    plusIcon.addEventListener('click', function () {
-      plusIcon.classList.add('hidden');
-      minusIcon.classList.remove('hidden');
-      answerDiv.classList.remove('hidden');
-    });
-    minusIcon.addEventListener('click', function () {
-      minusIcon.classList.add('hidden');
-      plusIcon.classList.remove('hidden');
-      answerDiv.classList.add('hidden');
+    questionDiv.addEventListener('click', function () {
+      var isAnswerHidden = answerDiv.classList.contains('hidden');
+      faqSections.forEach(function (s) {
+        s.querySelector('.plus').classList.remove('hidden');
+        s.querySelector('.minus').classList.add('hidden');
+        s.querySelector('.answer').classList.add('hidden');
+      });
+      if (isAnswerHidden) {
+        plusIcon.classList.add('hidden');
+        minusIcon.classList.remove('hidden');
+        answerDiv.classList.remove('hidden');
+      }
     });
   });
 });
