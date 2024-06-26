@@ -1,9 +1,9 @@
 {% for post in posts %}
-    <div class="blog-content rounded-lg">
-        <div class=" flex justify-center items-center sm:grid-cols-2 ">
+    <div class=" p-4 blog-content rounded-lg border-light-nv80 border">
+        <div class="flex justify-center items-center sm:grid-cols-2 rounded-lg  ">
             <img src="{{ post.thumbnail }}" class=" w-full lg:w-[228px] h-[186px] md:justify-center items-center object-cover rounded-lg"/>
         </div>
-        <div class="p-4 h-[300px] flex flex-col justify-between">
+        <div class="h-[300px] flex flex-col justify-between">
         <div>
         <span class="bg-light-p40 px-3 py-1 text-white-100 font-normal text-sm w-fit rounded-2xl mt-6 flex align-center justify-center">{{ post.ribbon ? post.ribbon : 'UI/UX Designer' }}</span>
         <a href="{{ post.permalink }}">
@@ -24,4 +24,5 @@
     </div>
     </div>
 {% endfor %}
+
 
