@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById('closeIcon').addEventListener('click', function() {
     document.getElementById('searchModal').style.visibility = 'hidden';
+    document.getElementById('live-search-input').value = '';
 });
 document.getElementById('search-Icon').addEventListener('click', function() {
     document.getElementById('searchModal').style.visibility = 'visible';

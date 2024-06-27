@@ -7,12 +7,12 @@
         <div class="card-container mt-10 flex md:flex-row lg:flex-nowrap flex-col gap-6 justify-center items-center">
             {% for item in data.card %}
 
-                <div class="card border border-light-nv80 bg-light-n98 rounded-16 overflow-hidden w-full md:w-330">
+                <div class="card border border-light-nv80 bg-light-n98 rounded-16 overflow-hidden w-full md:w-330 shadow">
                     <div class="h-200 w-full md:max-w-330 overflow-hidden">
                             <img src="{{item.image.url}}" class="w-full h-200 object-cover" alt="{{item.image.alt}}">
                     </div>
 
-                    <div class="p-4 flex flex-col justify-between">
+                    <div class="p-4 flex flex-col justify-between h-220">
                     	<div class="">
                             <h2 class="text-2xl lineHeight-32 line-clamp-1">{{item.title}}</h2>
                             <div class="lineHeight-20 text-light-p30 font-roboto text-sm letterSpacing-0.25 mt-4 line-clamp-3">{{item.description_card}}</div>

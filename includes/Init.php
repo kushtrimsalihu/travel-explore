@@ -30,7 +30,7 @@ class Init extends Site {
         add_filter('timber/twig', [new TwigExtension(), 'addToTwig']);
         add_filter('acf/load_field/key=field_667605c8ad53a', [new Setup(), 'acf_load_post_types_choices']);
         add_filter('timber/context', [new TwigExtension, 'addToContext']);
-
+        add_filter('timber/context', [new Setup(), 'add_to_context']);
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('wp_print_styles', 'print_emoji_styles');
 

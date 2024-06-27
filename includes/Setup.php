@@ -8,7 +8,7 @@ class Setup {
 
     public function theme_supports() {
         add_theme_support('title-tag');
-        add_theme_support('post-thumbnails');
+        add_theme_support('post-thumbnails');       
         add_image_size('small', 600, 600, false);
         add_theme_support('html5', [
             'comment-form',
@@ -67,8 +67,8 @@ class Setup {
             echo '<ul>';
             while ($search_query->have_posts()) {
                 $search_query->the_post();
-                echo '<li class="search-result-item m-2 flex item-center p-2 gap-5 hover:bg-light-hover">';
-                if(get_the_post_thumbnail()){ echo '<div class="search-result-thumbnail w-1/12">' . get_the_post_thumbnail(null, 'full', ['class' => 'w-full']) . '</div>';};
+                echo '<li class="search-result-item m-2 flex item-center p-2 gap-5 hover:bg-light-hover cursor-pointer" onclick="window.location.href=\'' .  get_permalink() . '\'">';
+                if(get_the_post_thumbnail()){ echo '<div class="search-result-thumbnail w-1/12">' . get_the_post_thumbnail(null, 'full', ['class' => 'w-full h-8']) . '</div>';};
                 echo '<div class="search-result-content flex items-center">';
                 echo '<a href="' . get_permalink() . '" class="font-roboto font-medium">' . get_the_title() . '</a>';
                 echo '</div>';
@@ -112,7 +112,6 @@ class Setup {
         }
         return $output;
     }
-  
    
     public function acf_load_post_types_choices( $field ) {
              // Reset choices
@@ -172,5 +171,20 @@ class Setup {
             exit();
         }
     }
+
+    public function add_to_context($context) {
+        $context['alternative_tourism_categories'] = $this->get_alternative_tourism_categories();
+        return $context;
+    }
+
+    private function get_alternative_tourism_categories() {
+        $categories = Timber::get_terms([
+            'taxonomy' => 'alternative_tourism_category',
+            'hide_empty' => false,
+        ]);
+    
+        return $categories;
+    }
+    
 
 }
