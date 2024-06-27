@@ -21,6 +21,7 @@ class Init extends Site {
         add_action('init', [new PostType(), 'register_alternative_tourism_taxonomies']);
         add_action('wp_ajax_live_search', [new Setup(), 'live_search_handler']);
         add_action('wp_ajax_nopriv_live_search', [new Setup(), 'live_search_handler']);
+        add_action('template_redirect', [new Setup(), 'setup_404_template_redirect']);
 
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
         add_filter('acf/settings/save_json', [new Setup(), 'my_acf_json_save_point']);

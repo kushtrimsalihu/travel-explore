@@ -1,9 +1,13 @@
-<section class="error-404 not-found p-4 bg-red-600 text-black-900">
-    <header class="page-header">
-        <h1 class="page-title">Oops 404 ... ! That page can't be found.</h1>
-    </header>
+{% extends 'base.twig' %}
+{% block content %}
 
-    <div class="page-content">
-        <p>It looks like nothing was found at this location. Maybe try a search?</p>
+<section class="flex items-center justify-center">
+    <div class="container flex flex-col items-center justify-center px-4 py-8">
+        <div class="flex flex-col items-center gap-6 w-full max-w-lg text-center">
+            <img src="{{ asset('assets/images/error.jpg') }}" alt="Error 404" class="w-full h-auto" />
+            <a href="{{ site_url }}" class="px-8 py-4 text-lg font-semibold rounded bg-transparent border border-light-p40 hover:bg-light-p40 hover:text-white-100 mt-6">Back to home</a>
+        </div>
     </div>
 </section>
+
+{% endblock %}

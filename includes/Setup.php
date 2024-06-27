@@ -5,6 +5,7 @@ use WP_Query;
 use Timber\Timber;
 
 class Setup {
+
     public function theme_supports() {
         add_theme_support('title-tag');
         add_theme_support('post-thumbnails');
@@ -160,4 +161,16 @@ class Setup {
         return 'post'; // Default post type if not found
     }
     
+
+    
+
+    function setup_404_template_redirect() {
+        if (is_404()) {
+            $context = Timber::context();
+            $context['site_url'] = home_url('/');
+            Timber::render('views/templates/errors/404.twig', $context);
+            exit();
+        }
+    }
+
 }

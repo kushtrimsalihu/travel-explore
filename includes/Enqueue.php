@@ -28,6 +28,11 @@ class Enqueue {
     public function travel_enqueue_scripts() {
         wp_enqueue_style('theme-style', get_template_directory_uri() . '/dist/css/app.css', [], filemtime(get_template_directory() . '/dist/css/app.css'), 'all');
         wp_enqueue_script('theme-script', get_template_directory_uri() . '/dist/js/app.js', [], filemtime(get_template_directory() . '/dist/js/app.js'), true);
+
+
+        wp_enqueue_style('leaflet-css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css', [], '1.7.1', 'all');
+        wp_enqueue_script('leaflet-js', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js', [], '1.7.1', true);
+
     }
     public function enqueue_live_search_script() {
         wp_enqueue_script('live-search', get_template_directory_uri() . '/src/js/live-search.js', [], '1.0', true);
