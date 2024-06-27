@@ -1,15 +1,31 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  <h1>{{ title }}</h1>
-  <div class="categories">
+<h1>{{ title }}</h1>
+
+<div class="categories">
     {% for category in categories %}
-      <div class="category">
-        <h2><a href="{{ get_term_link(category) }}">{{ category.name }}</a></h2>
-        <div class="description">
-          {{ category.description }}
+        <div class="category">
+            <h2><a href="{{ get_term_link(category.term) }}">{{ category.term.name }}</a></h2>
+            <div class="description">
+                {{ category.term.description }}
+            </div>
+            <div class="posts">
+                {% if category.posts %}
+                    <ul>
+                        {% for post in category.posts %}
+                            <li>
+                                <a href="{{ post.link }}">{{ post.title }}</a>
+                                <p>{{ post.post_content|striptags|truncate(150) }}</p>
+                               <h1> posti shfaqet</h1>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No posts found in this category.</p>
+                {% endif %}
+            </div>
         </div>
-      </div>
     {% endfor %}
-  </div>
+</div>
 {% endblock %}
