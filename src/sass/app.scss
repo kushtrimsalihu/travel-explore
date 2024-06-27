@@ -26,8 +26,8 @@ h1 {
         width: 100% !important;
         align-items: baseline !important;
         padding: 0px 8px;
-        .menu-home-container{
-            width: 100%;
+        > * {
+            width: 100% !important;
             ul {
                 display: flex;
                 flex-direction: column;
@@ -59,13 +59,13 @@ h1 {
                         margin: 0px !important;
                         background-color: #ECEEF3;
                         padding: 0px !important;
-                        padding-top: 5px !important;
+                        padding-top: 12px !important;
                         gap: 4px !important;
                         border: 0px solid #8D725C;
                         box-shadow: none;
                         li{
-                            padding-top: 8px !important;
-                            padding-bottom: 8px;
+                            padding-top: 12px !important;
+                            padding-bottom: 12px;
                             padding-left: 0px !important;
                             border-radius: 4px;
                             display: flex;
@@ -93,6 +93,7 @@ h1 {
             .right{
                 z-index: 40;
                 flex-direction: column !important;
+                min-height: 300vh !important;
                 .right-side{
                     flex-direction: column !important;
                 }

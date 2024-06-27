@@ -1,43 +1,52 @@
-<?php get_header(); ?>
-
 <?php
-// Sanitize and store the search query
+use Timber\Timber;
+
+$context = Timber::context();
+
 $search_term = isset($_GET['s']) ? sanitize_text_field($_GET['s']) : '';
 
-// Build the search arguments based on user input
 $search_args = array(
-    's' => $search_term, // Use sanitized search query
-    'post_type' => 'any',
+    's' => $search_term,
+    'post_type' => array('post', 'page', 'alternative_tourism'),
+    'posts_per_page' => -1,
 );
 
-// Allow customization of post types to be searched (optional)
-if (isset($_GET['post_type'])) {
-    $search_args['post_type'] = sanitize_text_field($_GET['post_type']); // Sanitize post type
+$search_results = new WP_Query($search_args);
+
+$processed_results = array(
+    'post' => array(),
+    'page' => array(),
+);
+$total_results = 0;
+
+if ($search_results->have_posts()) {
+    while ($search_results->have_posts()) {
+        $search_results->the_post();
+
+        $post_type = get_post_type();
+        $post_data = array(
+            'title' => get_the_title(),
+            'query'=> $search_term,
+            'permalink'=> get_permalink(),
+            'thumbnail' => get_the_post_thumbnail(null, 'full', array('class' => 'w-16 h-16')),
+            'excerpt' => get_the_excerpt(),
+            'post_type' => $post_type,
+        );
+
+        if ($post_type === 'alternative_tourism') {
+            $processed_results['post'][] = $post_data;
+        } else {
+            $processed_results[$post_type][] = $post_data;
+        }
+        $total_results++;
+    }
 }
 
-// Execute the search query
-$search_results = new WP_Query($search_args);
+wp_reset_postdata();
+
+$context['search_results'] = $processed_results;
+$context['total_results'] = $total_results;
+$context['search_term'] = $search_term;
+
+Timber::render('views/modules/search.twig', $context);
 ?>
-
-<div class="container">
-    <?php if ($search_results->have_posts()) : ?>
-        <div class="search-results">
-            <?php while ($search_results->have_posts()) : $search_results->the_post(); ?>
-                <div class="search-result-item">
-                    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                    <div class="search-result-excerpt">
-                        <?php the_excerpt(); ?>
-                    </div>
-                </div>
-            <?php endwhile; ?>
-        </div>
-    <?php else : ?>
-        <div class="no-results">
-            <h2><?php _e('Nuk u gjetën rezultate', 'textdomain'); ?></h2>
-        </div>
-    <?php endif; ?>
-
-    <?php wp_reset_postdata(); // Reset post data ?>
-</div>
-
-<?php get_footer(); ?>

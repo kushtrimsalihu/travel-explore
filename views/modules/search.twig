@@ -1,0 +1,42 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    {% if total_results > 0 %}
+        <div class="search-results flex flex-col mx-auto px-4 py-6 2xl:px-0 max-w-screen-lg">
+            <h1 class="text-light-p40 text-xl">{{ total_results }} Results for: "<span class="font-bold">{{ search_term }}</span>"</h1>
+            
+            {# Loop through each post type and display results #}
+            {% for post_type, results in search_results %}
+                {% if results|length > 0 %}
+                    <h1 class="mt-8 text-white-100 text-base lg:px-6 lg:py-2.5 px-6 py-2.5 rounded-full bg-light-p40 w-fit">{{ post_type|capitalize }}</h1>
+                    {% for result in results %}
+                        <div class="search-result-item border cursor-pointer rounded-lg h-28 p-4 flex items-center w-full shadow mt-4" onclick="window.location.href='{{ result.permalink }}'">
+                            <div class="flex flex-row items-center justify-between w-full">
+                                <div class="flex flex-row gap-4 items-center w-5/6">
+                                    {% if result.thumbnail %}
+                                        {{ result.thumbnail }}
+                                    {% endif %}
+                                    <div class="flex flex-col">
+                                        <h2 class="text-lg font-medium line-clamp-1"><a href="{{ result.permalink }}">{{ result.title }}</a></h2>
+                                        {% if result.excerpt %}
+                                            <div class="search-result-excerpt text-sm line-clamp-1">
+                                                {{ result.excerpt }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="h-28 flex items-center w-6">
+                                    <a href="{{ result.permalink }}"><img src="{{ asset('/assets/images/right-arrow.png') }}" alt="Logo" class="w-6 h-6"></a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-results">
+            <h1>No results found</h1>
+        </div>
+    {% endif %}
+{% endblock %}

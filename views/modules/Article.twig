@@ -1,0 +1,35 @@
+<div class="article-categories flex flex-col items-center justify-center w-full">
+    <h1 class="text-light-p40 text-2xl font-medium m-3 text-center">{{ data.title }}</h1>
+    <h1 class="text-light-p40 text-xl font-thin mb-10 text-center">{{ data.description }}</h1>
+    <div class="flex flex-col lg:flex-row lg:flex-nowrap w-full">
+        <div class="grid grid-cols-3 gap-2 items-center justify-items-center w-full lg:w-1/2">
+            {% if alternative_tourism_categories %}
+                {% for category in alternative_tourism_categories %}
+                    <div class="relative w-full lg:h-150 group overflow-hidden">
+                        <img src="{{ category.image }}" alt="{{ category.name }}" class="w-full h-full">
+                        <div class="absolute inset-0 bg-blue-300 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                            <img src="{{ category.icon }}" alt="{{ category.name }}" class="w-30 h-30 transition-transform duration-300 ease-in-out transform group-hover:scale-150 filter group-hover:brightness-0 group-hover:invert group-hover:sepia group-hover:hue-rotate-90">
+                        </div>
+                        <a href="{{ site.url }}/tourism-category/{{ category.slug }}" class="absolute inset-0 font-medium bg-black bg-opacity-20 text-xs sm:text-sm md:text-2xl lg:text-sm uppercase flex items-end pb-4 justify-center text-white-100 tracking-widest text-nowrap">
+                            {{ category.name }}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <li>No categories found.</li>
+            {% endif %}
+        </div>
+
+        <div class="lg:w-1/2 w-full lg:pl-10 lg:pt-0 pt-10 flex flex-col justify-between">
+            <h1 class="font-roboto text-3xl font-medium text-light-p40 mb-3 lg:mb-0">{{ data.header }}</h1>
+            <div class="leading-10 text-lg font-thin text-light-p40 mb-7 lg:mb-0 w-full">{{data.paragraph}}</div>
+
+            <div class="h-1/6 flex items-end">
+                <a href="{{data.button.url}}" class="button bg-light-p40 font-roboto text-white-100 font-medium tracking-wider text-sm border border-light-p40 px-6 py-2.5 rounded-full">
+                    {{data.button.title}}
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
