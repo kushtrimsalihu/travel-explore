@@ -1,13 +1,14 @@
-<section class="travel-post-cards-module flex flex-wrap gap-6 p-6 w-full">
+
+<section class=" travel-post-cards-module flex flex-wrap gap-6  w-full">
     {% for card in data.card %}
         <div class="flex flex-row bg-white border border-light-nv80 bg-light-n98 shadow-lg rounded-lg overflow-hidden w-full">
-            <div class="relative flex-none w-1/4 h-48 p-3">
+            <div class="relative flex-none w-1/3 h-auto p-3">
                 <img src="{{ card.image.url }}" alt="{{ card.image.alt }}" class="w-full h-full object-cover rounded-lg">
             </div>
             <div class="card-content p-4 flex-grow flex flex-col justify-between w-2/4">
                 <h2 class="text-xl font-semibold mb-2 text-brown-750">{{ card.title }}</h2>
                 <div class="text-gray-500 mb-2 px-2">{{ card.duration }}</div>
-                <div class="lineHeight-32 line-clamp-1 mb-4">{{ card.description|raw }}</div>
+                <div class="lineHeight-32 line-clamp-3 mb-4">{{ card.description|raw }}</div>
                 <div class="flex items-center space-x-1 text-yellow-500 mb-4">
                     {% for i in (1..5) %}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">

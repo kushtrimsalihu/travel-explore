@@ -6,6 +6,7 @@
 namespace App;
 
 use Timber\Timber;
+use Timber\Post;
 
 $context = Timber::context();
 $context['title'] = 'Tourism Categories';
@@ -22,21 +23,16 @@ if (is_wp_error($terms)) {
     $categories = [];
 
     foreach ($terms as $term) {
-        $posts = get_posts([
-            'post_type' => 'alternative_tourism',
-            'posts_per_page' => -1, 
-            'tax_query' => [
-                [
-                    'taxonomy' => 'alternative_tourism_category',
-                    'field'    => 'term_id',
-                    'terms'    => $term->term_id,
-                ],
-            ],
-        ]);
+        $image_url = get_field('image', $term); 
 
         $categories[] = [
             'term' => $term,
-            'posts' => $posts,
+            'term' => [
+                'name' => $term->name,
+                'description' => $term->description,
+                'link' => get_term_link($term),
+                'image' => $image_url,
+            ]
         ];
     }
 

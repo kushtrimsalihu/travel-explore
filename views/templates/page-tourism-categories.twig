@@ -1,31 +1,24 @@
 {% extends "base.twig" %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-
-<div class="categories">
-    {% for category in categories %}
-        <div class="category">
-            <h2><a href="{{ get_term_link(category.term) }}">{{ category.term.name }}</a></h2>
-            <div class="description">
-                {{ category.term.description }}
-            </div>
-            <div class="posts">
-                {% if category.posts %}
-                    <ul>
-                        {% for post in category.posts %}
-                            <li>
-                                <a href="{{ post.link }}">{{ post.title }}</a>
-                                <p>{{ post.post_content|striptags|truncate(150) }}</p>
-                               <h1> posti shfaqet</h1>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No posts found in this category.</p>
+<h1 class="text-center text-brown-750"> {{title}}</h1>
+<div class="flex mx-auto px-4 py-4 2xl:px-0 max-w-screen-lg">
+   
+    <div class="categories grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+        {% for category in categories %}
+            <div class="category-card bg-white border border-light-nv80 shadow-lg rounded-lg overflow-hidden">
+                {% if category.term.image %}
+                    <img class="w-full h-48 object-cover" src="{{ category.term.image }}" alt="{{ category.term.name }}">
                 {% endif %}
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold"><a href="{{ category.term.link }}">{{ category.term.name }}</a></h2>
+                    <div class="text-gray-700 mt-2 line-clamp-4">
+                        {{ category.term.description }}
+                    </div>
+                </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

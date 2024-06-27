@@ -92,7 +92,7 @@ document.getElementById('search-Icon-mobile').addEventListener('click', function
 document.addEventListener('DOMContentLoaded', function () {
   var faqSections = document.querySelectorAll('.faqsection');
   faqSections.forEach(function (section) {
-    var questionDiv = section.querySelector('.flex.items-center.cursor-pointer');
+    var questionDiv = section.querySelector('.question');
     var plusIcon = section.querySelector('.plus');
     var minusIcon = section.querySelector('.minus');
     var answerDiv = section.querySelector('.answer');
@@ -110,6 +110,87 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var form = document.getElementById('contactForm');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var fullName = document.getElementById('fullName');
+    var email = document.getElementById('email');
+    var subject = document.getElementById('subject');
+    var message = document.getElementById('message');
+    var valid = true;
+    document.querySelectorAll('.error').forEach(function (errorElement) {
+      errorElement.remove();
+    });
+    if (fullName.value.trim() === '') {
+      displayError(fullName, 'Full Name is required');
+      valid = false;
+    }
+    if (subject.value.trim() === '') {
+      displayError(subject, 'Subject is required');
+      valid = false;
+    }
+    if (message.value.trim() === '') {
+      displayError(message, 'Message is required');
+      valid = false;
+    }
+    if (valid) {
+      var formData = new FormData(form);
+      fetch('/wp-content/themes/travel-explore/send-email.php', {
+        method: 'POST',
+        body: formData
+      }).then(function (response) {
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+      }).then(function (data) {
+        var messageContainer = document.getElementById('messageContainer');
+        if (data.message) {
+          form.innerHTML = '<div class="text-center p-4 text-light-p40"><h3>Thank you for your message!</h3></div>';
+          form.reset();
+        } else {
+          throw new Error('No message received');
+        }
+      })["catch"](function (error) {
+        var messageContainer = document.getElementById('messageContainer');
+        messageContainer.innerHTML = "<h3>There was a problem sending the email: ".concat(error.message, "</h3>");
+        messageContainer.style.backgroundColor = '#f44336';
+        messageContainer.classList.remove('hidden');
+        console.error('Error:', error);
+      });
+    }
+  });
+  function displayError(element, message) {
+    var error = document.createElement('div');
+    error.textContent = message;
+    error.className = 'error';
+    error.style.color = 'red';
+    element.parentNode.insertBefore(error, element.nextSibling);
+  }
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var mapElement = document.getElementById('map');
+  if (mapElement) {
+    var latitude = parseFloat(mapElement.getAttribute('latitude'));
+    var longitude = parseFloat(mapElement.getAttribute('longitude'));
+    console.log('Latitude:', latitude);
+    console.log('Longitude:', longitude);
+    if (!isNaN(latitude) && !isNaN(longitude)) {
+      var map = L.map('map').setView([latitude, longitude], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      var marker = L.marker([latitude, longitude]).addTo(map);
+      marker.bindPopup('Welcome to our location!');
+    } else {
+      console.error('Latitude or longitude is not a number.');
+    }
+  } else {
+    console.error('Map element not found.');
+  }
 });
 
 /***/ }),
