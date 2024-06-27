@@ -19,7 +19,7 @@ try {
 
     
     $mail->setFrom('rinesakuqi2003@gmail.com', 'Mailer');
-    $mail->addAddress('rinesakuqi2003@gmail.com', 'Rinesa'); // Add a recipient
+    $mail->addAddress('rinesakuqi2003@gmail.com', 'Rinesa'); 
 
     
     $mail->isHTML(true);
