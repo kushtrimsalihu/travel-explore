@@ -16,7 +16,9 @@
                     {% endfor %}
                 </div>
                 <div class="flex flex-wrap gap-2 mb-4">
+              
                 {% if current_category %}
+
                     <div class="relative group w-6 h-6 inline-block">
                         <img src="{{ current_category.icon }}" alt="{{ current_category.name }}" class="w-full h-full">
                         <a href="{{ site.url }}/tourism-category/{{ current_category.slug }}" class="absolute inset-0"></a>
@@ -41,7 +43,7 @@
                     </svg>
                     Easy
                 </div>
-                <a href="{{ site.url }}/card/{{ card.id }}" class="button bg-transparent text-light-p40 border border-light-p40 py-2 px-4 rounded hover:bg-light-p40 hover:text-white-100">
+                <a href="{{card.button.url}}" class="button bg-transparent text-light-p40 border border-light-p40 py-2 px-4 rounded hover:bg-light-p40 hover:text-white-100">
                     {{ card.button.title }}
                 </a> 
             </div>
