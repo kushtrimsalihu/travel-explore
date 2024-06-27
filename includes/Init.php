@@ -15,14 +15,13 @@ class Init extends Site {
         add_action('wp_enqueue_scripts', [new Enqueue(), 'enqueue_live_search_script']);
         add_action('after_setup_theme', [new Setup(), 'theme_supports']);
         add_action('init', [new Setup(), 'register_navigation_menus']);
-        add_action('init', [new Setup(), 'setup_404_template_redirect']);
         add_action('init', [new PostType(), 'register_alternative_tourism_cpt']);
         add_action('init', [new PostType(), 'register_blog_post_type']);
         add_action('init', [new PostType(), 'blog_category']);
         add_action('init', [new PostType(), 'register_alternative_tourism_taxonomies']);
         add_action('wp_ajax_live_search', [new Setup(), 'live_search_handler']);
         add_action('wp_ajax_nopriv_live_search', [new Setup(), 'live_search_handler']);
-        add_action('after_setup_theme', [new Setup(), 'setup_404_template_redirect']);
+        add_action('template_redirect', [new Setup(), 'setup_404_template_redirect']);
 
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
         add_filter('acf/settings/save_json', [new Setup(), 'my_acf_json_save_point']);

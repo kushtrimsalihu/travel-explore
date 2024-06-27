@@ -131,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
     
-    console.log('Form script loaded'); 
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -181,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 const messageContainer = document.getElementById('messageContainer');
                 if (data.message) {
-                    form.innerHTML = '<div class="text-center p-4"><h3>Thank you for your message!</h3></div>';
+                    form.innerHTML = '<div class="text-center p-4 text-light-p40"><h3>Thank you for your message!</h3></div>';
                     form.reset();
                 } else {
                     throw new Error('No message received');

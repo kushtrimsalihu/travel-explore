@@ -162,15 +162,15 @@ class Setup {
     }
     
 
-    public function setup_404_template_redirect() {
-        add_action('template_redirect', function() {
-            if (is_404()) {
-                $context = Timber::context();
-                $context['site_url'] = home_url('/');
-                Timber::render('views/templates/errors/404.twig', $context);
-                exit();
-            }
-        });
+    
+
+    function setup_404_template_redirect() {
+        if (is_404()) {
+            $context = Timber::context();
+            $context['site_url'] = home_url('/');
+            Timber::render('views/templates/errors/404.twig', $context);
+            exit();
+        }
     }
 
 }
