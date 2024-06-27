@@ -6,7 +6,7 @@
             </div>
              {% for item in data.title %}
                 <div class="faqsection lg:pb-4 md:pb-3.5 pb-3 flex flex-col items-center">
-                    <div class="flex items-center cursor-pointer bg-light-n95 lg:w-3/4 w-full h-72 rounded-xl">
+                    <div class="question flex items-center cursor-pointer bg-light-n95 lg:w-3/4 w-full h-72 rounded-xl">
                         <div class="text-base lg:pl-5 pl-3">{{ item.question }}</div>
                         <img src="{{ asset('/assets/images/plus.png') }}" alt="plus" class="plus ml-auto" id="plus-icon">
                         <img src="{{ asset('/assets/images/minus.png') }}" alt="minus" class="minus hidden ml-auto" id="minus-icon">
