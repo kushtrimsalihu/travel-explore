@@ -1,21 +1,25 @@
 {% extends "base.twig" %}
 
 {% block content %}
-    <header class="page-header">
-        <h1 class="page-title">{{ title }}</h1>
+<div class="h-60 bg-cover bg-center" style="background-image: url('{{ current_category.image }}');">
+   
+    <header class="text-white-100 text-center py-12 bg-black bg-opacity-50 h-60 ">
+        <h1 class="text-4xl font-bold">{{ title }}</h1>
         {% if term_description %}
-            <div class="taxonomy-description">{{ term_description }}</div>
+            <div class="text-xl mt-4">{{ term_description }}</div>
         {% endif %}
     </header>
+</div>
 
     {% if posts %}
         <div >
             {% for post in posts %}
-                <article >
-                    
+                <article > 
                     <div class="flex justify-center items-center">
                         {% for module in post.meta('flexible_content') %}
+                        <div class="flex mx-auto px-4 py-6 2xl:px-0 max-w-screen-lg">
                             {% include "modules/#{ module.acf_fc_layout }.twig" with { data: module } %}
+                        </div>
                         {% endfor %}
                     </div>
                 </article>
