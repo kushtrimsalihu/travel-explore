@@ -3,19 +3,19 @@
         <div class="flex flex-col lg:flex-row justify-between lg:mb-24"> 
         <div class="mb-16 mt-12 lg:m-0 sm:w-96">
                 <img src="{{ footer.logo.url}}" alt="Logo" title="{{ footer.logo.title }}" class="w-[150px] h-16 object-contain" />
-                <h4 class="text-brown-400 font-roboto font-medium text-sm leading-5 mt-2">
+                <h4 class="text-brown-400 font-roboto  font-medium text-sm leading-5 mt-2">
                     {{ footer.content }}
                 </h4>
             </div>
             <div class="grid grid-cols-2 gap-6 lg:flex lg:gap-6 flex-wrap xl:flex-nowrap md:flex-nowrap"> 
                 <div class="text-grey-400 space-y-4 text-left  lg:w-36 xl:w-52">
-                    <h4 class="mb-2 text-white-100">Product</h4>
+                    <h4 class="mb-2 text-white-100">Categories</h4>
                     <div class="child-items space-y-3 font-roboto font-normal text-sm leading-5 list-none">
                         {{ function('wp_nav_menu', { 'theme_location': 'footer-menu-product', 'container': false, 'items_wrap': '%3$s' }) }}
                     </div>
                 </div>
                 <div class="text-grey-400 space-y-4 list-none text-left lg:w-36 xl:w-52">
-                    <h4 class="mb-2 text-white-100">Company</h4>
+                    <h4 class="mb-2 text-white-100">About Us</h4>
                     <div class="child-items space-y-3 font-roboto font-normal text-sm leading-5 list-none">
                         {{ function('wp_nav_menu', { 'theme_location': 'footer-menu-company', 'container': false, 'items_wrap': '%3$s' }) }}
                     </div>

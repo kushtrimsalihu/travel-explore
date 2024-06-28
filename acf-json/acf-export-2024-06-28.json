@@ -149,6 +149,27 @@
                     "operator": "==",
                     "value": "blog"
                 }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "alternative_tourism"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "post"
+                }
+            ],
+            [
+                {
+                    "param": "post",
+                    "operator": "==",
+                    "value": "587"
+                }
             ]
         ],
         "menu_order": 0,
@@ -470,6 +491,88 @@
                         "display": "block",
                         "sub_fields": [
                             {
+                                "key": "field_667d396221947",
+                                "label": "Card Type",
+                                "name": "card_type",
+                                "aria-label": "",
+                                "type": "select",
+                                "instructions": "",
+                                "required": 0,
+                                "conditional_logic": 0,
+                                "wrapper": {
+                                    "width": "",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "choices": {
+                                    "services": "Cards",
+                                    "author_card": "Cards with Author"
+                                },
+                                "default_value": false,
+                                "return_format": "value",
+                                "multiple": 0,
+                                "allow_null": 0,
+                                "ui": 0,
+                                "ajax": 0,
+                                "placeholder": ""
+                            },
+                            {
+                                "key": "field_667d3755d4ff2",
+                                "label": "Title",
+                                "name": "title",
+                                "aria-label": "",
+                                "type": "text",
+                                "instructions": "",
+                                "required": 0,
+                                "conditional_logic": [
+                                    [
+                                        {
+                                            "field": "field_667d396221947",
+                                            "operator": "==",
+                                            "value": "services"
+                                        }
+                                    ]
+                                ],
+                                "wrapper": {
+                                    "width": "",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "default_value": "",
+                                "maxlength": "",
+                                "placeholder": "",
+                                "prepend": "",
+                                "append": ""
+                            },
+                            {
+                                "key": "field_667d3765d4ff3",
+                                "label": "Description",
+                                "name": "description",
+                                "aria-label": "",
+                                "type": "text",
+                                "instructions": "",
+                                "required": 0,
+                                "conditional_logic": [
+                                    [
+                                        {
+                                            "field": "field_667d396221947",
+                                            "operator": "==",
+                                            "value": "services"
+                                        }
+                                    ]
+                                ],
+                                "wrapper": {
+                                    "width": "",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "default_value": "",
+                                "maxlength": "",
+                                "placeholder": "",
+                                "prepend": "",
+                                "append": ""
+                            },
+                            {
                                 "key": "field_6676057cad537",
                                 "label": "Cards module",
                                 "name": "cards_module",
@@ -477,7 +580,15 @@
                                 "type": "group",
                                 "instructions": "",
                                 "required": 0,
-                                "conditional_logic": 0,
+                                "conditional_logic": [
+                                    [
+                                        {
+                                            "field": "field_667d396221947",
+                                            "operator": "==",
+                                            "value": "author_card"
+                                        }
+                                    ]
+                                ],
                                 "wrapper": {
                                     "width": "",
                                     "class": "",
@@ -555,40 +666,38 @@
                                         "placeholder": ""
                                     }
                                 ]
-                            }
-                        ],
-                        "min": "",
-                        "max": ""
-                    },
-                    "layout_6656c3d727bfe": {
-                        "key": "layout_6656c3d727bfe",
-                        "name": "cards",
-                        "label": "Cards",
-                        "display": "block",
-                        "sub_fields": [
+                            },
                             {
-                                "key": "field_6656c5a827bff",
+                                "key": "field_667d362cd4fed",
                                 "label": "Card",
                                 "name": "card",
                                 "aria-label": "",
                                 "type": "repeater",
                                 "instructions": "",
                                 "required": 0,
-                                "conditional_logic": 0,
+                                "conditional_logic": [
+                                    [
+                                        {
+                                            "field": "field_667d396221947",
+                                            "operator": "==",
+                                            "value": "services"
+                                        }
+                                    ]
+                                ],
                                 "wrapper": {
                                     "width": "",
                                     "class": "",
                                     "id": ""
                                 },
-                                "layout": "block",
+                                "layout": "table",
                                 "min": 0,
                                 "max": 0,
                                 "collapsed": "",
-                                "button_label": "Add Card",
+                                "button_label": "Add Row",
                                 "rows_per_page": 20,
                                 "sub_fields": [
                                     {
-                                        "key": "field_66571966d4fee",
+                                        "key": "field_667d368bd4fee",
                                         "label": "Image",
                                         "name": "image",
                                         "aria-label": "",
@@ -602,7 +711,6 @@
                                             "id": ""
                                         },
                                         "return_format": "array",
-                                        "preview_size": "medium",
                                         "library": "all",
                                         "min_width": "",
                                         "min_height": "",
@@ -611,10 +719,11 @@
                                         "max_height": "",
                                         "max_size": "",
                                         "mime_types": "",
-                                        "parent_repeater": "field_6656c5a827bff"
+                                        "preview_size": "medium",
+                                        "parent_repeater": "field_667d362cd4fed"
                                     },
                                     {
-                                        "key": "field_6656c5ff27c00",
+                                        "key": "field_667d36acd4ff0",
                                         "label": "Title",
                                         "name": "title",
                                         "aria-label": "",
@@ -628,18 +737,18 @@
                                             "id": ""
                                         },
                                         "default_value": "",
+                                        "maxlength": "",
                                         "placeholder": "",
                                         "prepend": "",
                                         "append": "",
-                                        "maxlength": "",
-                                        "parent_repeater": "field_6656c5a827bff"
+                                        "parent_repeater": "field_667d362cd4fed"
                                     },
                                     {
-                                        "key": "field_6656c60e27c01",
+                                        "key": "field_667d36a0d4fef",
                                         "label": "Description Card",
-                                        "name": "description",
+                                        "name": "description_card",
                                         "aria-label": "",
-                                        "type": "wysiwyg",
+                                        "type": "text",
                                         "instructions": "",
                                         "required": 0,
                                         "conditional_logic": 0,
@@ -649,14 +758,14 @@
                                             "id": ""
                                         },
                                         "default_value": "",
-                                        "tabs": "all",
-                                        "toolbar": "full",
-                                        "media_upload": 1,
-                                        "delay": 0,
-                                        "parent_repeater": "field_6656c5a827bff"
+                                        "maxlength": "",
+                                        "placeholder": "",
+                                        "prepend": "",
+                                        "append": "",
+                                        "parent_repeater": "field_667d362cd4fed"
                                     },
                                     {
-                                        "key": "field_6656c62927c02",
+                                        "key": "field_667d3743d4ff1",
                                         "label": "Button",
                                         "name": "button",
                                         "aria-label": "",
@@ -670,49 +779,9 @@
                                             "id": ""
                                         },
                                         "return_format": "array",
-                                        "parent_repeater": "field_6656c5a827bff"
+                                        "parent_repeater": "field_667d362cd4fed"
                                     }
                                 ]
-                            },
-                            {
-                                "key": "field_667bc216ed34f",
-                                "label": "Title",
-                                "name": "title",
-                                "aria-label": "",
-                                "type": "text",
-                                "instructions": "",
-                                "required": 0,
-                                "conditional_logic": 0,
-                                "wrapper": {
-                                    "width": "",
-                                    "class": "",
-                                    "id": ""
-                                },
-                                "default_value": "",
-                                "maxlength": "",
-                                "placeholder": "",
-                                "prepend": "",
-                                "append": ""
-                            },
-                            {
-                                "key": "field_667bc21eed350",
-                                "label": "Description",
-                                "name": "description",
-                                "aria-label": "",
-                                "type": "wysiwyg",
-                                "instructions": "",
-                                "required": 0,
-                                "conditional_logic": 0,
-                                "wrapper": {
-                                    "width": "",
-                                    "class": "",
-                                    "id": ""
-                                },
-                                "default_value": "",
-                                "tabs": "all",
-                                "toolbar": "full",
-                                "media_upload": 1,
-                                "delay": 0
                             }
                         ],
                         "min": "",
@@ -861,7 +930,7 @@
                             },
                             {
                                 "key": "field_667c7143e34fd",
-                                "label": "Paragraph",
+                                "label": "paragraph",
                                 "name": "paragraph",
                                 "aria-label": "",
                                 "type": "wysiwyg",
@@ -1765,6 +1834,13 @@
                     "param": "post_type",
                     "operator": "==",
                     "value": "alternative_tourism"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "blog"
                 }
             ]
         ],
