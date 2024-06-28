@@ -1,12 +1,14 @@
 {% extends "base.twig" %}
 
 {% block content %}
-<div class="h-60 bg-cover bg-center" style="background-image: url('{{ current_category.image }}');">
-   
+{% set first_category = current_category|first %}
+<div class="h-60 bg-cover bg-center" style="background-image: url('{{ first_category.image }}');">
+    
+
     <header class="text-white-100 text-center py-12 bg-black bg-opacity-50 h-60 ">
         <h1 class="text-4xl font-bold">{{ title }}</h1>
         {% if term_description %}
-            <div class="text-xl mt-4 max-w-screen-xl mx-auto">{{ term_description }}</div>
+            <div class="text-base md:text-xl mt-4 max-w-screen-xl mx-auto">{{ term_description }}</div>
         {% endif %}
     </header>
 </div>
