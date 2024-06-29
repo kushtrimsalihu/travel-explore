@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html {{ site.language_attributes }}>
+	{% include "head.twig" %}
+	<body class="{{ body_class }}">
+		{% include "HeaderNavigation.twig" %}
+		{{ function('wp_body_open') }}
+
+		
+			{% if is_404 %}
+				{% include "templates/errors/404.twig" %}
+			{% endif %}
+			{% block content %}
+				{% include 'modules.twig' %}
+			{% endblock %}
+		
+
+		{% include 'footer.twig' %}
+		{{ function('wp_footer') }}
+		{% do action('get_footer') %}
+	</body>
+</html>

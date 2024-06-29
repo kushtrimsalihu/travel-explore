@@ -1,0 +1,9 @@
+node_modules/
+vendor/
+.DS_Store
+Thumbs.db
+*.log
+# dist/
+# dist/css/app.css
+# dist/js/app.js
+# dist/mix-manifest.js

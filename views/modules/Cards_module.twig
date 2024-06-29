@@ -1,0 +1,19 @@
+
+{% if data.card_type == 'author_card' %} 
+
+<div class="cards-module grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+    {% if data.cards_module.cards_title %}
+
+        <div class="md:col-span-2 col-span-1 lg:col-span-3 xl:col-span-3 cards-content mb-2.5">
+            <h2 class="text-3xl text-light-p10">{{data.cards_module.cards_title}}</h2>
+            <p class="text-light-p10 mt-4">{{data.cards_module.cards_content}}</p>
+        </div>
+    {% endif %}
+    {{ include("templates/cards/#{ data.cards_module.post_type_selector}-cards.twig", { data: data, post: posts }, ignore_missing = true)}}
+</div>
+ {% endif %} 
+ {% if data.card_type == 'services' %} 
+
+{{ include("views/modules/Cards.twig") }}
+
+ {% endif %} 
