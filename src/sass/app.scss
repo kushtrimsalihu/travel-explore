@@ -213,6 +213,24 @@ h1 {
     border-radius: 8px;
 }
 
+
+
+#travel-categories::-webkit-scrollbar {
+    border-radius: 8px;
+    height: 6px;
+    width: 6px;
+}
+
+#travel-categories::-webkit-scrollbar-track {
+    background-color: #E9E1DD;
+    border-radius: 8px;
+}
+
+#travel-categories::-webkit-scrollbar-thumb {
+    background-color: #968F8C;
+    border-radius: 8px;
+}
+
 .answer {
     text-align: left;
     width: 100%;

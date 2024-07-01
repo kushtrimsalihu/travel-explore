@@ -4,4 +4,11 @@
             {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
         </div>
     </section>
+    {% if data.acf_fc_layout == 'banner' %}
+        <section class="travel-categories-module">
+            <div class="flex mx-auto px-0 py-0 max-w-screen-xl">
+                {{ include('modules/travel-categories.twig', ignore_missing = true) }}
+            </div>
+        </section>
+    {% endif %}
 {% endfor %}
