@@ -1,5 +1,5 @@
 <div class="w-full overflow-auto" id="travel-categories">
-    <div class="bg-light-p40 h-28 min-w-fit flex flex-row justify-between items-center cursor-pointer">
+    <div class="bg-light-p40 h-28 min-w-fit flex flex-row justify-center items-center cursor-pointer">
         {% if alternative_tourism_categories %}
             {% for category in alternative_tourism_categories %}
                 <a href="{{ site.url }}/tourism-category/{{ category.slug }}" class="flex items-center justify-center flex-col w-32 h-4/5 {{ loop.last ? '' : 'border-r border-black' }}">
