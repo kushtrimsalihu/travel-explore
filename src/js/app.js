@@ -132,7 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
     
-
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         
@@ -142,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const message = document.getElementById('message');
         let valid = true;
 
-        
+      
         document.querySelectorAll('.error').forEach(function(errorElement) {
             errorElement.remove();
         });
@@ -153,38 +152,30 @@ document.addEventListener('DOMContentLoaded', function() {
             valid = false;
         }
 
-        
         if (subject.value.trim() === '') {
             displayError(subject, 'Subject is required');
             valid = false;
         }
 
-      
         if (message.value.trim() === '') {
             displayError(message, 'Message is required');
             valid = false;
         }
 
-
+        
         if (valid) {
             const formData = new FormData(form);
             fetch('/wp-content/themes/travel-explore/send-email.php', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                const messageContainer = document.getElementById('messageContainer');
                 if (data.message) {
                     form.innerHTML = '<div class="text-center p-4 text-light-p40"><h3>Thank you for your message!</h3></div>';
                     form.reset();
                 } else {
-                    throw new Error('No message received');
+                    throw new Error(data.error || 'No message received');
                 }
             })
             .catch(error => {
@@ -205,6 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         element.parentNode.insertBefore(error, element.nextSibling);
     }
 });
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
