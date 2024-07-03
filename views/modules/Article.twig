@@ -15,14 +15,12 @@
                         </a>
                     </div>
                 {% endfor %}
-            {% else %}
-                <li>No categories found.</li>
             {% endif %}
         </div>
 
-        <div class="lg:w-1/2 w-full lg:pl-10 lg:pt-0 pt-10 flex flex-col justify-between">
-            <h1 class="font-roboto text-3xl font-medium text-light-p40 mb-3 lg:mb-0">{{ data.header }}</h1>
-            <div class="leading-10 text-lg font-thin text-light-p40 mb-7 lg:mb-0 w-full">{{data.paragraph}}</div>
+        <div class="{{ alternative_tourism_categories ? 'lg:w-1/2 w-full lg:pl-10 lg:pt-0 pt-10 flex flex-col justify-between' : 'w-full mx-auto lg:pb-4'}}">
+            <h1 class="font-roboto text-3xl font-medium text-light-p40 mb-3 lg:mb-0">{{ data.article_header}}</h1>
+            <div class="leading-10 text-lg font-thin text-light-p40 mb-7 lg:mb-0 w-full">{{data.article_description}}</div>
 
             <div class="h-1/6 flex items-end">
                 <a href="{{data.button.url}}" class="button bg-light-p40 font-roboto text-white-100 font-medium tracking-wider text-sm border border-light-p40 px-6 py-2.5 rounded-full">

@@ -19,6 +19,7 @@ class Init extends Site {
         add_action('init', [new PostType(), 'register_blog_post_type']);
         add_action('init', [new PostType(), 'blog_category']);
         add_action('init', [new PostType(), 'register_alternative_tourism_taxonomies']);
+        add_action('init', [new PostType(), 'register_user_journey_post_type']);
         add_action('wp_ajax_live_search', [new Setup(), 'live_search_handler']);
         add_action('wp_ajax_nopriv_live_search', [new Setup(), 'live_search_handler']);
         add_action('template_redirect', [new Setup(), 'setup_404_template_redirect']);
@@ -31,10 +32,16 @@ class Init extends Site {
         add_filter('acf/load_field/key=field_667605c8ad53a', [new Setup(), 'acf_load_post_types_choices']);
         add_filter('timber/context', [new TwigExtension, 'addToContext']);
         add_filter('timber/context', [new Setup(), 'add_to_context']);
+        add_filter('timber/context', [$this, 'add_breadcrumbs_to_context']);
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('wp_print_styles', 'print_emoji_styles');
 
 
         parent::__construct();
+    }
+    public function add_breadcrumbs_to_context($context) {
+        $setup = new Setup();
+        $context['breadcrumbs'] = $setup->get_breadcrumbs();
+        return $context;
     }
 }
