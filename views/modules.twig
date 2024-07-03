@@ -1,7 +1,13 @@
 {% for data in flexible_content %}
     <section class="{{ data.acf_fc_layout ~ '-module' }} ">
         <div class="flex mx-auto px-4 py-12 2xl:px-0 max-w-screen-lg">
-            {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
+            {% if data.acf_fc_layout|e == 'cards_module' %}
+                {% set post_type = data.cards_module.post_type_selector %}
+                {% set posts = get_posts_by_type(post_type) %}
+                {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data, posts: posts }, ignore_missing = true) }}
+            {% else %}
+                {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
+            {% endif %}
         </div>
     </section>
     {% if data.acf_fc_layout == 'banner' %}

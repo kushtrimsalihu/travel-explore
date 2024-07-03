@@ -3,6 +3,7 @@
 use Timber\Timber;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use App\Setup;
 
 class TwigExtension {
 
@@ -28,6 +29,10 @@ class TwigExtension {
 
         $twig->addFunction(new TwigFunction('get_term_link', function ($term) {
             return get_term_link($term);
+        }));
+
+        $twig->addFunction(new TwigFunction('get_posts_by_type', function ($post_type) {
+            return Setup::get_all_posts_by_type($post_type);
         }));
 
         return $twig;
