@@ -198,39 +198,84 @@ class Setup {
                 'url' => $home_url
             ];
         }
-    
+
         if (is_search()) {
             $breadcrumbs[] = [
                 'title' => 'Search Results',
                 'url' => ''
             ];
-        }
-        
-
-        if (is_tax('alternative_tourism_category')) {
-            $term = get_queried_object();
-            $tourism_page_url = '';
-    
-            $tourism_page = get_page_by_path('tourism-category');
-            if ($tourism_page) {
-                $tourism_page_url = get_permalink($tourism_page);
+        } elseif (is_singular()) {
+            $post_type = get_post_type_object(get_post_type());
+            if ($post_type && !in_array($post_type->name, ['post', 'page'])) {
+                $breadcrumbs[] = [
+                    'title' => $post_type->labels->name,
+                    'url' => get_post_type_archive_link($post_type->name)
+                ];
             }
     
-            $breadcrumbs[] = [
-                'title' => 'Tourism Categories',
-                'url' => $tourism_page_url
-            ];
-    
-            $breadcrumbs[] = [
-                'title' => $term->name,
-                'url' => get_term_link($term->term_id)
-            ];
-        }  
-        elseif (is_page()) {
             $breadcrumbs[] = [
                 'title' => get_the_title(),
                 'url' => get_permalink()
             ];
+        } elseif (is_tax()) {
+            if (is_tax('alternative_tourism_category')) {
+                $term = get_queried_object();
+                $tourism_page_url = '';
+        
+                $tourism_page = get_page_by_path('tourism-category');
+                if ($tourism_page) {
+                    $tourism_page_url = get_permalink($tourism_page);
+                }
+        
+                $breadcrumbs[] = [
+                    'title' => 'Tourism Categories',
+                    'url' => $tourism_page_url
+                ];
+        
+                $breadcrumbs[] = [
+                    'title' => $term->name,
+                    'url' => get_term_link($term->term_id)
+                ];
+            }  else{
+            $term = get_queried_object();
+            if ($term) {
+                $taxonomy = get_taxonomy($term->taxonomy);
+                if ($taxonomy) {
+                    $breadcrumbs[] = [
+                        'title' => $taxonomy->labels->name,
+                        'url' => get_term_link($term->term_id)
+                    ];
+                }
+    
+                $breadcrumbs[] = [
+                    'title' => $term->name,
+                    'url' => get_term_link($term->term_id)
+                ];
+            }}
+        } elseif (is_page()) {
+            $breadcrumbs[] = [
+                'title' => get_the_title(),
+                'url' => get_permalink()
+            ];
+        } elseif (is_home()) {
+            $breadcrumbs[] = [
+                'title' => single_post_title('', false),
+                'url' => get_permalink()
+            ];
+        } elseif (is_archive()) {
+            if (is_post_type_archive()) {
+                $post_type = get_queried_object();
+                $breadcrumbs[] = [
+                    'title' => post_type_archive_title('', false),
+                    'url' => get_post_type_archive_link($post_type->name)
+                ];
+            } elseif (is_category() || is_tag() || is_tax()) {
+                $term = get_queried_object();
+                $breadcrumbs[] = [
+                    'title' => single_term_title('', false),
+                    'url' => get_term_link($term)
+                ];
+            }
         }
     
         return $breadcrumbs;
