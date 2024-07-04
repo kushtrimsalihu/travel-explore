@@ -43,6 +43,9 @@ class TwigExtension {
             'logo' => get_field('footer_logo', 'option'),
             'content' => get_field('footer_content', 'option'),
         ];
+
+        $setup = new Setup();
+        $context['breadcrumbs'] = $setup->get_breadcrumbs();
     
         return $context;
     }

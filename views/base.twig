@@ -5,6 +5,9 @@
 		{% include "HeaderNavigation.twig" %}
 		{{ function('wp_body_open') }}
 
+			{% if not breadcrumbs_included and not function('is_front_page') %}
+				{% include 'breadcrumbs.twig' %}
+			{% endif %}
 		
 			{% if is_404 %}
 				{% include "templates/errors/404.twig" %}

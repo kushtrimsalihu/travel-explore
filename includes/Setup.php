@@ -190,77 +190,52 @@ class Setup {
     public function get_breadcrumbs() {
         global $post;
         $breadcrumbs = [];
-        $home_url = home_url('/');
-        $breadcrumbs[] = [
-            'title' => 'Home',
-            'url' => $home_url
-        ];
+    
+        if (!is_front_page()) {
+            $home_url = home_url('/');
+            $breadcrumbs[] = [
+                'title' => 'Home',
+                'url' => $home_url
+            ];
+        }
+    
+        if (is_search()) {
+            $breadcrumbs[] = [
+                'title' => 'Search Results',
+                'url' => ''
+            ];
+        }
+        
 
         if (is_tax('alternative_tourism_category')) {
             $term = get_queried_object();
             $tourism_page_url = '';
-
+    
             $tourism_page = get_page_by_path('tourism-category');
             if ($tourism_page) {
                 $tourism_page_url = get_permalink($tourism_page);
             }
-
+    
             $breadcrumbs[] = [
                 'title' => 'Tourism Categories',
                 'url' => $tourism_page_url
             ];
-
-            if ($term->parent) {
-                $parent_term = get_term($term->parent, 'alternative_tourism_category');
-                $breadcrumbs[] = [
-                    'title' => $parent_term->name,
-                    'url' => get_term_link($parent_term->term_id)
-                ];
-            }
+    
             $breadcrumbs[] = [
                 'title' => $term->name,
                 'url' => get_term_link($term->term_id)
             ];
-        } elseif (is_category() || is_single()) {
-            $category = get_the_category();
-            if ($category) {
-                $breadcrumbs[] = [
-                    'title' => $category[0]->cat_name,
-                    'url' => get_category_link($category[0]->term_id)
-                ];
-                if (is_single()) {
-                    $breadcrumbs[] = [
-                        'title' => get_the_title(),
-                        'url' => get_permalink()
-                    ];
-                }
-            }
-        } elseif (is_page() && $post->post_parent) {
-            $parent_id  = $post->post_parent;
-            $crumbs = [];
-            while ($parent_id) {
-                $page = get_page($parent_id);
-                $crumbs[] = [
-                    'title' => get_the_title($page->ID),
-                    'url' => get_permalink($page->ID)
-                ];
-                $parent_id = $page->post_parent;
-            }
-            $crumbs = array_reverse($crumbs);
-            $breadcrumbs = array_merge($breadcrumbs, $crumbs);
-            $breadcrumbs[] = [
-                'title' => get_the_title(),
-                'url' => get_permalink()
-            ];
-        } elseif (is_page()) {
+        }  
+        elseif (is_page()) {
             $breadcrumbs[] = [
                 'title' => get_the_title(),
                 'url' => get_permalink()
             ];
         }
-
+    
         return $breadcrumbs;
     }
+    
     
 
 }
