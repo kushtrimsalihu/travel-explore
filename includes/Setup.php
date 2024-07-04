@@ -185,6 +185,57 @@ class Setup {
     
         return $categories;
     }
+
+    
+    public function get_breadcrumbs() {
+        global $post;
+        $breadcrumbs = [];
+    
+        if (!is_front_page()) {
+            $home_url = home_url('/');
+            $breadcrumbs[] = [
+                'title' => 'Home',
+                'url' => $home_url
+            ];
+        }
+    
+        if (is_search()) {
+            $breadcrumbs[] = [
+                'title' => 'Search Results',
+                'url' => ''
+            ];
+        }
+        
+
+        if (is_tax('alternative_tourism_category')) {
+            $term = get_queried_object();
+            $tourism_page_url = '';
+    
+            $tourism_page = get_page_by_path('tourism-category');
+            if ($tourism_page) {
+                $tourism_page_url = get_permalink($tourism_page);
+            }
+    
+            $breadcrumbs[] = [
+                'title' => 'Tourism Categories',
+                'url' => $tourism_page_url
+            ];
+    
+            $breadcrumbs[] = [
+                'title' => $term->name,
+                'url' => get_term_link($term->term_id)
+            ];
+        }  
+        elseif (is_page()) {
+            $breadcrumbs[] = [
+                'title' => get_the_title(),
+                'url' => get_permalink()
+            ];
+        }
+    
+        return $breadcrumbs;
+    }
+    
     
 
 }

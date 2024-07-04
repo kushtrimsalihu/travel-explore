@@ -19,6 +19,7 @@ class Init extends Site {
         add_action('init', [new PostType(), 'register_blog_post_type']);
         add_action('init', [new PostType(), 'blog_category']);
         add_action('init', [new PostType(), 'register_alternative_tourism_taxonomies']);
+        add_action('init', [new PostType(), 'register_user_journey_post_type']);
         add_action('wp_ajax_live_search', [new Setup(), 'live_search_handler']);
         add_action('wp_ajax_nopriv_live_search', [new Setup(), 'live_search_handler']);
         add_action('template_redirect', [new Setup(), 'setup_404_template_redirect']);
@@ -37,4 +38,5 @@ class Init extends Site {
 
         parent::__construct();
     }
+
 }
