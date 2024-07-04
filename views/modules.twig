@@ -10,7 +10,7 @@
             {% endif %}
         </div>
     </section>
-    {% if data.acf_fc_layout == 'banner' %}
+    {% if loop.index == 1 and function('is_front_page') %}
         <section class="travel-categories-module">
             <div class="flex mx-auto px-0 py-0 w-full">
                 {{ include('modules/travel-categories.twig', ignore_missing = true) }}
