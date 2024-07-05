@@ -2,9 +2,10 @@
 {% set breadcrumbs_included = true %}
 
 {% block content %}
-<h1 class="text-center text-brown-750"> {{title}}</h1>
-<div class="flex mx-auto flex-col px-4 py-4 2xl:px-0 max-w-screen-lg">
 {% include 'breadcrumbs.twig' %}
+<h1 class="text-center text-brown-750"> {{title}}</h1>
+<div class="flex mx-auto px-4 py-4 2xl:px-0 max-w-screen-lg">
+   
     <div class="categories grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     
         {% for category in categories %}

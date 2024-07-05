@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 document.getElementById('closeIcon').addEventListener('click', function () {
   document.getElementById('searchModal').style.visibility = 'hidden';
+  document.getElementById('live-search-input').value = '';
 });
 document.getElementById('search-Icon').addEventListener('click', function () {
   document.getElementById('searchModal').style.visibility = 'visible';
@@ -141,17 +142,13 @@ document.addEventListener('DOMContentLoaded', function () {
         method: 'POST',
         body: formData
       }).then(function (response) {
-        if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-        }
         return response.json();
       }).then(function (data) {
-        var messageContainer = document.getElementById('messageContainer');
         if (data.message) {
           form.innerHTML = '<div class="text-center p-4 text-light-p40"><h3>Thank you for your message!</h3></div>';
           form.reset();
         } else {
-          throw new Error('No message received');
+          throw new Error(data.error || 'No message received');
         }
       })["catch"](function (error) {
         var messageContainer = document.getElementById('messageContainer');
