@@ -1,0 +1,67 @@
+{% if data.display_mode == 'latest' %}
+
+{% set all_latest_posts = get_latest_posts() %}
+
+    {% for post_type, posts in all_latest_posts %}
+        {% if post_type == 'alternative_tourism' %}
+            <h2>{{ post_type }}</h2>
+
+            <ul>
+                {% for post in posts %}
+            <a href="{{ post.link }}">{{ post.post_title }}</a>
+                        
+                {% endfor %}
+            </ul>
+        {% elseif post_type == 'post'%}
+            <h2>{{ post_type }}</h2>
+                <ul>
+                    {% for post in posts %}
+                    <li>{{ post.post_title }}</li>
+                    {% endfor %}
+                </ul>
+        {% endif %}
+    {% endfor %}
+
+{% elseif data.display_mode == 'manual' %}
+    <h3>Manual Selection</h3>
+    <ul>
+        {% for post in data.manual %}
+            <li>
+                <a href="{{ post.link }}">{{ post.post_title }}</a>
+                {{post.post_content}}
+                
+            </li>
+        {% endfor %}
+    </ul>
+{% elseif data.display_mode == 'filter_by_category' %}
+    {% for item in category_filter %}
+        {% set category = item.category %}
+        {% set posts = item.posts %}
+        {% set image = item.image %}
+
+        <div class="category">
+            <h2>{{ category.name }}</h2>
+            <p>{{ category.description }}</p>
+            {% if image %}
+                <img src="{{ image.url }}" alt="{{ image.alt }}">
+            {% endif %}
+            <a href="{{ get_term_link(category.term_id) }}">View Category</a>
+        </div>
+
+        <div class="posts">
+            {% for post in posts %}
+                <div class="post">
+                    <h3><a href="{{ post.link }}">{{ post.title }}</a></h3>
+                    <p>{{ post.excerpt }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+
+    
+{% elseif data.display_mode == 'filter_by_author' %}
+    <h3>Filter by Author</h3>
+    {{ include("templates/author-filter.twig", { data: data }, ignore_missing = true) }}
+
+{% endif %}

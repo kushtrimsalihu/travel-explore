@@ -35,6 +35,10 @@ class TwigExtension {
             return Setup::get_all_posts_by_type($post_type);
         }));
 
+        $twig->addFunction(new TwigFunction('get_latest_posts', function () {
+            return Setup::get_latest_posts();
+        }));
+
         return $twig;
     }
 

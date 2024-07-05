@@ -1,14 +1,18 @@
-<?php 
+<?php
 
 namespace App;
 
 use Timber\Timber;
 
+$context = Timber::context();
+$context['posts'] = Timber::get_posts();
 $templates = ['templates/archive.twig', 'templates/page.twig'];
 
-$context = Timber::context();
-
-if (is_tax('alternative_tourism_category')) {
+if (is_post_type_archive('alternative_tourism')) {
+    $context['title'] = post_type_archive_title('', false);
+    $context['flexible_content'] = get_field('flexible_content'); 
+    array_unshift($templates, 'templates/alt-tourism/archive-alternative-tourism.twig');
+} elseif (is_tax('alternative_tourism_category')) {
     $context['title'] = single_term_title('', false);
     array_unshift($templates, 'templates/taxonomy-alternative_tourism_category.twig');
     $context['term_description'] = term_description();
@@ -20,7 +24,5 @@ if (is_tax('alternative_tourism_category')) {
     $context['title'] = post_type_archive_title('', false);
     array_unshift($templates, 'templates/archive-user_journey.twig');
 }
-
-$context['posts'] = Timber::get_posts();
 
 Timber::render($templates, $context);

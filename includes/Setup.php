@@ -280,7 +280,36 @@ class Setup {
     
         return $breadcrumbs;
     }
+
+    public static function get_latest_posts() {
+        $post_types = get_post_types(['public' => true], 'names');
+        $latest_posts = [];
+
+        foreach ($post_types as $post_type) {
+            $args = [
+                'post_type' => $post_type,
+                'posts_per_page' => 6,
+                'post_status' => 'publish',
+            ];
+
+            $query = new \WP_Query($args);
+            $posts = $query->posts;
+
+            $latest_posts[$post_type] = $posts;
+        }
+
+        return $latest_posts;
+    }
+
+    function filter_acf_relationship_query( $args, $field, $post_id ) {
+        if ( $field['name'] === 'latest_post' ) {
+            $args['orderby'] = 'date';
+            $args['order'] = 'DESC';
+            $args['posts_per_page'] = 6;
+        }
     
+        return $args;
+    }
     
 
 }
