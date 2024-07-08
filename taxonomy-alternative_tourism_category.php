@@ -1,4 +1,6 @@
 <?php
+/*
+Template Name: Tourism Categories*/
 
 namespace App;
 
