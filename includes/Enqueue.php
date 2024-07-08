@@ -38,7 +38,7 @@ class Enqueue {
     public function swiper_scripts() {
         wp_enqueue_style('swiper-css', get_template_directory_uri() . '/node_modules/swiper/swiper-bundle.min.css', array(), null, 'all');
         wp_enqueue_script('swiper-js', get_template_directory_uri() . '/node_modules/swiper/swiper-bundle.min.js', array(), null, true);
-        wp_enqueue_script('carousel', get_template_directory_uri() . '/dist/js/carousel.js', array('swiper-js'), filemtime(get_template_directory() . '/dist/js/carousel-init.js'), true);
+        wp_enqueue_script('carousel', get_template_directory_uri() . '/dist/js/carousel.js', array('swiper-js'), filemtime(get_template_directory() . '/dist/js/carousel.js'), true);
     }
 
     public function enqueue_live_search_script() {
