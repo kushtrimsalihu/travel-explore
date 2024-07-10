@@ -1,7 +1,7 @@
 <section class="travel-post-cards-module flex flex-wrap gap-6 w-full">
     {% for card in data.card %}
-        <div class="flex flex-col md:flex-row bg-white border border-light-nv80 bg-light-n98 shadow-lg rounded-lg overflow-hidden w-full ">
-            <div class="relative flex-none w-full  md:w-1/4 h-auto  p-3">
+        <div class="flex flex-col md:flex-row bg-white border border-light-nv80 bg-light-n98 shadow-lg rounded-lg overflow-hidden w-full">
+            <div class="relative flex-none w-full md:w-1/4 h-auto p-3">
                 <img src="{{ card.image.url }}" alt="{{ card.image.alt }}" class="w-full h-full object-cover rounded-lg">
             </div>
             <div class="card-content p-4 flex-grow flex flex-col justify-between w-full">
@@ -24,35 +24,30 @@
                                 <div class="bg-brown-350 text-white text-center text-xs py-1 px-2 rounded shadow-md whitespace-nowrap">
                                     {{ category.name }}
                                 </div>
-                                <div class="w-2 h-2  transform rotate-45 mt-[-4px]"></div>
+                                <div class="w-2 h-2 transform rotate-45 mt-[-4px]"></div>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             </div>
-            <div class="p-4 flex-none w-autoflex flex-col justify-between border-l border-gray-200 text-center">
-                <div class="text-lg font-bold  text-brown-750 mb-2 line-clamp-1 ">{{ card.price }}</div>
-                
-                <div class="flex justify-center items-center mb-3 lg:mb-8 h-screen">
-                <svg class="w-1/4 h-auto text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M24 6C14.0583 6 6 14.0546 6 23.9892C6 28.9256 7.98814 33.396 11.2103 36.6475L9.78969 38.0553C6.21161 34.4446 4 29.4741 4 23.9892C4 12.949 12.9548 4 24 4C35.0452 4 44 12.949 44 23.9892C44 29.6236 41.6663 34.7148 37.9152 38.3471L36.5239 36.9103C39.9022 33.639 42 29.0598 42 23.9892C42 14.0546 33.9417 6 24 6Z" fill="#333333"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M23 11L23 6.00001L25 6L25 11L23 11Z" fill="#333333"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M36.7068 37.0681L33.0595 33.4209L34.4737 32.0067L38.1209 35.6538L36.7068 37.0681Z" fill="#333333"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1214 14.5355L10.5857 11.0001L11.9999 9.58584L15.5356 13.1213L14.1214 14.5355Z" fill="#333333"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M37.6843 22H42.6843V24H37.6843V22Z" fill="#333333"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M5.05267 22H10.0527V24H5.05267V22Z" fill="#333333"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M32.5858 12.9999L36.2332 9.35298L37.6474 10.7673L33.9999 14.4142L32.5858 12.9999Z" fill="#333333"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1968 33.6232L10.5496 37.2705L9.13539 35.8563L12.7825 32.209L14.1968 33.6232Z" fill="#333333"/>
-                  <path d="M20.9521 36.7982C20.7139 36.4854 20.598 36.0963 20.6264 35.7042L22.996 21.8838C23.1402 19.887 25.1653 19.9052 25.3095 21.902L27.6907 35.7042C27.719 36.0963 27.6032 36.4854 27.365 36.7982L25.4425 39.0096C24.5 39.5 24 39.5 22.8745 39.0096L20.9521 36.7982Z" fill="#333333"/>
-                </svg>
-              </div>
-              
-            
-            
-
-                <a href="{{card.button.url}}" class="button bg-transparent text-nowrap ml-5 lg:ml-10 w-fit text-light-p40 border border-light-p40 py-2 px-4 rounded-2xl hover:bg-light-p40 hover:text-white-100">
+            <div class="p-4 flex-none w-full md:w-1/6 flex-col justify-between border-l border-gray-200 text-center h-full ">
+                <div class="text-lg font-bold text-brown-750 mb-5 line-clamp-1">{{ card.price }}</div>
+                <div class="flex justify-center items-center mb-8">
+                    <svg class="w-1/2 h-auto text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24 6C14.0583 6 6 14.0546 6 23.9892C6 28.9256 7.98814 33.396 11.2103 36.6475L9.78969 38.0553C6.21161 34.4446 4 29.4741 4 23.9892C4 12.949 12.9548 4 24 4C35.0452 4 44 12.949 44 23.9892C44 29.6236 41.6663 34.7148 37.9152 38.3471L36.5239 36.9103C39.9022 33.639 42 29.0598 42 23.9892C42 14.0546 33.9417 6 24 6Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M23 11L23 6.00001L25 6L25 11L23 11Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M36.7068 37.0681L33.0595 33.4209L34.4737 32.0067L38.1209 35.6538L36.7068 37.0681Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1214 14.5355L10.5857 11.0001L11.9999 9.58584L15.5356 13.1213L14.1214 14.5355Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M37.6843 22H42.6843V24H37.6843V22Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.05267 22H10.0527V24H5.05267V22Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M32.5858 12.9999L36.2332 9.35298L37.6474 10.7673L33.9999 14.4142L32.5858 12.9999Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1968 33.6232L10.5496 37.2705L9.13539 35.8563L12.7825 32.209L14.1968 33.6232Z" fill="#333333"/>
+                        <path d="M20.9521 36.7982C20.7139 36.4854 20.598 36.0963 20.6264 35.7042L22.996 21.8838C23.1402 19.887 25.1653 19.9052 25.3095 21.902L27.6907 35.7042C27.719 36.0963 27.6032 36.4854 27.365 36.7982L25.4425 39.0096C24.5 39.5 24 39.5 22.8745 39.0096L20.9521 36.7982Z" fill="#333333"/>
+                    </svg>
+                </div>
+                <a href="{{ card.button.url }}" class="button bg-transparent text-nowrap w-fit text-light-p40 border border-light-p40 mt-8 py-2 px-4 rounded-2xl hover:bg-light-p40 hover:text-white-100">
                     {{ card.button.title }}
-                </a> 
+                </a>
             </div>
         </div>
     {% endfor %}
