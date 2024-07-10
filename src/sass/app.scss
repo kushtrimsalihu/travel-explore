@@ -13,7 +13,9 @@ body {
 h1 {
     @apply font-roboto text-2xl;
 }
-
+.travel-post-cards-module > div:nth-child(3) .flex-none {
+    @apply md:w-1/6; 
+}
 .banner-module {
     @apply bg-light-n98;
 }
