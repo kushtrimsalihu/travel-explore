@@ -6,6 +6,11 @@ use Twig\TwigFunction;
 use App\Setup;
 
 class TwigExtension {
+    protected $setup;
+
+    public function __construct() {
+        $this->setup = new Setup();
+    }
 
     public function addToTwig($twig)
     {
@@ -35,9 +40,11 @@ class TwigExtension {
             return Setup::get_all_posts_by_type($post_type);
         }));
 
-        $twig->addFunction(new TwigFunction('get_latest_posts', function () {
-            return Setup::get_latest_posts();
+        $twig->addFunction(new TwigFunction('get_latest_posts', function ($selected_post_type) {
+            return Setup::get_latest_posts($selected_post_type);
         }));
+        $twig->addFunction(new TwigFunction('get_categories_and_posts', [$this->setup, 'get_categories_and_posts']));
+
 
         return $twig;
     }
@@ -50,8 +57,8 @@ class TwigExtension {
 
         $setup = new Setup();
         $context['breadcrumbs'] = $setup->get_breadcrumbs();
+        $context['category_filter'] = $setup->get_categories_and_posts(); 
     
         return $context;
     }
-
 }
