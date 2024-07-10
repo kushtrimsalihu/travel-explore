@@ -14,6 +14,7 @@ class Init extends Site {
         add_action('wp_enqueue_scripts', [new Enqueue(), 'travel_enqueue_scripts']);
         add_action('wp_enqueue_scripts', [new Enqueue(), 'enqueue_live_search_script']);
         add_action('wp_enqueue_scripts', [new Enqueue(),'swiper_scripts']);
+        add_action('wp_enqueue_scripts', [new Enqueue(),'enqueue_fancybox']);
         add_action('after_setup_theme', [new Setup(), 'theme_supports']);
         add_action('init', [new Setup(), 'register_navigation_menus']);
         add_action('init', [new PostType(), 'register_alternative_tourism_cpt']);
