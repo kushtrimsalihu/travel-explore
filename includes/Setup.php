@@ -357,4 +357,67 @@ class Setup {
         return $all_modules_categories_and_posts;
     }
     
+    public function exclude_pending_posts_from_frontend($query) {
+        if (!is_admin() && $query->is_main_query()) {
+            $query->set('post_status', 'publish');
+        }
+    }
+    
+
+    public function set_pending_status_for_user_posts($data, $postarr) {
+        if (!current_user_can('administrator')) {
+            $data['post_status'] = 'pending';
+        }
+        return $data;
+    }
+
+    public function notify_admin_of_pending_post($post_id, $post) {
+        if ($post->post_status == 'pending' && !current_user_can('administrator')) {
+            $admin_email = get_option('admin_email');
+            $subject = 'New Pending Post Submission';
+            $message = 'A new post titled "' . $post->post_title . '" has been submitted and is pending approval.';
+            wp_mail($admin_email, $subject, $message);
+        }
+    }
+
+    public function restrict_publish_to_admins($data, $postarr) {
+        if ($data['post_status'] == 'publish' && !current_user_can('administrator')) {
+
+            $data['post_status'] = 'pending';
+        }
+        return $data;
+    }
+
+    public function add_author_column($columns) {
+        if (current_user_can('administrator')) {
+            $columns['post_author'] = 'Author';
+        }
+        return $columns;
+    }
+
+    public function show_author_column($column_name, $post_id) {
+        if ($column_name == 'post_author') {
+            $post = get_post($post_id);
+            $author_id = $post->post_author;
+            $author_name = get_the_author_meta('display_name', $author_id);
+            echo $author_name;
+        }
+    }
+
+    public function add_custom_columns($columns) {
+        if (current_user_can('administrator')) {
+            $columns['author'] = __('Author');
+        }
+        return $columns;
+    }
+
+    public function custom_column_content($column_name, $post_id) {
+        if ($column_name == 'author' && current_user_can('administrator')) {
+            $author = get_the_author_meta('display_name', get_post_field('post_author', $post_id));
+            echo esc_html($author);
+        }
+    }
+
+
+    
 }

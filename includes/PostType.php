@@ -234,6 +234,7 @@ class PostType {
             'hierarchical'       => false,
             'menu_position'      => null,
             'supports'           => array('title', 'thumbnail'),
+            'menu_icon' => 'dashicons-format-chat',
         );
     
         register_post_type('user_journey', $args);
