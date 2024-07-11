@@ -15,6 +15,13 @@ class Init extends Site {
         add_action('wp_enqueue_scripts', [$enqueue, 'enqueue_live_search_script']);
         add_action('wp_enqueue_scripts', [$enqueue, 'swiper_scripts']);
         
+
+        add_action('wp_enqueue_scripts', [new Enqueue(), 'dequeueScripts' ]);
+        add_action('wp_enqueue_scripts', [new Enqueue(), 'dequeueStyles' ]);
+        add_action('wp_enqueue_scripts', [new Enqueue(), 'travel_enqueue_scripts']);
+        add_action('wp_enqueue_scripts', [new Enqueue(), 'enqueue_live_search_script']);
+        add_action('wp_enqueue_scripts', [new Enqueue(),'swiper_scripts']);
+        add_action('wp_enqueue_scripts', [new Enqueue(),'enqueue_fancybox']);
         add_action('after_setup_theme', [new Setup(), 'theme_supports']);
         add_action('init', [new Setup(), 'register_navigation_menus']);
         add_action('init', [new PostType(), 'register_alternative_tourism_cpt']);
@@ -25,6 +32,10 @@ class Init extends Site {
         add_action('wp_ajax_live_search', [new Setup(), 'live_search_handler']);
         add_action('wp_ajax_nopriv_live_search', [new Setup(), 'live_search_handler']);
         add_action('template_redirect', [new Setup(), 'setup_404_template_redirect']);
+        add_action('save_post', [new Setup(), 'notify_admin_of_pending_post'], 10, 2);
+        add_action('manage_user-journey_posts_custom_column', [new Setup(), 'show_author_column'], 10, 2);
+        add_action('manage_user_journey_posts_custom_column', [new Setup(), 'custom_column_content'], 10, 2);
+        add_action('pre_get_posts', [new Setup(), 'exclude_pending_posts_from_frontend']);
 
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
         add_filter('acf/settings/save_json', [new Setup(), 'my_acf_json_save_point']);
@@ -34,7 +45,17 @@ class Init extends Site {
         add_filter('acf/load_field/key=field_667605c8ad53a', [new Setup(), 'acf_load_post_types_choices']);
         add_filter('timber/context', [new TwigExtension, 'addToContext']);
         add_filter('timber/context', [new Setup(), 'add_to_context']);
+        add_filter('acf/fields/relationship/query', [new Setup(),'filter_acf_relationship_query'], 10, 3);
+        add_filter('wp_insert_post_data', [new Setup(), 'set_pending_status_for_user_posts'], 10, 2);
+        add_filter('manage_user-journey_posts_columns', [new Setup(), 'add_author_column']);
+        add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
+        
         add_filter('acf/fields/relationship/query', [new Setup(), 'filter_acf_relationship_query'], 10, 3);
+        add_filter('acf/fields/relationship/query', [new Setup(),'filter_acf_relationship_query'], 10, 3);
+        add_filter('wp_insert_post_data', [new Setup(), 'set_pending_status_for_user_posts'], 10, 2);
+        add_filter('manage_user-journey_posts_columns', [new Setup(), 'add_author_column']);
+        add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
+        
 
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('wp_print_styles', 'print_emoji_styles');

@@ -1,7 +1,7 @@
 {% for data in flexible_content %}
     <section class="{{ data.acf_fc_layout ~ '-module' }}">
-        {% if data.acf_fc_layout == 'carousel' %}
-            <div class="flex mx-auto py-12 w-full"> 
+        {% if data.acf_fc_layout == 'post_display_settings' %}
+            <div class="flex mx-auto pb-12 w-full"> 
                 {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
             </div>
         {% else %}

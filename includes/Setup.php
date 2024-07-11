@@ -114,13 +114,11 @@ class Setup {
     }
    
     public function acf_load_post_types_choices( $field ) {
-             // Reset choices
+
         $field['choices'] = array();
     
-        // Get all post types
         $post_types = get_post_types( array( 'public' => true ), 'objects' );
     
-        // Loop through post types and populate choices
         foreach ( $post_types as $post_type ) {
             $field['choices'][ $post_type->name ] = $post_type->label;
         }
@@ -137,7 +135,6 @@ class Setup {
         $query = new WP_Query($args);
         $posts = Timber::get_posts($query);
 
-        // Ensure thumbnails are included
         foreach ($posts as $key => $post) {
             $posts[$key]->thumbnail = get_the_post_thumbnail_url($post->ID, 'full');
             $posts[$key]->permalink = get_permalink($post->ID);
@@ -157,11 +154,8 @@ class Setup {
                 return $module['cards_module']['post_type_selector'];
             }
         }
-        return 'post'; // Default post type if not found
+        return 'post'; 
     }
-    
-
-    
 
     function setup_404_template_redirect() {
         if (is_404()) {
@@ -281,35 +275,149 @@ class Setup {
         return $breadcrumbs;
     }
 
-    public static function get_latest_posts() {
+    public static function get_latest_posts($selected_post_type) {
         $post_types = get_post_types(['public' => true], 'names');
         $latest_posts = [];
-
-        foreach ($post_types as $post_type) {
+    
+        if (in_array($selected_post_type, $post_types)) {
             $args = [
-                'post_type' => $post_type,
+                'post_type' => $selected_post_type,
                 'posts_per_page' => 6,
                 'post_status' => 'publish',
             ];
-
+    
             $query = new \WP_Query($args);
             $posts = $query->posts;
-
-            $latest_posts[$post_type] = $posts;
+    
+            foreach ($posts as $post) {
+                $post->post_thumbnail_url = get_the_post_thumbnail_url($post->ID);
+                
+            }
+    
+            $latest_posts[$selected_post_type] = $posts;
         }
-
+    
         return $latest_posts;
     }
 
-    function filter_acf_relationship_query( $args, $field, $post_id ) {
-        if ( $field['name'] === 'latest_post' ) {
-            $args['orderby'] = 'date';
-            $args['order'] = 'DESC';
-            $args['posts_per_page'] = 6;
-        }
+    public function get_categories_and_posts() {
+        $modules = get_field('flexible_content');
+        $all_modules_categories_and_posts = [];
     
-        return $args;
+        if ($modules) {
+            foreach ($modules as $module) {
+                if ($module['acf_fc_layout'] === 'post_display_settings') {
+                    switch ($module['display_mode']) {
+                        case 'filter_by_category':
+                            $categories_and_posts = [];
+                            $category_items = $module['category_filter'] ?? [];
+                            foreach ($category_items as $category_id) {
+                                $category_name = get_term($category_id)->name;
+                                $posts = get_posts([
+                                    'post_type' => 'alternative_tourism', 
+                                    'tax_query' => [
+                                        [
+                                            'taxonomy' => 'alternative_tourism_category',
+                                            'field'    => 'term_id',
+                                            'terms'    => $category_id,
+                                        ],
+                                    ],
+                                ]);
+    
+                                $post_data = [];
+                                foreach ($posts as $post) {
+                                    $thumbnail_id = get_post_thumbnail_id($post->ID);
+                                    $flexible_content = get_field('flexible_content', $post->ID);
+                                    $post_data[] = [
+                                        'post' => $post,
+                                        'image' => get_the_post_thumbnail_url($post->ID, 'thumbnail'),
+                                        'image_alt' => get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true),
+                                        'image_title' => get_the_title($thumbnail_id),
+                                        'flexible_content' => $flexible_content,
+                                    ];
+                                }
+                                
+                                $categories_and_posts[] = [
+                                    'category' => $category_name,
+                                    'posts' => $post_data,
+                                ];
+                            }
+                            $all_modules_categories_and_posts[] = [
+                                'module' => $module,
+                                'categories_and_posts' => $categories_and_posts
+                            ];
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        
+        return $all_modules_categories_and_posts;
+    }
+    
+    public function exclude_pending_posts_from_frontend($query) {
+        if (!is_admin() && $query->is_main_query()) {
+            $query->set('post_status', 'publish');
+        }
     }
     
 
+    public function set_pending_status_for_user_posts($data, $postarr) {
+        if (!current_user_can('administrator')) {
+            $data['post_status'] = 'pending';
+        }
+        return $data;
+    }
+
+    public function notify_admin_of_pending_post($post_id, $post) {
+        if ($post->post_status == 'pending' && !current_user_can('administrator')) {
+            $admin_email = get_option('admin_email');
+            $subject = 'New Pending Post Submission';
+            $message = 'A new post titled "' . $post->post_title . '" has been submitted and is pending approval.';
+            wp_mail($admin_email, $subject, $message);
+        }
+    }
+
+    public function restrict_publish_to_admins($data, $postarr) {
+        if ($data['post_status'] == 'publish' && !current_user_can('administrator')) {
+
+            $data['post_status'] = 'pending';
+        }
+        return $data;
+    }
+
+    public function add_author_column($columns) {
+        if (current_user_can('administrator')) {
+            $columns['post_author'] = 'Author';
+        }
+        return $columns;
+    }
+
+    public function show_author_column($column_name, $post_id) {
+        if ($column_name == 'post_author') {
+            $post = get_post($post_id);
+            $author_id = $post->post_author;
+            $author_name = get_the_author_meta('display_name', $author_id);
+            echo $author_name;
+        }
+    }
+
+    public function add_custom_columns($columns) {
+        if (current_user_can('administrator')) {
+            $columns['author'] = __('Author');
+        }
+        return $columns;
+    }
+
+    public function custom_column_content($column_name, $post_id) {
+        if ($column_name == 'author' && current_user_can('administrator')) {
+            $author = get_the_author_meta('display_name', get_post_field('post_author', $post_id));
+            echo esc_html($author);
+        }
+    }
+
+
+    
 }
