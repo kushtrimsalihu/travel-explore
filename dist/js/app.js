@@ -172,8 +172,6 @@ document.addEventListener('DOMContentLoaded', function () {
   if (mapElement) {
     var latitude = parseFloat(mapElement.getAttribute('latitude'));
     var longitude = parseFloat(mapElement.getAttribute('longitude'));
-    console.log('Latitude:', latitude);
-    console.log('Longitude:', longitude);
     if (!isNaN(latitude) && !isNaN(longitude)) {
       var map = L.map('map').setView([latitude, longitude], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -182,11 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }).addTo(map);
       var marker = L.marker([latitude, longitude]).addTo(map);
       marker.bindPopup('Welcome to our location!');
-    } else {
-      console.error('Latitude or longitude is not a number.');
     }
-  } else {
-    console.error('Map element not found.');
   }
 });
 
