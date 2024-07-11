@@ -13,7 +13,7 @@
                 </div>
                 <p class="text-grey-450 md:text-lg text-sm">{{post.date|date("F j, Y")}}</p>
             </div>
-            <img src="{{featured_image}}" class="w-screen h-full object-cover">
+            <img src="{{ featured_image ? featured_image : site.theme.link ~ '/assets/images/default.PNG' }}" class="w-screen h-full object-cover">
             <div class="absolute inset-0 bg-black opacity-60"></div>
         </div>
 
