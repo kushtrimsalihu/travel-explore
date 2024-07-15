@@ -40,7 +40,6 @@ class Init extends Site {
         add_action('admin_post_nopriv_user_journey_registration',[new Setup(), 'handle_user_registration']);
         add_action('admin_post_user_journey_registration',[new Setup(), 'handle_user_registration']);
         
-        // Shto shortcode për konfirmimin e regjistrimit
         add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
 
 

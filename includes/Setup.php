@@ -419,22 +419,20 @@ class Setup {
     }
 
     private function is_strong_password($password) {
-        return preg_match('/[A-Z]/', $password) && // Përmban të paktën një shkronjë të madhe
-               preg_match('/[0-9]/', $password) && // Përmban të paktën një numër
-               strlen($password) >= 8; // Është të paktën 8 karaktere i gjatë
+        return preg_match('/[A-Z]/', $password) && 
+               preg_match('/[0-9]/', $password) && 
+               strlen($password) >= 8;
     }
 
     public function handle_user_registration($dummy_param) {
-        $password = $_POST['password']; // Merrni fjalëkalimin nga $_POST
+        $password = $_POST['password']; 
 
-        // Verifikoni forcën e fjalëkalimit
         if (!$this->is_strong_password($password)) {
             set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Fjalëkalimi duhet të jetë të paktën 8 karaktere i gjatë dhe të përmbajë të paktën një shkronjë të madhe dhe një numër.'], 30);
             wp_redirect($_POST['_wp_http_referer']);
             exit;
         }
 
-        // Verifikoni nonce
         if (!isset($_POST['user_journey_registration_nonce_field']) || !wp_verify_nonce($_POST['user_journey_registration_nonce_field'], 'user_journey_registration_nonce')) {
             set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Verifikimi i nonce dështoi'], 30);
             wp_redirect($_POST['_wp_http_referer']);
@@ -487,7 +485,6 @@ class Setup {
         exit;
     }
 
-    // Creating user in WordPress
     $userdata = [
         'user_login' => $username,
         'user_pass' => $password,
@@ -508,15 +505,12 @@ class Setup {
         exit;
     }
 
-    // Generating a hash code for verification
     $activation_code = wp_generate_password(20, false);
     update_user_meta($user_id, 'activation_code', $activation_code);
 
-    // Email sending part
     $subject = 'Confirmation of registration on our site';
     $message = 'Please click on the following link to confirm your registration: ' . add_query_arg(['key' => $activation_code, 'user' => $user_id], home_url('/'));
     
-    // HTML formatted message
     $html_message = '<html><body>';
     $html_message .= '<p>Please click on the following link to confirm your registration:</p>';
     $html_message .= '<p><a href="' . add_query_arg(['key' => $activation_code, 'user' => $user_id], home_url('/')) . '">Confirm registration</a></p>';
@@ -531,7 +525,6 @@ class Setup {
 
     wp_mail($email, $subject, $html_message, $headers);
 
-    // Notification for the user about the confirmation email
     set_transient('user_journey_registration_message', ['type' => 'success', 'message' => 'Registration successful! Check your email to confirm registration.'], 30);
 
     wp_redirect($_POST['_wp_http_referer']);
@@ -545,8 +538,8 @@ public function redirect_after_registration_confirmation() {
         $stored_activation_code = get_user_meta($user_id, 'activation_code', true);
 
         if ($stored_activation_code && $key === $stored_activation_code) {
-            update_user_meta($user_id, 'activation_code', ''); // Clear activation code after confirmation
-            wp_redirect(home_url('/profile')); // Redirect to profile page after successful confirmation
+            update_user_meta($user_id, 'activation_code', ''); 
+            wp_redirect(home_url('/profile')); 
             exit;
         }
     }
