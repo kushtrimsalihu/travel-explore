@@ -376,9 +376,19 @@ class Setup {
             $admin_email = get_option('admin_email');
             $subject = 'New Pending Post Submission';
             $message = 'A new post titled "' . $post->post_title . '" has been submitted and is pending approval.';
-            wp_mail($admin_email, $subject, $message);
+            $html_message = '<html><body>';
+            $html_message .= '<p>A new post titled "<strong>' . $post->post_title . '</strong>" has been submitted and is pending approval.</p>';
+            $html_message .= '</body></html>';
+            
+            $headers = [
+                'From: Notification <noreply@yoursite.com>',
+                'Content-Type: text/html; charset=UTF-8'
+            ];
+    
+            wp_mail($admin_email, $subject, $html_message, $headers);
         }
     }
+    
 
     public function restrict_publish_to_admins($data, $postarr) {
         if ($data['post_status'] == 'publish' && !current_user_can('administrator')) {
@@ -417,7 +427,6 @@ class Setup {
             echo esc_html($author);
         }
     }
-
     private function is_strong_password($password) {
         return preg_match('/[A-Z]/', $password) && 
                preg_match('/[0-9]/', $password) && 
@@ -477,7 +486,7 @@ class Setup {
         wp_redirect($_POST['_wp_http_referer']);
         exit;
     }
-    
+
 
     if ($password !== $verify_password) {
         set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Passwords do not match'], 30);
@@ -510,13 +519,13 @@ class Setup {
 
     $subject = 'Confirmation of registration on our site';
     $message = 'Please click on the following link to confirm your registration: ' . add_query_arg(['key' => $activation_code, 'user' => $user_id], home_url('/'));
-    
+
     $html_message = '<html><body>';
     $html_message .= '<p>Please click on the following link to confirm your registration:</p>';
     $html_message .= '<p><a href="' . add_query_arg(['key' => $activation_code, 'user' => $user_id], home_url('/')) . '">Confirm registration</a></p>';
-    
+
     $html_message .= '</body></html>';
-    
+
 
     $headers = [
         'From: Notification <noreply@yoursite.com>',
@@ -586,4 +595,17 @@ public function custom_registration_page() {
     </div>
     <?php
 }
+    public function restrict_user_journey_posts_to_own($query) {
+        if (!is_admin() || !$query->is_main_query()) {
+            return;
+        }
+    
+        global $pagenow;
+        $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : '';
+    
+        if ($pagenow == 'edit.php' && $post_type == 'user_journey' && !current_user_can('administrator')) {
+            $query->set('author', get_current_user_id());
+        }
+    }
+    
 }
