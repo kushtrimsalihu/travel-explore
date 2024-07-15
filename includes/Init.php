@@ -55,7 +55,7 @@ class Init extends Site {
         add_filter('wp_insert_post_data', [new Setup(), 'set_pending_status_for_user_posts'], 10, 2);
         add_filter('manage_user-journey_posts_columns', [new Setup(), 'add_author_column']);
         add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
-        
+        add_filter('pre_get_posts', [new Setup(), 'restrict_user_journey_posts_to_own']);
         add_filter('acf/fields/relationship/query', [new Setup(), 'filter_acf_relationship_query'], 10, 3);
         add_filter('acf/fields/relationship/query', [new Setup(),'filter_acf_relationship_query'], 10, 3);
         add_filter('wp_insert_post_data', [new Setup(), 'set_pending_status_for_user_posts'], 10, 2);
