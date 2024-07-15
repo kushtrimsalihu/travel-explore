@@ -8,6 +8,13 @@ use TwigExtension;
 class Init extends Site {
 
     public function __construct() {
+        $enqueue = new Enqueue();
+        add_action('wp_enqueue_scripts', [$enqueue, 'dequeueScripts']);
+        add_action('wp_enqueue_scripts', [$enqueue, 'dequeueStyles']);
+        add_action('wp_enqueue_scripts', [$enqueue, 'travel_enqueue_scripts']);
+        add_action('wp_enqueue_scripts', [$enqueue, 'enqueue_live_search_script']);
+        add_action('wp_enqueue_scripts', [$enqueue, 'swiper_scripts']);
+        
 
         add_action('wp_enqueue_scripts', [new Enqueue(), 'dequeueScripts' ]);
         add_action('wp_enqueue_scripts', [new Enqueue(), 'dequeueStyles' ]);
@@ -29,6 +36,12 @@ class Init extends Site {
         add_action('manage_user-journey_posts_custom_column', [new Setup(), 'show_author_column'], 10, 2);
         add_action('manage_user_journey_posts_custom_column', [new Setup(), 'custom_column_content'], 10, 2);
         add_action('pre_get_posts', [new Setup(), 'exclude_pending_posts_from_frontend']);
+        add_action('admin_menu', [new Setup(), 'custom_registration_menu']);
+        add_action('admin_post_nopriv_user_journey_registration',[new Setup(), 'handle_user_registration']);
+        add_action('admin_post_user_journey_registration',[new Setup(), 'handle_user_registration']);
+        
+        add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
+
 
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
         add_filter('acf/settings/save_json', [new Setup(), 'my_acf_json_save_point']);
@@ -43,12 +56,20 @@ class Init extends Site {
         add_filter('manage_user-journey_posts_columns', [new Setup(), 'add_author_column']);
         add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
         
+        add_filter('acf/fields/relationship/query', [new Setup(), 'filter_acf_relationship_query'], 10, 3);
+        add_filter('acf/fields/relationship/query', [new Setup(),'filter_acf_relationship_query'], 10, 3);
+        add_filter('wp_insert_post_data', [new Setup(), 'set_pending_status_for_user_posts'], 10, 2);
+        add_filter('manage_user-journey_posts_columns', [new Setup(), 'add_author_column']);
+        add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
+        
 
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('wp_print_styles', 'print_emoji_styles');
-
+        
+      
 
         parent::__construct();
     }
+
 
 }
