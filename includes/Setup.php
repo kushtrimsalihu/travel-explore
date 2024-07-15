@@ -418,6 +418,179 @@ class Setup {
         }
     }
 
+    private function is_strong_password($password) {
+        return preg_match('/[A-Z]/', $password) && // Përmban të paktën një shkronjë të madhe
+               preg_match('/[0-9]/', $password) && // Përmban të paktën një numër
+               strlen($password) >= 8; // Është të paktën 8 karaktere i gjatë
+    }
 
+    public function handle_user_registration($dummy_param) {
+        $password = $_POST['password']; // Merrni fjalëkalimin nga $_POST
+
+        // Verifikoni forcën e fjalëkalimit
+        if (!$this->is_strong_password($password)) {
+            set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Fjalëkalimi duhet të jetë të paktën 8 karaktere i gjatë dhe të përmbajë të paktën një shkronjë të madhe dhe një numër.'], 30);
+            wp_redirect($_POST['_wp_http_referer']);
+            exit;
+        }
+
+        // Verifikoni nonce
+        if (!isset($_POST['user_journey_registration_nonce_field']) || !wp_verify_nonce($_POST['user_journey_registration_nonce_field'], 'user_journey_registration_nonce')) {
+            set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Verifikimi i nonce dështoi'], 30);
+            wp_redirect($_POST['_wp_http_referer']);
+            exit;
+        }
+
+    $username = isset($_POST['username']) ? sanitize_text_field($_POST['username']) : '';
+    $first_name = isset($_POST['first_name']) ? sanitize_text_field($_POST['first_name']) : '';
+    $last_name = isset($_POST['last_name']) ? sanitize_text_field($_POST['last_name']) : '';
+    $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+    $phone_number = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
+    $profile_image_id = isset($_POST['profile_image']) ? intval($_POST['profile_image']) : 0;
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
+    $verify_password = isset($_POST['verify_password']) ? $_POST['verify_password'] : '';
+
+    if (!is_email($email)) {
+        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Invalid email address'], 30);
+        wp_redirect($_POST['_wp_http_referer']);
+        exit;
+    }
+
+    if (empty($username)) {
+        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Username is required'], 30);
+        wp_redirect($_POST['_wp_http_referer']);
+        exit;
+    }
+
+    if (!validate_username($username)) {
+        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Invalid username format'], 30);
+        wp_redirect($_POST['_wp_http_referer']);
+        exit;
+    }
+
+    if (email_exists($email)) {
+        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Email address is already in use'], 30);
+        wp_redirect($_POST['_wp_http_referer']);
+        exit;
+    }
+
+    if (!$this->is_strong_password($password)) {
+        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Password must be at least 8 characters long and contain at least one uppercase letter and one number.'], 30);
+        wp_redirect($_POST['_wp_http_referer']);
+        exit;
+    }
     
+
+    if ($password !== $verify_password) {
+        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Passwords do not match'], 30);
+        wp_redirect($_POST['_wp_http_referer']);
+        exit;
+    }
+
+    // Creating user in WordPress
+    $userdata = [
+        'user_login' => $username,
+        'user_pass' => $password,
+        'first_name' => $first_name,
+        'last_name' => $last_name,
+        'user_email' => $email,
+        'meta_input' => [
+            'phone_number' => $phone_number,
+            'profile_image' => $profile_image_id,
+        ],
+    ];
+
+    $user_id = wp_insert_user($userdata);
+
+    if (is_wp_error($user_id)) {
+        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => $user_id->get_error_message()], 30);
+        wp_redirect($_POST['_wp_http_referer']);
+        exit;
+    }
+
+    // Generating a hash code for verification
+    $activation_code = wp_generate_password(20, false);
+    update_user_meta($user_id, 'activation_code', $activation_code);
+
+    // Email sending part
+    $subject = 'Confirmation of registration on our site';
+    $message = 'Please click on the following link to confirm your registration: ' . add_query_arg(['key' => $activation_code, 'user' => $user_id], home_url('/'));
+    
+    // HTML formatted message
+    $html_message = '<html><body>';
+    $html_message .= '<p>Please click on the following link to confirm your registration:</p>';
+    $html_message .= '<p><a href="' . add_query_arg(['key' => $activation_code, 'user' => $user_id], home_url('/')) . '">Confirm registration</a></p>';
+    
+    $html_message .= '</body></html>';
+    
+
+    $headers = [
+        'From: Notification <noreply@yoursite.com>',
+        'Content-Type: text/html; charset=UTF-8'
+    ];
+
+    wp_mail($email, $subject, $html_message, $headers);
+
+    // Notification for the user about the confirmation email
+    set_transient('user_journey_registration_message', ['type' => 'success', 'message' => 'Registration successful! Check your email to confirm registration.'], 30);
+
+    wp_redirect($_POST['_wp_http_referer']);
+    exit;
+}
+public function redirect_after_registration_confirmation() {
+    if (strpos($_SERVER['REQUEST_URI'], home_url('/')) !== false && isset($_GET['key']) && isset($_GET['user'])) {
+        $key = sanitize_text_field($_GET['key']);
+        $user_id = intval($_GET['user']);
+
+        $stored_activation_code = get_user_meta($user_id, 'activation_code', true);
+
+        if ($stored_activation_code && $key === $stored_activation_code) {
+            update_user_meta($user_id, 'activation_code', ''); // Clear activation code after confirmation
+            wp_redirect(home_url('/profile')); // Redirect to profile page after successful confirmation
+            exit;
+        }
+    }
+}
+public function custom_registration_menu() {
+    add_menu_page('User Registration', 'User Registration', 'manage_options', 'custom-registration', [$this, 'custom_registration_page'], 'dashicons-admin-users', 6);
+}
+
+public function custom_registration_page() {
+    ?>
+    <div class="wrap">
+        <h1>User Registration</h1>
+        <form id="user-registration-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="user_journey_registration">
+            <?php wp_nonce_field('user_journey_registration_nonce', 'user_journey_registration_nonce_field'); ?>
+            <table class="form-table">
+                <tr>
+                    <th><label for="username">Username</label></th>
+                    <td><input type="text" name="username" id="username" required></td>
+                </tr>
+                <tr>
+                    <th><label for="first_name">First Name</label></th>
+                    <td><input type="text" name="first_name" id="first_name" required></td>
+                </tr>
+                <tr>
+                    <th><label for="last_name">Last Name</label></th>
+                    <td><input type="text" name="last_name" id="last_name" required></td>
+                </tr>
+                <tr>
+                    <th><label for="email">Email</label></th>
+                    <td><input type="email" name="email" id="email" required></td>
+                </tr>
+                <tr>
+                    <th><label for="phone">Phone</label></th>
+                    <td><input type="text" name="phone" id="phone" required></td>
+                </tr>
+                <tr>
+                    <th><label for="profile_image">Profile Image</label></th>
+                    <td><input type="file" name="profile_image" id="profile_image"></td>
+                </tr>
+            </table>
+            <button type="submit" name="submit" class="button button-primary">Register</button>
+        </form>
+    </div>
+    <?php
+}
 }
