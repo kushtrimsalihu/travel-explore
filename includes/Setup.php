@@ -448,38 +448,38 @@ class Setup {
             exit;
         }
 
-    $username = isset($_POST['username']) ? sanitize_text_field($_POST['username']) : '';
-    $first_name = isset($_POST['first_name']) ? sanitize_text_field($_POST['first_name']) : '';
-    $last_name = isset($_POST['last_name']) ? sanitize_text_field($_POST['last_name']) : '';
-    $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
-    $phone_number = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
-    $profile_image_id = isset($_POST['profile_image']) ? intval($_POST['profile_image']) : 0;
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
-    $verify_password = isset($_POST['verify_password']) ? $_POST['verify_password'] : '';
+        $username = isset($_POST['username']) ? sanitize_text_field($_POST['username']) : '';
+        $first_name = isset($_POST['first_name']) ? sanitize_text_field($_POST['first_name']) : '';
+        $last_name = isset($_POST['last_name']) ? sanitize_text_field($_POST['last_name']) : '';
+        $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+        $phone_number = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
+        $profile_image_id = isset($_POST['profile_image']) ? intval($_POST['profile_image']) : 0;
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        $verify_password = isset($_POST['verify_password']) ? $_POST['verify_password'] : '';
 
-    if (!is_email($email)) {
-        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Invalid email address'], 30);
-        wp_redirect($_POST['_wp_http_referer']);
-        exit;
-    }
+        if (!is_email($email)) {
+            set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Invalid email address'], 30);
+            wp_redirect($_POST['_wp_http_referer']);
+            exit;
+        }
 
-    if (empty($username)) {
-        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Username is required'], 30);
-        wp_redirect($_POST['_wp_http_referer']);
-        exit;
-    }
+        if (empty($username)) {
+            set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Username is required'], 30);
+            wp_redirect($_POST['_wp_http_referer']);
+            exit;
+        }
 
-    if (!validate_username($username)) {
-        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Invalid username format'], 30);
-        wp_redirect($_POST['_wp_http_referer']);
-        exit;
-    }
+        if (!validate_username($username)) {
+            set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Invalid username format'], 30);
+            wp_redirect($_POST['_wp_http_referer']);
+            exit;
+        }
 
-    if (email_exists($email)) {
-        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Email address is already in use'], 30);
-        wp_redirect($_POST['_wp_http_referer']);
-        exit;
-    }
+        if (email_exists($email)) {
+            set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Email address is already in use'], 30);
+            wp_redirect($_POST['_wp_http_referer']);
+            exit;
+        }
 
     if (!$this->is_strong_password($password)) {
         set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Password must be at least 8 characters long and contain at least one uppercase letter and one number.'], 30);
@@ -487,35 +487,34 @@ class Setup {
         exit;
     }
 
+        if ($password !== $verify_password) {
+            set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Passwords do not match'], 30);
+            wp_redirect($_POST['_wp_http_referer']);
+            exit;
+        }
 
-    if ($password !== $verify_password) {
-        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => 'Passwords do not match'], 30);
-        wp_redirect($_POST['_wp_http_referer']);
-        exit;
-    }
+        $userdata = [
+            'user_login' => $username,
+            'user_pass' => $password,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'user_email' => $email,
+            'meta_input' => [
+                'phone_number' => $phone_number,
+                'profile_image' => $profile_image_id,
+            ],
+        ];
 
-    $userdata = [
-        'user_login' => $username,
-        'user_pass' => $password,
-        'first_name' => $first_name,
-        'last_name' => $last_name,
-        'user_email' => $email,
-        'meta_input' => [
-            'phone_number' => $phone_number,
-            'profile_image' => $profile_image_id,
-        ],
-    ];
+        $user_id = wp_insert_user($userdata);
 
-    $user_id = wp_insert_user($userdata);
+        if (is_wp_error($user_id)) {
+            set_transient('user_journey_registration_message', ['type' => 'error', 'message' => $user_id->get_error_message()], 30);
+            wp_redirect($_POST['_wp_http_referer']);
+            exit;
+        }
 
-    if (is_wp_error($user_id)) {
-        set_transient('user_journey_registration_message', ['type' => 'error', 'message' => $user_id->get_error_message()], 30);
-        wp_redirect($_POST['_wp_http_referer']);
-        exit;
-    }
-
-    $activation_code = wp_generate_password(20, false);
-    update_user_meta($user_id, 'activation_code', $activation_code);
+        $activation_code = wp_generate_password(20, false);
+        update_user_meta($user_id, 'activation_code', $activation_code);
 
     $subject = 'Confirmation of registration on our site';
     $message = 'Please click on the following link to confirm your registration: ' . add_query_arg(['key' => $activation_code, 'user' => $user_id], home_url('/'));
@@ -527,74 +526,77 @@ class Setup {
     $html_message .= '</body></html>';
 
 
-    $headers = [
-        'From: Notification <noreply@yoursite.com>',
-        'Content-Type: text/html; charset=UTF-8'
-    ];
+        $headers = [
+            'From: Notification <noreply@yoursite.com>',
+            'Content-Type: text/html; charset=UTF-8'
+        ];
 
-    wp_mail($email, $subject, $html_message, $headers);
+        wp_mail($email, $subject, $html_message, $headers);
 
-    set_transient('user_journey_registration_message', ['type' => 'success', 'message' => 'Registration successful! Check your email to confirm registration.'], 30);
+        set_transient('user_journey_registration_message', ['type' => 'success', 'message' => 'Registration successful! Check your email to confirm registration.'], 30);
 
-    wp_redirect($_POST['_wp_http_referer']);
-    exit;
-}
-public function redirect_after_registration_confirmation() {
-    if (strpos($_SERVER['REQUEST_URI'], home_url('/')) !== false && isset($_GET['key']) && isset($_GET['user'])) {
-        $key = sanitize_text_field($_GET['key']);
-        $user_id = intval($_GET['user']);
+        wp_redirect($_POST['_wp_http_referer']);
+        exit;
+    }
 
-        $stored_activation_code = get_user_meta($user_id, 'activation_code', true);
+    public function redirect_after_registration_confirmation() {
+        if (strpos($_SERVER['REQUEST_URI'], home_url('/')) !== false && isset($_GET['key']) && isset($_GET['user'])) {
+            $key = sanitize_text_field($_GET['key']);
+            $user_id = intval($_GET['user']);
 
-        if ($stored_activation_code && $key === $stored_activation_code) {
-            update_user_meta($user_id, 'activation_code', ''); 
-            wp_redirect(home_url('/profile')); 
-            exit;
+            $stored_activation_code = get_user_meta($user_id, 'activation_code', true);
+
+            if ($stored_activation_code && $key === $stored_activation_code) {
+                update_user_meta($user_id, 'activation_code', ''); 
+                wp_redirect(home_url('/profile')); 
+                exit;
+            }
         }
     }
-}
-public function custom_registration_menu() {
-    add_menu_page('User Registration', 'User Registration', 'manage_options', 'custom-registration', [$this, 'custom_registration_page'], 'dashicons-admin-users', 6);
-}
 
-public function custom_registration_page() {
-    ?>
-    <div class="wrap">
-        <h1>User Registration</h1>
-        <form id="user-registration-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" enctype="multipart/form-data">
-            <input type="hidden" name="action" value="user_journey_registration">
-            <?php wp_nonce_field('user_journey_registration_nonce', 'user_journey_registration_nonce_field'); ?>
-            <table class="form-table">
-                <tr>
-                    <th><label for="username">Username</label></th>
-                    <td><input type="text" name="username" id="username" required></td>
-                </tr>
-                <tr>
-                    <th><label for="first_name">First Name</label></th>
-                    <td><input type="text" name="first_name" id="first_name" required></td>
-                </tr>
-                <tr>
-                    <th><label for="last_name">Last Name</label></th>
-                    <td><input type="text" name="last_name" id="last_name" required></td>
-                </tr>
-                <tr>
-                    <th><label for="email">Email</label></th>
-                    <td><input type="email" name="email" id="email" required></td>
-                </tr>
-                <tr>
-                    <th><label for="phone">Phone</label></th>
-                    <td><input type="text" name="phone" id="phone" required></td>
-                </tr>
-                <tr>
-                    <th><label for="profile_image">Profile Image</label></th>
-                    <td><input type="file" name="profile_image" id="profile_image"></td>
-                </tr>
-            </table>
-            <button type="submit" name="submit" class="button button-primary">Register</button>
-        </form>
-    </div>
-    <?php
-}
+    public function custom_registration_menu() {
+        add_menu_page('User Registration', 'User Registration', 'manage_options', 'custom-registration', [$this, 'custom_registration_page'], 'dashicons-admin-users', 6);
+    }
+
+    public function custom_registration_page() {
+        ?>
+        <div class="wrap">
+            <h1>User Registration</h1>
+            <form id="user-registration-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="user_journey_registration">
+                <?php wp_nonce_field('user_journey_registration_nonce', 'user_journey_registration_nonce_field'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th><label for="username">Username</label></th>
+                        <td><input type="text" name="username" id="username" required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="first_name">First Name</label></th>
+                        <td><input type="text" name="first_name" id="first_name" required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="last_name">Last Name</label></th>
+                        <td><input type="text" name="last_name" id="last_name" required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="email">Email</label></th>
+                        <td><input type="email" name="email" id="email" required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="phone">Phone</label></th>
+                        <td><input type="text" name="phone" id="phone" required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="profile_image">Profile Image</label></th>
+                        <td><input type="file" name="profile_image" id="profile_image"></td>
+                    </tr>
+                </table>
+                <button type="submit" name="submit" class="button button-primary">Register</button>
+            </form>
+        </div>
+        <?php
+    }
+
     public function restrict_user_journey_posts_to_own($query) {
         if (!is_admin() || !$query->is_main_query()) {
             return;
@@ -608,4 +610,64 @@ public function custom_registration_page() {
         }
     }
     
+    public function register_prohibited_words_settings() {
+        add_option('prohibited_words', "spam\ninsult\nracism");
+        register_setting('default', 'prohibited_words');
+    }
+
+    public function prohibited_words_settings_page() {
+        add_menu_page(
+            'Prohibited Words',
+            'Prohibited Words',
+            'manage_options',
+            'prohibited-words',
+            array($this, 'prohibited_words_settings_page_html')
+        );
+    }
+
+    public function prohibited_words_settings_page_html() {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+        ?>
+        <div class="wrap">
+            <h1>Prohibited Words</h1>
+            <form method="post" action="options.php">
+                <?php
+                settings_fields('default');
+                do_settings_sections('default');
+                ?>
+                <textarea name="prohibited_words" rows="10" cols="50"><?php echo esc_textarea(get_option('prohibited_words')); ?></textarea>
+                <?php submit_button(); ?>
+            </form>
+        </div>
+        <?php
+    }
+
+    public static function filter_prohibited_words($content) {
+        $prohibited_words = get_option('prohibited_words', '');
+        $prohibited_words_array = array_map('trim', explode("\n", $prohibited_words));
+        foreach ($prohibited_words_array as $word) {
+            if (stripos($content, $word) !== false) {
+                error_log("Prohibited word detected: " . $word);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static function check_prohibited_words($data, $postarr) {
+        if ($data['post_type'] == 'user_journey') {
+           
+            if (!self::filter_prohibited_words($data['post_title'])) {
+                wp_die('Your post title contains prohibited words and cannot be submitted.');
+            }
+     
+            $description = isset($postarr['acf']['field_6683b353ee36f']) ? $postarr['acf']['field_6683b353ee36f'] : ''; 
+            if (!self::filter_prohibited_words($description)) {
+                wp_die('Your description contains prohibited words and cannot be submitted.');
+            }
+        }
+        return $data;
+    }
 }
