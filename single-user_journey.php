@@ -9,6 +9,9 @@ if ($image_id) {
     $context['featured_image'] = $image_src[0];
 };
 
+$author_id = $post->post_author;
+$context['profile_image'] = get_avatar_url($author_id);
+
 $context['description'] = get_field('description', $post->ID);
 $context['title'] = get_field('title', $post->ID);
 $context['author_image'] = get_field('author_image', $post->ID);

@@ -670,4 +670,17 @@ class Setup {
         }
         return $data;
     }
+
+    // Filter to show only the comments of the current user
+    function show_only_user_comments($clauses, $wp_comment_query) {
+        if (is_admin() && !current_user_can('administrator')) {
+            global $wpdb;
+            $clauses['where'] .= " AND {$wpdb->comments}.user_id = " . get_current_user_id();
+        }
+        return $clauses;
+    }
+    
 }
+    
+    
+

@@ -218,8 +218,39 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.reply-toggle').forEach(button => {
+        button.addEventListener('click', function () {
+            const commentId = this.getAttribute('data-comment-id');
+            document.getElementById('reply-form-' + commentId).classList.toggle('hidden');
+        });
+    });
+    document.querySelectorAll('.cancel-reply').forEach(button => {
+        button.addEventListener('click', function () {
+            const commentId = this.closest('.reply-form').id.replace('reply-form-', '');
+            document.getElementById('reply-form-' + commentId).classList.add('hidden');
+        });
+    });
+});
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.show-replies').forEach(function (toggle) {
+        toggle.addEventListener('click', function () {
+            const commentId = this.getAttribute('data-comment-id');
+            const repliesContainer = document.getElementById(`replies-${commentId}`);
+            repliesContainer.classList.toggle('hidden');
+            this.textContent = repliesContainer.classList.contains('hidden') ? 'Show replies' : 'Hide replies';
+        });
+    });
+});
 
-
-
+document.addEventListener('DOMContentLoaded', function() {
+    var commentForm = document.getElementById('commentform');
+    if (commentForm) {
+        commentForm.addEventListener('submit', function(event) {
+            window.location.reload();
+            alert('Comment added successfully!');
+        });
+    }
+});
