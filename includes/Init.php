@@ -14,7 +14,6 @@ class Init extends Site {
         add_action('wp_enqueue_scripts', [$enqueue, 'travel_enqueue_scripts']);
         add_action('wp_enqueue_scripts', [$enqueue, 'enqueue_live_search_script']);
         add_action('wp_enqueue_scripts', [$enqueue, 'swiper_scripts']);
-        
 
         add_action('wp_enqueue_scripts', [new Enqueue(), 'dequeueScripts' ]);
         add_action('wp_enqueue_scripts', [new Enqueue(), 'dequeueStyles' ]);
@@ -39,6 +38,8 @@ class Init extends Site {
         add_action('admin_menu', [new Setup(), 'custom_registration_menu']);
         add_action('admin_post_nopriv_user_journey_registration',[new Setup(), 'handle_user_registration']);
         add_action('admin_post_user_journey_registration',[new Setup(), 'handle_user_registration']);
+        add_action('admin_init', [new Setup(), 'register_prohibited_words_settings']);
+        add_action('admin_menu', [new Setup(), 'prohibited_words_settings_page']);
         
         add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
 
@@ -61,6 +62,7 @@ class Init extends Site {
         add_filter('wp_insert_post_data', [new Setup(), 'set_pending_status_for_user_posts'], 10, 2);
         add_filter('manage_user-journey_posts_columns', [new Setup(), 'add_author_column']);
         add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
+        add_filter('wp_insert_post_data', [Setup::class, 'check_prohibited_words'], 10, 2);
         
 
         remove_action('wp_head', 'print_emoji_detection_script', 7);
