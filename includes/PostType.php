@@ -233,7 +233,7 @@ class PostType {
             'has_archive'        => true,
             'hierarchical'       => false,
             'menu_position'      => null,
-            'supports'           => array('title', 'thumbnail'),
+            'supports'           => array('title', 'thumbnail', 'comments'),
             'menu_icon' => 'dashicons-format-chat',
         );
     

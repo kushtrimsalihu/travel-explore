@@ -63,6 +63,7 @@ class Init extends Site {
         add_filter('manage_user-journey_posts_columns', [new Setup(), 'add_author_column']);
         add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
         add_filter('wp_insert_post_data', [Setup::class, 'check_prohibited_words'], 10, 2);
+        add_filter('comments_clauses', [new Setup(), 'show_only_user_comments'], 10, 2);
         
 
         remove_action('wp_head', 'print_emoji_detection_script', 7);
