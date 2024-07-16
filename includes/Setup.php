@@ -643,6 +643,20 @@ class Setup {
         </div>
         <?php
     }
+    public static function increment_user_violations($user_id) {
+        $violations = get_user_meta($user_id, 'prohibited_word_violations', true);
+        $violations = $violations ? $violations + 1 : 1;
+        update_user_meta($user_id, 'prohibited_word_violations', $violations);
+        return $violations;
+    }
+
+    public static function send_admin_notification($user_id) {
+        $user_info = get_userdata($user_id);
+        $admin_email = get_option('admin_email');
+        $subject = 'User Exceeded Prohibited Words Usage';
+        $message = 'User ' . $user_info->user_login . ' has used prohibited words more than 5 times.';
+        wp_mail($admin_email, $subject, $message);
+    }
 
     public static function filter_prohibited_words($content) {
         $prohibited_words = get_option('prohibited_words', '');
@@ -658,20 +672,28 @@ class Setup {
 
     public static function check_prohibited_words($data, $postarr) {
         if ($data['post_type'] == 'user_journey') {
+            $user_id = get_current_user_id();
            
             if (!self::filter_prohibited_words($data['post_title'])) {
+                $violations = self::increment_user_violations($user_id);
+                if ($violations > 5) {
+                    self::send_admin_notification($user_id);
+                }
                 wp_die('Your post title contains prohibited words and cannot be submitted.');
             }
      
             $description = isset($postarr['acf']['field_6683b353ee36f']) ? $postarr['acf']['field_6683b353ee36f'] : ''; 
             if (!self::filter_prohibited_words($description)) {
+                $violations = self::increment_user_violations($user_id);
+                if ($violations > 5) {
+                    self::send_admin_notification($user_id);
+                }
                 wp_die('Your description contains prohibited words and cannot be submitted.');
             }
         }
         return $data;
     }
 
-    // Filter to show only the comments of the current user
     function show_only_user_comments($clauses, $wp_comment_query) {
         if (is_admin() && !current_user_can('administrator')) {
             global $wpdb;
