@@ -40,9 +40,10 @@ class Init extends Site {
         add_action('admin_post_user_journey_registration',[new Setup(), 'handle_user_registration']);
         add_action('admin_init', [new Setup(), 'register_prohibited_words_settings']);
         add_action('admin_menu', [new Setup(), 'prohibited_words_settings_page']);
-        
+        add_action('admin_menu', [new Setup(), 'remove_menus_for_authors'], 99);
         add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
-
+        add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
+        
 
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
         add_filter('acf/settings/save_json', [new Setup(), 'my_acf_json_save_point']);
@@ -64,6 +65,9 @@ class Init extends Site {
         add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
         add_filter('wp_insert_post_data', [Setup::class, 'check_prohibited_words'], 10, 2);
         add_filter('comments_clauses', [new Setup(), 'show_only_user_comments'], 10, 2);
+        
+
+
         
 
         remove_action('wp_head', 'print_emoji_detection_script', 7);
