@@ -46,6 +46,8 @@ class Init extends Site {
         
         add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
         add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
+        add_action('wp_authenticate', [new Setup(), 'custom_login_errors'], 1);
+        add_action('transition_post_status', [new Setup(),'set_approver_name_on_publish'], 10, 3);
         
 
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
@@ -68,8 +70,7 @@ class Init extends Site {
         add_filter('manage_user_journey_posts_columns', [new Setup(), 'add_custom_columns']);
         add_filter('wp_insert_post_data', [Setup::class, 'check_prohibited_words'], 10, 2);
         add_filter('comments_clauses', [new Setup(), 'show_only_user_comments'], 10, 2);
-        
-
+        add_filter('post_row_actions', [new Setup(), 'add_approved_by_to_post_row_actions'], 10, 2);
 
         
 

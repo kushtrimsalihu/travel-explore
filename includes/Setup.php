@@ -739,5 +739,44 @@ class Setup {
             remove_menu_page('travel-explore-settings');
         }
     }
+
+    function custom_login_errors() {
+        $referrer = $_SERVER['HTTP_REFERER'];  
+        if (!empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin')) {
+            if (isset($_REQUEST['log']) && isset($_REQUEST['pwd'])) {
+                $user = wp_authenticate($_REQUEST['log'], $_REQUEST['pwd']);
+                if (is_wp_error($user)) {
+                    wp_redirect($referrer . '?login=failed');
+                    exit;
+                }
+            }
+        }
+    }
+
+    function set_approver_name_on_publish($new_status, $old_status, $post) {
+        if ('publish' === $new_status && 'publish' !== $old_status && $post->post_type === 'user_journey' && current_user_can('administrator')) {
+            $current_user = wp_get_current_user();
+            update_post_meta($post->ID, 'approved_by_name', $current_user->display_name);
+        }
+    }
+    function add_approved_by_to_post_row_actions($actions, $post) {
+        if ('user_journey' === $post->post_type && current_user_can('administrator')) {
+            $approver_name = get_post_meta($post->ID, 'approved_by_name', true);
+            if (!empty($approver_name)) {
+                $actions['approved_by'] = 'Approved by: ' . esc_html($approver_name);
+            }
+        }
+        return $actions;
+    }
+
+
+
+
+
+
+
+   
+
+    
 }
 
