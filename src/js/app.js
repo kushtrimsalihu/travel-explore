@@ -243,14 +243,35 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
     var commentForm = document.getElementById('commentform');
     if (commentForm) {
         commentForm.addEventListener('submit', function(event) {
-            window.location.reload();
-            alert('Comment added successfully!');
+            if (currentUserId !== postAuthorId && currentUserId !== 1) {
+                window.location.reload();
+                alert('Your comment will be approved by the admin.');
+            }
+            else{
+                window.location.reload();
+                alert('Your comment added succesfully.');
+            }
         });
     }
+
+    var replyForms = document.querySelectorAll('.comment-form');
+    replyForms.forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (currentUserId !== postAuthorId && currentUserId !== 1) {
+                window.location.reload();
+                alert('Your reply will be approved by the admin.');
+            }
+            else{
+                window.location.reload();
+                alert('Your reply added succesfully.');
+            }
+        });
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {

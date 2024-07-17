@@ -702,6 +702,20 @@ class Setup {
         }
         return $clauses;
     }
+
+    function notify_user_on_comment_approval($comment_id) {
+        $comment = get_comment($comment_id);
+        
+        // Only send email if the comment is approved
+        if ($comment->comment_approved == 1) {
+            $user_email = $comment->comment_author_email;
+            $subject = "Your comment has been approved";
+            $message = "Hi " . $comment->comment_author . ",\n\nYour comment on the post \"" . get_the_title($comment->comment_post_ID) . "\" has been approved.\n\nThank you for your contribution!\n\nBest regards,\nYour Website Team";
+            $headers = 'From: Your Website <no-reply@yourwebsite.com>' . "\r\n";
+            
+            wp_mail($user_email, $subject, $message, $headers);
+        }
+    }
     
 
     
