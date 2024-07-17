@@ -42,12 +42,14 @@
                 {% for latest_post in latest_posts %}
                     <div class="latest-user-journey-item bg-white rounded-lg shadow-md overflow-hidden">
                         <a href="{{ latest_post.link }}">
-                            <img src="{{ latest_post.thumbnail }}" class="w-full h-32 object-cover">
+                            <img src="{{ latest_post.thumbnail ?: site.theme.link ~ '/assets/images/default.PNG' }}" class="w-full h-32 object-cover">
                         </a>
                         <div class="p-4">
                             <a href="{{ latest_post.link }}" class="text-lg font-semibold line-clamp-2">{{ latest_post.title }}</a>
                             <p class="text-gray-600 text-sm mt-2 line-clamp-2">{{ latest_post.description }}</p>
-                            <a href="{{ latest_post.link }}" class="text-sm text-blue-600 hover:underline mt-2">Read more</a>
+                            {% if latest_post.description|length > 50 %}
+                                <a href="{{ latest_post.link }}" class="text-sm text-blue-600 hover:underline mt-2">Read more</a>
+                            {% endif %}                        
                         </div>
                     </div>
                 {% endfor %}
