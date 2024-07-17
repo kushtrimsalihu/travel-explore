@@ -609,7 +609,7 @@ class Setup {
             $query->set('author', get_current_user_id());
         }
     }
-    
+
     public function register_prohibited_words_settings() {
         add_option('prohibited_words', "spam\ninsult\nracism");
         register_setting('default', 'prohibited_words');
@@ -670,6 +670,7 @@ class Setup {
         return true;
     }
 
+
     public static function check_prohibited_words($data, $postarr) {
         if ($data['post_type'] == 'user_journey') {
             $user_id = get_current_user_id();
@@ -702,7 +703,27 @@ class Setup {
         return $clauses;
     }
     
+
+    
+    function remove_menus_for_authors() {
+        if (current_user_can('author')) {
+            remove_menu_page('index.php');                   
+            remove_menu_page('edit.php');                    
+            remove_menu_page('upload.php');                  
+            remove_menu_page('edit-comments.php');           
+            remove_menu_page('edit.php?post_type=page');     
+            remove_menu_page('tools.php');                   
+            remove_menu_page('edit.php?post_type=blog');     
+            remove_menu_page('edit.php?post_type=alternative_tourism');
+            
+            
+        }
+    }
+
+    function remove_acf_options_page_for_authors() {
+        if (current_user_can('author')) {
+            remove_menu_page('travel-explore-settings');
+        }
+    }
 }
-    
-    
 

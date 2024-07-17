@@ -16,20 +16,19 @@
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-light-p10" for="password">Password</label>
                         <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" id="password" name="pwd" type="password" placeholder="Password" required>
-                        <a href="#" class="text-sm text-gray-900 hover:text-gray-400 float-right mt-1 ">Forgot your password?</a>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="show_passwords" class="mr-2">
+                            <label for="show_passwords" class="text-sm font-medium text-gray-900">Show Password</label>
+                        </div>
+                        <a href="{{ site.url }}/wp-login.php?action=lostpassword" class="text-sm text-gray-900 hover:text-gray-400 float-right mt-1 ">Forgot your password?</a>
                     </div>
+
                     <div class="flex items-center justify-center mb-4 pt-5">
                         <button class="flex justify-center py-2.5 px-6 rounded-full shadow-sm text-sm font-medium bg-light-p40 border text-white-100 hover:bg-transparent hover:text-light-p40 hover:border-light-p40 w-3/4 text-center" type="submit">
                             LOGIN
                         </button>
                     </div>
-                    <div class="mt-6 text-center">
-                        <p class="text-sm text-gray-600">or login with</p>
-                        <div class="mt-2">
-                            <a href="https://mail.google.com/mail/u/0/#inbox" class="text-gray-600 hover:text-gray-900 mx-2"><img src="{{ site.theme.link }}/assets/images/gmail.png" alt="Gmail" class="inline-block" style="width: 24px; height: 24px;"> Gmail</a>
-                            <a href="https://www.facebook.com/" class="text-gray-600 hover:text-gray-900 mx-2"><img src="{{ site.theme.link }}/assets/images/facebook.png" alt="Facebook" class="inline-block" style="width: 24px; height: 24px;"> Facebook</a>
-                        </div>
-                    </div>
+                    
                 </form>
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">Don't have an account?</p>

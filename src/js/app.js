@@ -216,9 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
             marker.bindPopup('Welcome to our location!');
         }}
 });
-
-
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.reply-toggle').forEach(button => {
         button.addEventListener('click', function () {
             const commentId = this.getAttribute('data-comment-id');
@@ -251,6 +249,19 @@ document.addEventListener('DOMContentLoaded', function() {
         commentForm.addEventListener('submit', function(event) {
             window.location.reload();
             alert('Comment added successfully!');
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var showPasswordsCheckbox = document.getElementById('show_passwords');
+    if (showPasswordsCheckbox) {
+        showPasswordsCheckbox.addEventListener('change', function() {
+            var passwordFields = document.querySelectorAll('input[type="password"], input[type="text"]');
+            var showPasswords = this.checked;
+            passwordFields.forEach(function(field) {
+                field.type = showPasswords ? 'text' : 'password';
+            });
         });
     }
 });

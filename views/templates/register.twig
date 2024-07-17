@@ -59,14 +59,6 @@
                     </div>
                 </form>
 
-                <script>
-                    document.getElementById('show_passwords').addEventListener('change', function() {
-                        var passwordFields = document.querySelectorAll('input[type="password"]');
-                        passwordFields.forEach(function(field) {
-                            field.type = this.checked ? 'text' : 'password';
-                        }, this);
-                    });
-                </script>
             </div>
         </div>
     </div>
