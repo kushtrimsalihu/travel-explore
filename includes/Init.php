@@ -41,6 +41,9 @@ class Init extends Site {
         add_action('admin_init', [new Setup(), 'register_prohibited_words_settings']);
         add_action('admin_menu', [new Setup(), 'prohibited_words_settings_page']);
         add_action('admin_menu', [new Setup(), 'remove_menus_for_authors'], 99);
+        add_action('wp_set_comment_status', [new Setup(), 'notify_user_on_comment_approval'], 10, 2);
+
+        
         add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
         add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
         
