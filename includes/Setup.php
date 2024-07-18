@@ -769,14 +769,86 @@ class Setup {
         return $actions;
     }
 
-
-
-
-
-
-
-   
-
+    public function get_users_with_more_than_50_approved_posts() {
+        global $wpdb;
+    
+        $users_query = new \WP_User_Query([
+            'role__not_in' => 'Administrator',
+            'number' => -1,
+        ]);
+    
+        $users = $users_query->get_results();
+        $filtered_users = [];
+    
+        foreach ($users as $user) {
+            $post_count = $wpdb->get_var($wpdb->prepare("
+                SELECT COUNT(*)
+                FROM $wpdb->posts p
+                INNER JOIN $wpdb->postmeta pm ON p.ID = pm.post_id
+                WHERE p.post_author = %d
+                AND p.post_status = 'publish'
+                AND pm.meta_key = 'approved_by_name'
+            ", $user->ID));
+           
+    
+            if ($post_count >= 2) {
+                $filtered_users[] = [
+                    'ID' => $user->ID,
+                    'user_login' => $user->user_login,
+                    'display_name' => $user->user_nicename,
+                    'post_count' => $post_count,
+                ];
+            }
+            
+        }
+    
+        return $filtered_users;
+    }
+    
+    public function display_users_with_more_than_50_approved_posts() {
+        if (!current_user_can('administrator')) {
+            wp_die('You do not have sufficient permissions to access this page.');
+        }
+    
+        $users = $this->get_users_with_more_than_50_approved_posts();
+    
+        if (empty($users)) {
+            echo '<p>No users found with more than 50 approved posts.</p>';
+            return;
+        }
+    
+        echo '<h2>Users with More Than 50 Approved Posts</h2>';
+        echo '<table class="widefat fixed" cellspacing="0">';
+        echo '<thead><tr><th>Username</th><th>User Name</th><th>Post Count</th><th>Reward</th></tr></thead>';
+        echo '<tbody>';
+    
+        foreach ($users as $user) {
+            echo '<tr>';
+            echo '<td>' . esc_html($user['user_login']) . '</td>';
+            echo '<td>' . esc_html($user['display_name']) . '</td>';
+            echo '<td>' . esc_html($user['post_count']) . '</td>';
+            echo '<td>This user has won a free random travel trip.</td>';
+            echo '</tr>';
+        }
+        
+    
+        echo '</tbody>';
+        echo '</table>';
+    }
+    
+    public function add_users_with_more_than_50_approved_posts_menu() {
+        $icon_url = get_template_directory_uri() . '/assets/images/user-shield.svg';
+    
+    
+        add_menu_page(
+            'Users with More Than 50 Approved Posts',
+            'Users 50+ Approved Posts',
+            'manage_options',
+            'users-50-approved-posts',
+            [$this, 'display_users_with_more_than_50_approved_posts'],
+            $icon_url
+        );
+    }
     
 }
 
