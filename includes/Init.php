@@ -42,13 +42,10 @@ class Init extends Site {
         add_action('admin_menu', [new Setup(), 'prohibited_words_settings_page']);
         add_action('admin_menu', [new Setup(), 'remove_menus_for_authors'], 99);
         add_action('wp_set_comment_status', [new Setup(), 'notify_user_on_comment_approval'], 10, 2);
-
-        
-        add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
         add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
         add_action('wp_authenticate', [new Setup(), 'custom_login_errors'], 1);
         add_action('transition_post_status', [new Setup(),'set_approver_name_on_publish'], 10, 3);
-        
+        add_action('admin_menu', [new Setup(), 'add_users_with_more_than_50_approved_posts_menu']);
 
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
         add_filter('acf/settings/save_json', [new Setup(), 'my_acf_json_save_point']);
@@ -72,7 +69,7 @@ class Init extends Site {
         add_filter('comments_clauses', [new Setup(), 'show_only_user_comments'], 10, 2);
         add_filter('post_row_actions', [new Setup(), 'add_approved_by_to_post_row_actions'], 10, 2);
 
-        
+        add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
 
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('wp_print_styles', 'print_emoji_styles');
