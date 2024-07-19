@@ -286,3 +286,72 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const cookieConsentBanner = document.getElementById('cookie-consent-banner');
+    const cookieConsentAccept = document.getElementById('cookie-consent-accept');
+    const cookieConsentReject = document.getElementById('cookie-consent-reject');
+
+    setTimeout(function() {
+        const cookieConsentBanner = document.getElementById('cookie-consent-banner');
+        
+        if (!getCookie('cookie_consent')) {
+            cookieConsentBanner.classList.remove('hidden');
+        }
+
+        const cookieConsentAccept = document.getElementById('cookie-consent-accept');
+        const cookieConsentReject = document.getElementById('cookie-consent-reject');
+
+        cookieConsentAccept.addEventListener('click', function() {
+            setCookie('cookie_consent', 'accepted', 365);
+            cookieConsentBanner.classList.add('hidden');
+        });
+
+        cookieConsentReject.addEventListener('click', function() {
+            cookieConsentBanner.classList.add('hidden');
+            setCookie('cookie_consent', 'rejected', 365);
+        });
+
+    }, 2000);
+
+    function setCookie(name, value, days) {
+        const d = new Date();
+        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + d.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    if (getCookie('cookie_consent') === 'accepted') {
+        loadTrackingScripts();
+    }
+
+
+    function loadTrackingScripts() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y';
+        document.head.appendChild(script);
+    
+        script.onload = function() {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-XXXXX-Y');
+        };
+    }
+
+
+});
