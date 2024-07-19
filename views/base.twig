@@ -8,6 +8,10 @@
 			{% if not breadcrumbs_included and not function('is_front_page') %}
 				{% include 'breadcrumbs.twig' %}
 			{% endif %}
+
+			{% if function('is_front_page') %}
+				{% include 'cookies.twig' %}
+			{% endif %}
 		
 			{% if is_404 %}
 				{% include "templates/errors/404.twig" %}

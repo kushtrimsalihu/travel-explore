@@ -8,6 +8,10 @@
             <h1 class="text-2xl font-medium mb-4">Comments</h1>
         {% endif %}
 
+        {% if post.comments is empty %}
+            <p class="">There are no comments in this post</p>
+        {% endif %}
+
         {% if function('is_user_logged_in') %}
             <h1 class="text-2xl font-medium mb-4">Leave a comment</h1>
             <form action="{{ site.url }}/wp-comments-post.php" method="post" id="commentform" class="flex flex-col gap-4">
