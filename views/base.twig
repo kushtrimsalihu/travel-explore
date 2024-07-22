@@ -9,9 +9,9 @@
 				{% include 'breadcrumbs.twig' %}
 			{% endif %}
 
-			{% if function('is_front_page') %}
+			{# {% if function('is_front_page') %} #}
 				{% include 'cookies.twig' %}
-			{% endif %}
+			{# {% endif %} #}
 		
 			{% if is_404 %}
 				{% include "templates/errors/404.twig" %}
