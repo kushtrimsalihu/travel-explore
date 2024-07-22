@@ -36,7 +36,6 @@ class Init extends Site {
         add_action('manage_user-journey_posts_custom_column', [new Setup(), 'show_author_column'], 10, 2);
         add_action('manage_user_journey_posts_custom_column', [new Setup(), 'custom_column_content'], 10, 2);
         add_action('pre_get_posts', [new Setup(), 'exclude_pending_posts_from_frontend']);
-        add_action('admin_menu', [new Setup(), 'custom_registration_menu']);
         add_action('admin_post_nopriv_user_journey_registration',[new Setup(), 'handle_user_registration']);
         add_action('admin_post_user_journey_registration',[new Setup(), 'handle_user_registration']);
         add_action('admin_init', [new Setup(), 'register_prohibited_words_settings']);

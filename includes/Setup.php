@@ -555,49 +555,6 @@ class Setup {
         }
     }
 
-    public function custom_registration_menu() {
-        add_menu_page('User Registration', 'User Registration', 'manage_options', 'custom-registration', [$this, 'custom_registration_page'], 'dashicons-admin-users', 6);
-    }
-
-    public function custom_registration_page() {
-        ?>
-        <div class="wrap">
-            <h1>User Registration</h1>
-            <form id="user-registration-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="user_journey_registration">
-                <?php wp_nonce_field('user_journey_registration_nonce', 'user_journey_registration_nonce_field'); ?>
-                <table class="form-table">
-                    <tr>
-                        <th><label for="username">Username</label></th>
-                        <td><input type="text" name="username" id="username" required></td>
-                    </tr>
-                    <tr>
-                        <th><label for="first_name">First Name</label></th>
-                        <td><input type="text" name="first_name" id="first_name" required></td>
-                    </tr>
-                    <tr>
-                        <th><label for="last_name">Last Name</label></th>
-                        <td><input type="text" name="last_name" id="last_name" required></td>
-                    </tr>
-                    <tr>
-                        <th><label for="email">Email</label></th>
-                        <td><input type="email" name="email" id="email" required></td>
-                    </tr>
-                    <tr>
-                        <th><label for="phone">Phone</label></th>
-                        <td><input type="text" name="phone" id="phone" required></td>
-                    </tr>
-                    <tr>
-                        <th><label for="profile_image">Profile Image</label></th>
-                        <td><input type="file" name="profile_image" id="profile_image"></td>
-                    </tr>
-                </table>
-                <button type="submit" name="submit" class="button button-primary">Register</button>
-            </form>
-        </div>
-        <?php
-    }
-
     public function restrict_user_journey_posts_to_own($query) {
         if (!is_admin() || !$query->is_main_query()) {
             return;
