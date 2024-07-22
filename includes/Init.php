@@ -28,6 +28,7 @@ class Init extends Site {
         add_action('init', [new PostType(), 'blog_category']);
         add_action('init', [new PostType(), 'register_alternative_tourism_taxonomies']);
         add_action('init', [new PostType(), 'register_user_journey_post_type']);
+        add_action('init', [new PostType(), 'register_reservation_post_type']);
         add_action('wp_ajax_live_search', [new Setup(), 'live_search_handler']);
         add_action('wp_ajax_nopriv_live_search', [new Setup(), 'live_search_handler']);
         add_action('template_redirect', [new Setup(), 'setup_404_template_redirect']);
@@ -42,10 +43,18 @@ class Init extends Site {
         add_action('admin_menu', [new Setup(), 'prohibited_words_settings_page']);
         add_action('admin_menu', [new Setup(), 'remove_menus_for_authors'], 99);
         add_action('wp_set_comment_status', [new Setup(), 'notify_user_on_comment_approval'], 10, 2);
+        add_action('admin_post_nopriv_submit_reservation', [new Setup(),'handle_reservation_submission']);
+        add_action('admin_post_submit_reservation', [new Setup(),'handle_reservation_submission']);
+        add_action('pre_get_posts', [new Setup(),'show_own_reservations']);
+        add_action('manage_reservation_posts_custom_column', [new Setup(),'custom_reservation_column_content'], 10, 2);
+        add_action('admin_init', [new Setup(),'restrict_reservation_management']);
+        add_action('wp_insert_post', [new Setup(),'send_admin_new_reservation_notification'], 10, 3);
+        
         add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
         add_action('wp_authenticate', [new Setup(), 'custom_login_errors'], 1);
         add_action('transition_post_status', [new Setup(),'set_approver_name_on_publish'], 10, 3);
         add_action('admin_menu', [new Setup(), 'add_users_with_more_than_50_approved_posts_menu']);
+        add_action('save_post', [new Setup(),'notify_user_of_reservation_status_change'], 10, 3);
 
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
         add_filter('acf/settings/save_json', [new Setup(), 'my_acf_json_save_point']);
@@ -68,6 +77,8 @@ class Init extends Site {
         add_filter('wp_insert_post_data', [Setup::class, 'check_prohibited_words'], 10, 2);
         add_filter('comments_clauses', [new Setup(), 'show_only_user_comments'], 10, 2);
         add_filter('post_row_actions', [new Setup(), 'add_approved_by_to_post_row_actions'], 10, 2);
+        add_filter('post_row_actions', [new Setup(),'customize_reservation_row_actions'], 10, 2);
+        add_filter('manage_reservation_posts_columns', [new Setup(),'set_custom_reservation_columns']);
 
         add_shortcode('user_registration_confirmation',[new Setup(), 'user_registration_confirmation_shortcode']);
 

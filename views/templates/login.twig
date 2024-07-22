@@ -24,6 +24,9 @@
                         {% if login_failed %}
                             <p class="text-red-600 text-sm text-center text-nowrap mt-2">{{ login_failed }}</p>
                         {% endif %}
+                        {% if login_required %}
+                            <p class="text-red-600 text-sm text-center text-nowrap mt-2">{{ login_required }}</p>
+                        {% endif %}
                         <a href="{{ site.url }}/wp-login.php?action=lostpassword" class="text-sm text-gray-900 hover:text-gray-400 float-right mt-1 ">Forgot your password?</a>
                     </div>
 

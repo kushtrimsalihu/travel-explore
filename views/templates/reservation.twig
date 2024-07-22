@@ -1,0 +1,57 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<section class="reservation-module flex flex-wrap gap-6 w-full my-10">
+    <div class="flex flex-col md:flex-row bg-white border-light-nv80 shadow-lg rounded-lg overflow-hidden w-full">
+        <div class="relative flex-none w-full md:w-1/2 h-auto px-3">
+            <img src="{{ card_image_url }}" alt="{{ card_title }}" class="w-full h-full object-cover">
+        </div>
+        <div class="card-content p-4 flex-grow flex flex-col justify-between w-full md:w-1/2">
+            <h2 class="text-2xl md:w-full font-semibold mb-2 text-light-p40 text-center">{{ card_title }}</h2>
+            <div class="text-gray-500 mb-2 px-2 text-center">from:</div>
+            <div id="price" data-base-price="{{ card_price }}" class="text-3xl font-bold text-gray-800 mb-5 text-center">{{ card_price }}</div>
+            <div class="lineHeight-32 mb-4 text-center">{{ card_description|raw }}</div>
+            <form action="{{ site.url }}/wp-admin/admin-post.php" method="post" class="space-y-4" id="reservation-form">
+    <input type="hidden" name="action" value="submit_reservation">
+    <input type="hidden" name="card_image_url" value="{{ card_image_url }}">
+    <input type="hidden" name="card_title" value="{{ card_title }}">
+    <input type="hidden" name="card_duration" value="{{ card_duration }}">
+    <input type="hidden" name="card_description" value="{{ card_description }}">
+    <input type="hidden" name="card_price" id="card_price" value="{{ card_price }}">
+    <input type="hidden" name="total_price" id="total_price" value="">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="relative mb-4">
+            <input type="text" id="name" name="name" required class="input-field w-full border-b-2 border-gray-300 focus:outline-none focus:border-light-p40" placeholder="Name">
+        </div>
+        <div class="relative mb-4">
+            <input type="email" id="email" name="email" required class="input-field w-full border-b-2 border-gray-300 focus:outline-none focus:border-light-p40" placeholder="Email">
+        </div>
+        <div class="relative mb-4">
+            <input type="tel" id="phone" name="phone" required class="input-field w-full border-b-2 border-gray-300 focus:outline-none focus:border-light-p40" placeholder="Phone">
+        </div>
+        <div class="relative mb-4">
+            <input type="date" id="date" name="date" required class="input-field w-full border-b-2 border-gray-300 focus:outline-none focus:border-light-p40">
+        </div>
+        <div class="relative mb-4">
+            <input type="number" id="persons" name="persons" min="1" value="1" required class="input-field w-full border-b-2 border-gray-300 focus:outline-none focus:border-light-p40" placeholder="Person">
+        </div>
+        <div class="relative mb-4 col-span-2">
+            <textarea id="comments" name="comments" class="textarea-field w-full border-b-2 border-gray-300 focus:outline-none focus:border-light-p40" placeholder="Comments"></textarea>
+        </div>
+    </div>
+    <div id="total-price-display" class="text-xl font-bold text-gray-800 mb-5 text-center"></div>
+    <div class="flex justify-center">
+        <button type="submit" class="btn-submit bg-light-p40 hover:border hover:border-light-p40 hover:text-light-p40 hover:bg-transparent text-white-100 py-2 px-4 rounded-sm w-1/2">Submit Reservation</button>
+    </div>
+</form>
+        </div>
+    </div>
+ 
+
+
+
+
+
+</section>
+{% endblock %}

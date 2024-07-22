@@ -132,70 +132,70 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
     
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        const fullName = document.getElementById('fullName');
-        const email = document.getElementById('email');
-        const subject = document.getElementById('subject');
-        const message = document.getElementById('message');
-        let valid = true;
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const fullName = document.getElementById('fullName');
+            const email = document.getElementById('email');
+            const subject = document.getElementById('subject');
+            const message = document.getElementById('message');
+            let valid = true;
 
-      
-        document.querySelectorAll('.error').forEach(function(errorElement) {
-            errorElement.remove();
+            document.querySelectorAll('.error').forEach(function(errorElement) {
+                errorElement.remove();
+            });
+
+            if (fullName.value.trim() === '') {
+                displayError(fullName, 'Full Name is required');
+                valid = false;
+            }
+
+            if (subject.value.trim() === '') {
+                displayError(subject, 'Subject is required');
+                valid = false;
+            }
+
+            if (message.value.trim() === '') {
+                displayError(message, 'Message is required');
+                valid = false;
+            }
+
+            if (valid) {
+                const formData = new FormData(form);
+                fetch('/wp-content/themes/travel-explore/send-email.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        form.innerHTML = '<div class="text-center p-4 text-light-p40"><h3>Thank you for your message!</h3></div>';
+                        form.reset();
+                    } else {
+                        throw new Error(data.error || 'No message received');
+                    }
+                })
+                .catch(error => {
+                    const messageContainer = document.getElementById('messageContainer');
+                    messageContainer.innerHTML = `<h3>There was a problem sending the email: ${error.message}</h3>`;
+                    messageContainer.style.backgroundColor = '#f44336'; 
+                    messageContainer.classList.remove('hidden');
+                    console.error('Error:', error);
+                });
+            }
         });
 
-        
-        if (fullName.value.trim() === '') {
-            displayError(fullName, 'Full Name is required');
-            valid = false;
+        function displayError(element, message) {
+            const error = document.createElement('div');
+            error.textContent = message;
+            error.className = 'error';
+            error.style.color = 'red';
+            element.parentNode.insertBefore(error, element.nextSibling);
         }
-
-        if (subject.value.trim() === '') {
-            displayError(subject, 'Subject is required');
-            valid = false;
-        }
-
-        if (message.value.trim() === '') {
-            displayError(message, 'Message is required');
-            valid = false;
-        }
-
-        
-        if (valid) {
-            const formData = new FormData(form);
-            fetch('/wp-content/themes/travel-explore/send-email.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    form.innerHTML = '<div class="text-center p-4 text-light-p40"><h3>Thank you for your message!</h3></div>';
-                    form.reset();
-                } else {
-                    throw new Error(data.error || 'No message received');
-                }
-            })
-            .catch(error => {
-                const messageContainer = document.getElementById('messageContainer');
-                messageContainer.innerHTML = `<h3>There was a problem sending the email: ${error.message}</h3>`;
-                messageContainer.style.backgroundColor = '#f44336'; 
-                messageContainer.classList.remove('hidden');
-                console.error('Error:', error);
-            });
-        }
-    });
-
-    function displayError(element, message) {
-        const error = document.createElement('div');
-        error.textContent = message;
-        error.className = 'error';
-        error.style.color = 'red';
-        element.parentNode.insertBefore(error, element.nextSibling);
     }
 });
+
 
 
 
@@ -281,12 +281,16 @@ document.addEventListener('DOMContentLoaded', function() {
             var passwordFields = document.querySelectorAll('input[type="password"], input[type="text"]');
             var showPasswords = this.checked;
             passwordFields.forEach(function(field) {
-                field.type = showPasswords ? 'text' : 'password';
+                if (field.type === 'password' && showPasswords) {
+                    field.dataset.type = 'password'; 
+                    field.type = 'text';
+                } else if (field.dataset.type === 'password') { 
+                    field.type = 'password';
+                }
             });
         });
     }
 });
-
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -354,4 +358,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const priceElement = document.getElementById('card_price');
+    const personsElement = document.getElementById('persons');
+    const totalPriceElement = document.getElementById('total_price');
+    const totalPriceDisplay = document.getElementById('total-price-display');
+    
+    if (priceElement && personsElement && totalPriceElement && totalPriceDisplay) {
+        const basePrice = parseFloat(priceElement.value);
+
+        function updateTotalPrice() {
+            const numberOfPersons = parseInt(personsElement.value);
+            if (!isNaN(numberOfPersons) && !isNaN(basePrice)) {
+                const totalPrice = basePrice * numberOfPersons;
+                totalPriceElement.value = totalPrice.toFixed(2);
+                totalPriceDisplay.textContent = `Total Price: €${totalPrice.toFixed(2)}`;
+            } else {
+                totalPriceElement.value = '0.00';
+                totalPriceDisplay.textContent = 'Total Price: €0.00';
+            }
+        }
+
+        personsElement.addEventListener('input', updateTotalPrice);
+        updateTotalPrice();
+    }
 });
