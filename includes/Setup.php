@@ -372,12 +372,12 @@ class Setup {
     }
 
     public function notify_admin_of_pending_post($post_id, $post) {
-        if ($post->post_status == 'pending' && !current_user_can('administrator')) {
+        if ($post->post_status == 'pending' && $post->post_type == 'user_journey' && !current_user_can('administrator')) {
             $admin_email = get_option('admin_email');
-            $subject = 'New Pending Post Submission';
-            $message = 'A new post titled "' . $post->post_title . '" has been submitted and is pending approval.';
+            $subject = 'New Pending User Journey Submission';
+            $message = 'A new user journey titled "' . $post->post_title . '" has been submitted and is pending approval.';
             $html_message = '<html><body>';
-            $html_message .= '<p>A new post titled "<strong>' . $post->post_title . '</strong>" has been submitted and is pending approval.</p>';
+            $html_message .= '<p>A new user journey titled "<strong>' . $post->post_title . '</strong>" has been submitted and is pending approval.</p>';
             $html_message .= '</body></html>';
             
             $headers = [
@@ -388,6 +388,7 @@ class Setup {
             wp_mail($admin_email, $subject, $html_message, $headers);
         }
     }
+    
     
 
     public function restrict_publish_to_admins($data, $postarr) {
@@ -730,7 +731,6 @@ class Setup {
             remove_menu_page('edit.php?post_type=blog');     
             remove_menu_page('edit.php?post_type=alternative_tourism');
             
-            
         }
     }
 
@@ -741,7 +741,9 @@ class Setup {
     }
 
     function custom_login_errors() {
-        $referrer = $_SERVER['HTTP_REFERER'];  
+        
+        $referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+
         if (!empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin')) {
             if (isset($_REQUEST['log']) && isset($_REQUEST['pwd'])) {
                 $user = wp_authenticate($_REQUEST['log'], $_REQUEST['pwd']);
@@ -752,6 +754,7 @@ class Setup {
             }
         }
     }
+    
 
     function set_approver_name_on_publish($new_status, $old_status, $post) {
         if ('publish' === $new_status && 'publish' !== $old_status && $post->post_type === 'user_journey' && current_user_can('administrator')) {
@@ -849,6 +852,235 @@ class Setup {
             $icon_url
         );
     }
+    function handle_reservation_submission() {
+        if (!is_user_logged_in()) {
+            wp_redirect(home_url('/login') . '?message=login_required'); 
+            exit;
+        }
     
-}
+        if (isset($_POST['name'], $_POST['email'], $_POST['phone'], $_POST['date'], $_POST['persons'], $_POST['comments'], $_POST['card_price'], $_POST['card_title'], $_POST['total_price']))  {
+            $current_user = wp_get_current_user();
+    
+            $postarr = [
+                'post_title'   => sanitize_text_field($_POST['name']), 
+                'post_content' => sanitize_textarea_field($_POST['comments']), 
+                'post_status'  => 'pending', 
+                'post_type'    => 'reservation', 
+                'post_author'  => $current_user->ID, 
+                'meta_input'   => [ 
+                    'name'               => sanitize_text_field($_POST['name']),
+                    'email'              => sanitize_email($_POST['email']), 
+                    'phone'              => sanitize_text_field($_POST['phone']), 
+                    'reservation_date'   => sanitize_text_field($_POST['date']), 
+                    'persons'            => intval($_POST['persons']), 
+                    'reservation_status' => 'pending', 
+                    'notes'              => sanitize_text_field($_POST['comments']), 
+                    'price'              => sanitize_text_field($_POST['card_price']), 
+                    'total_price'        => sanitize_text_field($_POST['total_price']),
+                    'reservation_type'   => sanitize_text_field($_POST['card_title'])
+                    ]
+            ];
+    
+            $post_id = wp_insert_post($postarr);
+    
+            if ($post_id !== 0) {
+                wp_redirect(home_url()); 
+                exit;
+            }
+        }
+        wp_redirect(home_url('/error'));
+        exit;
+    }
+    
+    function show_own_reservations($query) {
+        if (!current_user_can('administrator') && $query->is_main_query() && is_admin() && $query->get('post_type') == 'reservation') {
+            $query->set('author', get_current_user_id());
+        }
+    }
+    
+    function restrict_reservation_management() {
+        if (is_admin() && !current_user_can('administrator') && !defined('DOING_AJAX')) {
+            global $pagenow;
+            $restricted_pages = [
+                'edit.php?post_type=reservation',
+                'post.php?post_type=reservation',
+                'post-new.php?post_type=reservation'
+            ];
+    
+            if (in_array($pagenow, $restricted_pages)) {
+                wp_redirect(admin_url());
+                exit;
+            }
+        }
+    }
+    
+    function set_custom_reservation_columns($columns) {
+        $new_columns = [
+            'cb' => $columns['cb'],
+            'title' => __('Name'),
+            'reservation_type' => __('Type of Reservation'), 
+            'reservation_date' => __('Reservation Date'),
+            'email' => __('Email'),
+            'phone' => __('Phone'),
+            'status' => __('Status'),
+            'persons' => __('Number of Persons'), 
+            'total_price' => __('Total Price'),
+            'notes' => __('Notes'),
+            'username' => __('User'),
+            'date' => $columns['date']  
+        ];
+        return $new_columns;
+    }
+    
+    function custom_reservation_column_content($column, $post_id) {
+        switch ($column) {
+            case 'reservation_type':
+                echo esc_html(get_post_meta($post_id, 'reservation_type', true));  
+                break;
+            case 'reservation_date':
+                echo esc_html(get_post_meta($post_id, 'reservation_date', true));
+                break;
+            case 'email':
+                echo esc_html(get_post_meta($post_id, 'email', true));
+                break;
+            case 'phone':
+                echo esc_html(get_post_meta($post_id, 'phone', true));
+                break;
+            case 'status':
+                $current_status = get_post_meta($post_id, 'reservation_status', true);
+                if ($current_status) {
+                    echo esc_html($current_status); 
+                } else {
+                    echo __('pending', 'textdomain'); 
+                }
+                break;
+            case 'persons':
+                echo esc_html(get_post_meta($post_id, 'persons', true)); 
+                break;
+                case 'total_price':
+                    $total_price = get_post_meta($post_id, 'total_price', true);  
+                    if (!empty($total_price)) {
+                        echo esc_html($total_price); 
+                    } else {
+                        echo __('No Price', 'textdomain'); 
+                    }
+                    break;
+            case 'notes':
+                echo esc_html(get_post_meta($post_id, 'notes', true));
+                break;
+            case 'username':
+                $post = get_post($post_id);
+                $user = get_userdata($post->post_author);
+                echo esc_html($user->user_login);
+                break;
+        }
+    }
+    
+    function customize_reservation_row_actions($actions, $post) {
+        if ($post->post_type == 'reservation') {
+            if (!current_user_can('administrator')) {
+                unset($actions['edit']);
+                unset($actions['inline hide-if-no-js']);
+                unset($actions['trash']);
+                unset($actions['view']);
+            }
+        }
+        return $actions;
+    }
+    
+    function send_admin_new_reservation_notification($post_id, $post, $update) {
+        if ($post->post_type != 'reservation' || $update) {
+            return;
+        }
+    
+        $admin_email = get_option('admin_email');
+        $subject = 'New Reservation Submitted';
+        $message = sprintf(
+            "A new reservation has been submitted.\n\nName: %s\nEmail: %s\nPhone: %s\nDate: %s\nComments: %s\n\nPlease review and manage the reservation in the admin panel.",
+            sanitize_text_field($post->post_title),
+            sanitize_email(get_post_meta($post_id, 'email', true)),
+            sanitize_text_field(get_post_meta($post_id, 'phone', true)),
+            sanitize_text_field(get_post_meta($post_id, 'reservation_date', true)),
+            sanitize_textarea_field($post->post_content)
+        );
+    
+        $html_message = '<html><body>';
+        $html_message .= '<p>A new reservation has been submitted.</p>';
+        $html_message .= '<p><strong>Name:</strong> ' . sanitize_text_field($post->post_title) . '</p>';
+        $html_message .= '<p><strong>Email:</strong> ' . sanitize_email(get_post_meta($post_id, 'email', true)) . '</p>';
+        $html_message .= '<p><strong>Phone:</strong> ' . sanitize_text_field(get_post_meta($post_id, 'phone', true)) . '</p>';
+        $html_message .= '<p><strong>Date:</strong> ' . sanitize_text_field(get_post_meta($post_id, 'reservation_date', true)) . '</p>';
+        $html_message .= '<p><strong>Comments:</strong> ' . sanitize_textarea_field($post->post_content) . '</p>';
+        $html_message .= '<p>Please review and manage the reservation in the admin panel.</p>';
+        $html_message .= '</body></html>';
+    
+        $headers = [
+            'From: Notification <noreply@yoursite.com>',
+            'Content-Type: text/html; charset=UTF-8'
+        ];
+    
+        wp_mail($admin_email, $subject, $html_message, $headers);
+    }
+    
+    function notify_user_of_reservation_status_change($post_id, $post, $update) {
+
+        if ($post->post_type != 'reservation' || !$update) {
+            return;
+        }
+    
+        $new_status = get_post_meta($post_id, 'reservation_status', true);
+        $old_status = get_post_meta($post_id, '_previous_reservation_status', true);
+    
+        if ($new_status == $old_status) {
+            return;
+        }
+    
+        update_post_meta($post_id, '_previous_reservation_status', $new_status);
+    
+        $user_email = sanitize_email(get_post_meta($post_id, 'email', true));
+    
+        if ($new_status == 'approved') {
+            $subject = 'Your Reservation Has Been Approved';
+            $message = '<html><body>';
+            $message .= '<p>Your reservation has been approved.</p>';
+            $message .= '<p>Thank you for choosing our service!</p>';
+            $message .= '</body></html>';
+    
+            $headers = [
+                'From: Notification <noreply@yoursite.com>',
+                'Content-Type: text/html; charset=UTF-8'
+            ];
+            wp_mail($user_email, $subject, $message, $headers);
+    
+        } elseif ($new_status == 'rejected') {
+            $subject = 'Your Reservation Has Been Rejected';
+            $message = '<html><body>';
+            $message .= '<p>We regret to inform you that your reservation has been rejected.</p>';
+            $message .= '<p>Please contact us for more details.</p>';
+            $message .= '</body></html>';
+    
+            $headers = [
+                'From: Notification <noreply@yoursite.com>',
+                'Content-Type: text/html; charset=UTF-8'
+            ];
+            wp_mail($user_email, $subject, $message, $headers);
+    
+            wp_trash_post($post_id);
+    
+            wp_redirect(admin_url('edit.php?post_type=reservation'));
+            exit; 
+        } else {
+            return; 
+        }
+    }
+    
+
+    }
+    
+
+    
+
+    
+    
+
 
