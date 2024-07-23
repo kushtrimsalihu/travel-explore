@@ -385,3 +385,18 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTotalPrice();
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var popup = document.getElementById('popup-notification');
+    var closeBtn = document.getElementById('close-popup');
+    function showPopup() {
+        popup.classList.remove('hidden');
+    }
+    function closePopup() {
+        popup.classList.add('hidden');
+    }
+    closeBtn.addEventListener('click', closePopup);
+    if (window.someConditionToShowPopup) {
+        showPopup();
+    }
+});

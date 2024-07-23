@@ -1030,9 +1030,60 @@ class Setup {
             return; 
         }
     }
-    
 
+    
+    function check_user_posts_count() {
+        function notify_user_of_prize($user_id) {
+            $user = get_userdata($user_id);
+    
+            if ($user && !empty($user->user_email)) {
+                $to = $user->user_email;
+                $subject = 'Congratulations! You Won a Free Trip!';
+                $message = "
+                    Dear {$user->display_name},
+    
+                    Congratulations! You’ve won a free trip for reaching 50 posts on your user journey.
+    
+                    This is our way of saying thank you for your dedication and amazing contributions.
+    
+                    For more details about your prize, please contact us.
+    
+                    Best regards,
+                    Travel Explore Team
+                ";
+    
+                $headers = array('Content-Type: text/plain; charset=UTF-8');
+    
+                wp_mail($to, $subject, $message, $headers);
+            }
+        }
+    
+        if (is_home() || is_front_page()) {
+            if (is_user_logged_in()) {
+                $current_user = wp_get_current_user();
+    
+                if (!in_array('administrator', $current_user->roles)) {
+                    $post_count_query = new WP_Query([
+                        'author' => $current_user->ID,
+                        'post_type' => 'user_journey',
+                        'post_status' => 'publish',
+                        'posts_per_page' => -1,
+                        'fields' => 'ids',
+                    ]);
+                    $post_count = $post_count_query->found_posts;
+    
+                    if ($post_count >= 50) {  
+                        notify_user_of_prize($current_user->ID);
+                        echo '<script>window.someConditionToShowPopup = true;</script>';
+                    } else {
+                        echo '<script>window.someConditionToShowPopup = false;</script>';
+                    }
+                }
+            }
+        }
     }
+    
+}
     
 
     
