@@ -1057,27 +1057,56 @@ class Setup {
                 wp_mail($to, $subject, $message, $headers);
             }
         }
+
+        function notify_admin_of_user_prize($user_id) {
+            $user = get_userdata($user_id);
+            $admin_email = get_option('admin_email');
     
-        if (is_home() || is_front_page()) {
-            if (is_user_logged_in()) {
-                $current_user = wp_get_current_user();
+            if ($user && !empty($admin_email)) {
+                $to = $admin_email;
+                $subject = 'User Achievement Notification';
+                $message = "
+                    Hello Admin,
     
-                if (!in_array('administrator', $current_user->roles)) {
-                    $post_count_query = new WP_Query([
-                        'author' => $current_user->ID,
-                        'post_type' => 'user_journey',
-                        'post_status' => 'publish',
-                        'posts_per_page' => -1,
-                        'fields' => 'ids',
-                    ]);
-                    $post_count = $post_count_query->found_posts;
+                    User {$user->display_name} has reached 50 posts on their user journey.
     
-                    if ($post_count >= 50) {  
-                        notify_user_of_prize($current_user->ID);
-                        echo '<script>window.someConditionToShowPopup = true;</script>';
-                    } else {
-                        echo '<script>window.someConditionToShowPopup = false;</script>';
-                    }
+                    This user has achieved a milestone and won a free trip.
+    
+                    Best regards,
+                    Travel Explore
+                ";
+    
+                $headers = array('Content-Type: text/plain; charset=UTF-8');
+    
+                wp_mail($to, $subject, $message, $headers);
+            }
+        }
+    
+        if (is_user_logged_in()) {
+            $current_user = wp_get_current_user();
+    
+            if (!in_array('administrator', $current_user->roles)) {
+                $post_count_query = new WP_Query([
+                    'author' => $current_user->ID,
+                    'post_type' => 'user_journey',
+                    'post_status' => 'publish',
+                    'posts_per_page' => -1,
+                    'fields' => 'ids',
+                ]);
+                $post_count = $post_count_query->found_posts;
+
+    
+                if ($post_count >= 2) {
+                    notify_user_of_prize($current_user->ID);
+                    notify_admin_of_user_prize($current_user->ID);
+                    echo '<script>window.ShowPopup = true;</script>';
+                }
+                elseif ($post_count >= 1 && $post_count < 50 && is_archive('user-journey')) {
+                    echo '<script>window.showEncouragementNotification = true;</script>';
+                }
+                else{
+                    echo '<script>window.ShowPopup = false;</script>';
+                    echo '<script>window.showEncouragementNotification = false;</script>';
                 }
             }
         }

@@ -14,6 +14,8 @@
 			{% if function('is_front_page') %}
 				{% include 'winning-popup.twig' %}
 			{% endif %}
+
+			{% include 'inform-users-modal.twig' %}
 		
 			{% if is_404 %}
 				{% include "templates/errors/404.twig" %}
