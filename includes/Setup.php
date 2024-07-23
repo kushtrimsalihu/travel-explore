@@ -1030,9 +1030,95 @@ class Setup {
             return; 
         }
     }
-    
 
+    
+    function check_user_posts_count() {
+        function notify_user_of_prize($user_id) {
+            $user = get_userdata($user_id);
+            $user_email_sent = get_user_meta($user_id, 'user_email_sent_for_50_posts', true);
+    
+            if ($user && !empty($user->user_email) && !$user_email_sent) {
+                $to = $user->user_email;
+                $subject = 'Congratulations! You Won a Free Trip!';
+                $message = "
+                    Dear {$user->display_name},
+    
+                    Congratulations! You’ve won a free trip for reaching 50 posts on your user journey.
+    
+                    This is our way of saying thank you for your dedication and amazing contributions.
+    
+                    For more details about your prize, please contact us.
+    
+                    Best regards,
+                    Travel Explore Team
+                ";
+    
+                $headers = array('Content-Type: text/plain; charset=UTF-8');
+    
+                wp_mail($to, $subject, $message, $headers);
+                update_user_meta($user_id, 'user_email_sent_for_50_posts', true);
+            }
+        }
+
+        function notify_admin_of_user_prize($user_id) {
+            $user = get_userdata($user_id);
+            $admin_email = get_option('admin_email');
+            $admin_notification_sent = get_user_meta($user_id, 'admin_notification_sent_for_50_posts', true);
+    
+            if ($user && !empty($admin_email) && !$admin_notification_sent) {
+                $to = $admin_email;
+                $subject = 'User Achievement Notification';
+                $message = "
+                    Hello Admin,
+    
+                    User {$user->display_name} has reached 50 posts on their user journey.
+    
+                    This user has achieved a milestone and won a free trip.
+    
+                    Best regards,
+                    Travel Explore
+                ";
+    
+                $headers = array('Content-Type: text/plain; charset=UTF-8');
+    
+                wp_mail($to, $subject, $message, $headers);
+                update_user_meta($user_id, 'admin_notification_sent_for_50_posts', true);
+            }
+        }
+    
+        if (is_user_logged_in()) {
+            $current_user = wp_get_current_user();
+    
+            if (!in_array('administrator', $current_user->roles)) {
+                $post_count_query = new WP_Query([
+                    'author' => $current_user->ID,
+                    'post_type' => 'user_journey',
+                    'post_status' => 'publish',
+                    'posts_per_page' => -1,
+                    'fields' => 'ids',
+                ]);
+                $post_count = $post_count_query->found_posts;
+    
+                $user_email_sent = get_user_meta($current_user->ID, 'user_email_sent_for_50_posts', true);
+                $admin_notification_sent = get_user_meta($current_user->ID, 'admin_notification_sent_for_50_posts', true);
+    
+                if ($post_count >= 2) {
+                    notify_user_of_prize($current_user->ID);
+                    notify_admin_of_user_prize($current_user->ID);
+                    echo '<script>window.ShowPopup = true;</script>';
+                }
+                elseif ($post_count >= 1 && $post_count < 50 && is_archive('user-journey')) {
+                    echo '<script>window.showEncouragementNotification = true;</script>';
+                }
+                else{
+                    echo '<script>window.ShowPopup = false;</script>';
+                    echo '<script>window.showEncouragementNotification = false;</script>';
+                }
+            }
+        }
     }
+    
+}
     
 
     
