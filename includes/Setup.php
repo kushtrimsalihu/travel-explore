@@ -1035,8 +1035,9 @@ class Setup {
     function check_user_posts_count() {
         function notify_user_of_prize($user_id) {
             $user = get_userdata($user_id);
+            $user_email_sent = get_user_meta($user_id, 'user_email_sent_for_50_posts', true);
     
-            if ($user && !empty($user->user_email)) {
+            if ($user && !empty($user->user_email) && !$user_email_sent) {
                 $to = $user->user_email;
                 $subject = 'Congratulations! You Won a Free Trip!';
                 $message = "
@@ -1055,14 +1056,16 @@ class Setup {
                 $headers = array('Content-Type: text/plain; charset=UTF-8');
     
                 wp_mail($to, $subject, $message, $headers);
+                update_user_meta($user_id, 'user_email_sent_for_50_posts', true);
             }
         }
 
         function notify_admin_of_user_prize($user_id) {
             $user = get_userdata($user_id);
             $admin_email = get_option('admin_email');
+            $admin_notification_sent = get_user_meta($user_id, 'admin_notification_sent_for_50_posts', true);
     
-            if ($user && !empty($admin_email)) {
+            if ($user && !empty($admin_email) && !$admin_notification_sent) {
                 $to = $admin_email;
                 $subject = 'User Achievement Notification';
                 $message = "
@@ -1079,6 +1082,7 @@ class Setup {
                 $headers = array('Content-Type: text/plain; charset=UTF-8');
     
                 wp_mail($to, $subject, $message, $headers);
+                update_user_meta($user_id, 'admin_notification_sent_for_50_posts', true);
             }
         }
     
@@ -1094,7 +1098,9 @@ class Setup {
                     'fields' => 'ids',
                 ]);
                 $post_count = $post_count_query->found_posts;
-
+    
+                $user_email_sent = get_user_meta($current_user->ID, 'user_email_sent_for_50_posts', true);
+                $admin_notification_sent = get_user_meta($current_user->ID, 'admin_notification_sent_for_50_posts', true);
     
                 if ($post_count >= 2) {
                     notify_user_of_prize($current_user->ID);
