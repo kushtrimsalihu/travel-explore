@@ -305,9 +305,6 @@ document.addEventListener('DOMContentLoaded', function() {
             cookieConsentBanner.classList.remove('hidden');
         }
 
-        const cookieConsentAccept = document.getElementById('cookie-consent-accept');
-        const cookieConsentReject = document.getElementById('cookie-consent-reject');
-
         cookieConsentAccept.addEventListener('click', function() {
             setCookie('cookie_consent', 'accepted', 365);
             cookieConsentBanner.classList.add('hidden');
@@ -315,7 +312,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         cookieConsentReject.addEventListener('click', function() {
             cookieConsentBanner.classList.add('hidden');
-            setCookie('cookie_consent', 'rejected', 365);
         });
 
     }, 2000);
@@ -395,9 +391,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function closePopup() {
         popup.classList.add('hidden');
     }
-    closeBtn.addEventListener('click', closePopup);
-    if (window.ShowPopup) {
-        showPopup();
+    if(closeBtn){
+        closeBtn.addEventListener('click', closePopup);
+        if (window.ShowPopup) {
+            showPopup();
+        }
     }
 });
 

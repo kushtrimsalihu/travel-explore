@@ -48,6 +48,7 @@ class Init extends Site {
         add_action('manage_reservation_posts_custom_column', [new Setup(),'custom_reservation_column_content'], 10, 2);
         add_action('admin_init', [new Setup(),'restrict_reservation_management']);
         add_action('wp_insert_post', [new Setup(),'send_admin_new_reservation_notification'], 10, 3);
+        add_action('init', [new Setup(), 'handle_contact_us_click']);
         
         add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
         add_action('wp_authenticate', [new Setup(), 'custom_login_errors'], 1);

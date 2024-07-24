@@ -1102,21 +1102,36 @@ class Setup {
                 $user_email_sent = get_user_meta($current_user->ID, 'user_email_sent_for_50_posts', true);
                 $admin_notification_sent = get_user_meta($current_user->ID, 'admin_notification_sent_for_50_posts', true);
     
-                if ($post_count >= 2) {
+                session_start();
+                $contact_us_clicked = $_SESSION['contact_us_clicked'] ?? false;
+    
+                if ($post_count >= 10) {
                     notify_user_of_prize($current_user->ID);
                     notify_admin_of_user_prize($current_user->ID);
-                    echo '<script>window.ShowPopup = true;</script>';
-                }
-                elseif ($post_count >= 1 && $post_count < 50 && is_archive('user-journey')) {
+                    if (!$contact_us_clicked) {
+                        echo '<script>window.ShowPopup = true;</script>';
+                    }
+                } 
+                elseif ($post_count >= 1 && $post_count < 10 && is_archive('user-journey')) {
                     echo '<script>window.showEncouragementNotification = true;</script>';
-                }
-                else{
+                } 
+                else {
                     echo '<script>window.ShowPopup = false;</script>';
                     echo '<script>window.showEncouragementNotification = false;</script>';
                 }
             }
         }
     }
+
+    function handle_contact_us_click() {
+        if (isset($_POST['contact_us_clicked']) && $_POST['contact_us_clicked'] == '1') {
+            session_start();
+            $_SESSION['contact_us_clicked'] = true;
+            wp_redirect(home_url('/contact-us'));
+            exit;
+        }
+    }
+    
     
 }
     
