@@ -548,3 +548,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+document.addEventListener('DOMContentLoaded', function() {
+    var reservationForm = document.getElementById('reservation-form');
+
+    if (reservationForm) {
+        reservationForm.addEventListener('submit', function(event) {
+            alert('Your reservation is being processed. You will be redirected to the Homepage.');
+        });
+    }
+});
