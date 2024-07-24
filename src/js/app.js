@@ -381,7 +381,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTotalPrice();
     }
 });
-
 document.addEventListener('DOMContentLoaded', function() {
     var popup = document.getElementById('popup-notification');
     var closeBtn = document.getElementById('close-popup');
@@ -399,6 +398,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
 
     if (window.showEncouragementNotification) {
@@ -414,3 +414,137 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    if (document.getElementById('map')) {
+        var map = L.map('map').setView([42.6629, 21.1655], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        var control = L.Routing.control({
+            waypoints: [],
+            routeWhileDragging: true,
+            router: L.Routing.osrmv1({
+                serviceUrl: 'https://router.project-osrm.org/route/v1/'
+            })
+        }).addTo(map);
+
+        var start, end;
+        var currentLocationMarker;
+
+        control.on('routesfound', function (e) {
+            var routes = e.routes;
+            var summary = routes[0].summary;
+            var distance = (summary.totalDistance / 1000).toFixed(1) + ' km';
+            var totalMinutes = summary.totalTime / 60;
+            var duration;
+
+            if (totalMinutes > 60) {
+                var hours = Math.floor(totalMinutes / 60);
+                var minutes = Math.floor(totalMinutes % 60);
+                duration = hours + ' hr ' + minutes + ' min';
+            } else {
+                duration = totalMinutes.toFixed(0) + ' min';
+            }
+
+            document.getElementById('route-info').innerHTML = 
+                '<p class="distance">Distance: ' + distance + '</p>' +
+                '<p class="duration">Duration: ' + duration + '</p>';
+        });
+
+        async function getCoordinates(location) {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`);
+                const data = await response.json();
+                if (data && data.length > 0) {
+                    const { lat, lon } = data[0];
+                    return L.latLng(lat, lon);
+                } else {
+                    alert('Could not find the location: ' + location);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Geocoding error:', error);
+                alert('An error occurred while fetching location data.');
+                return null;
+            }
+        }
+
+        document.getElementById('location-type').addEventListener('change', function () {
+            var locationType = document.getElementById('location-type').value;
+            var manualLocationDiv = document.getElementById('manual-location');
+            if (locationType === 'manual') {
+                manualLocationDiv.style.display = 'block';
+            } else {
+                manualLocationDiv.style.display = 'none';
+            }
+        });
+
+        document.getElementById('start-now').addEventListener('click', async function () {
+            var locationType = document.getElementById('location-type').value;
+            var endInput = document.getElementById('end').value;
+
+            if (locationType === 'current') {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async function (position) {
+                        start = L.latLng(position.coords.latitude, position.coords.longitude);
+                        end = await getCoordinates(endInput);
+
+                        if (end) {
+                            control.setWaypoints([start, end]);
+                            document.getElementById('start-navigation').style.display = 'inline-block'; // Show the start button
+                        } else {
+                            alert('Please enter a valid location for the end point.');
+                        }
+                    }, function (error) {
+                        alert('Error retrieving current location: ' + error.message);
+                    });
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            } else {
+                var startInput = document.getElementById('start').value;
+                start = await getCoordinates(startInput);
+                end = await getCoordinates(endInput);
+
+                if (start && end) {
+                    control.setWaypoints([start, end]);
+                    document.getElementById('start-navigation').style.display = 'inline-block'; // Show the start button
+                } else {
+                    alert('Please enter valid locations for both start and end points.');
+                }
+            }
+        });
+
+        document.getElementById('start-navigation').addEventListener('click', async function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(async function (position) {
+                    var currentLocation = L.latLng(position.coords.latitude, position.coords.longitude);
+
+                    if (currentLocationMarker) {
+                        currentLocationMarker.setLatLng(currentLocation); // Update marker position
+                    } else {
+                        currentLocationMarker = L.marker(currentLocation).addTo(map).bindPopup('You are here').openPopup();
+                    }
+
+                    // Set the view to the current location with high zoom level
+                    map.setView(currentLocation, 19); // Zoom in as close as possible for accurate location detection
+
+                    // Update the waypoints to include the current location
+                    if (start && end) {
+                        control.setWaypoints([currentLocation, end]);
+                    }
+                }, function (error) {
+                    alert('Error retrieving current location for navigation: ' + error.message);
+                }, {
+                    enableHighAccuracy: true,
+                    maximumAge: 0,
+                    timeout: Infinity // Set to Infinity to prevent timeout
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        });
+    }
+});
