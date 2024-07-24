@@ -27,6 +27,7 @@
     "jquerry": "^0.0.1-security",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "swiper": "^11.1.4"
   }
 }
