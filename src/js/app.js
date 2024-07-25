@@ -415,8 +415,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (document.getElementById('map')) {
-        var map = L.map('map').setView([42.6629, 21.1655], 13);
+    const urlParams = new URLSearchParams(window.location.search);
+    const location = urlParams.get('location');
+    if (location) {
+        document.getElementById('end').value = location;
+    }
+
+    if (document.getElementById('route-map')) {
+        var map = L.map('route-map').setView([42.6629, 21.1655], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -432,6 +438,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         var start, end;
         var currentLocationMarker;
+        var startLocationType = 'current';
 
         control.on('routesfound', function (e) {
             var routes = e.routes;
@@ -451,6 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('route-info').innerHTML = 
                 '<p class="distance">Distance: ' + distance + '</p>' +
                 '<p class="duration">Duration: ' + duration + '</p>';
+            document.getElementById('route-info').style.display = 'flex'; 
         });
 
         async function getCoordinates(location) {
@@ -472,9 +480,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         document.getElementById('location-type').addEventListener('change', function () {
-            var locationType = document.getElementById('location-type').value;
+            startLocationType = document.getElementById('location-type').value;
             var manualLocationDiv = document.getElementById('manual-location');
-            if (locationType === 'manual') {
+            if (startLocationType === 'manual') {
                 manualLocationDiv.style.display = 'block';
             } else {
                 manualLocationDiv.style.display = 'none';
@@ -482,10 +490,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.getElementById('start-now').addEventListener('click', async function () {
-            var locationType = document.getElementById('location-type').value;
             var endInput = document.getElementById('end').value;
 
-            if (locationType === 'current') {
+            if (startLocationType === 'current') {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(async function (position) {
                         start = L.latLng(position.coords.latitude, position.coords.longitude);
@@ -510,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (start && end) {
                     control.setWaypoints([start, end]);
-                    document.getElementById('start-navigation').style.display = 'inline-block'; // Show the start button
+                    document.getElementById('start-navigation').style.display = 'inline-block'; 
                 } else {
                     alert('Please enter valid locations for both start and end points.');
                 }
@@ -518,42 +525,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.getElementById('start-navigation').addEventListener('click', async function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(async function (position) {
-                    var currentLocation = L.latLng(position.coords.latitude, position.coords.longitude);
+            if (startLocationType === 'current') {
+                if (navigator.geolocation) {
+                    navigator.geolocation.watchPosition(async function (position) {
+                        var currentLocation = L.latLng(position.coords.latitude, position.coords.longitude);
 
-                    if (currentLocationMarker) {
-                        currentLocationMarker.setLatLng(currentLocation); // Update marker position
-                    } else {
-                        currentLocationMarker = L.marker(currentLocation).addTo(map).bindPopup('You are here').openPopup();
-                    }
+                        if (currentLocationMarker) {
+                            currentLocationMarker.setLatLng(currentLocation); 
+                        } else {
+                            currentLocationMarker = L.marker(currentLocation).addTo(map).bindPopup('You are here').openPopup();
+                        }
 
-                    // Set the view to the current location with high zoom level
-                    map.setView(currentLocation, 19); // Zoom in as close as possible for accurate location detection
+                        map.setView(currentLocation, 19);
 
-                    // Update the waypoints to include the current location
-                    if (start && end) {
-                        control.setWaypoints([currentLocation, end]);
-                    }
-                }, function (error) {
-                    alert('Error retrieving current location for navigation: ' + error.message);
-                }, {
-                    enableHighAccuracy: true,
-                    maximumAge: 0,
-                    timeout: Infinity // Set to Infinity to prevent timeout
-                });
+                        if (start && end) {
+                            control.setWaypoints([currentLocation, end]);
+                        }
+                    }, function (error) {
+                        alert('Error retrieving current location for navigation: ' + error.message);
+                    }, {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: Infinity 
+                    });
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
             } else {
-                alert('Geolocation is not supported by this browser.');
+                if (start && end) {
+                    control.setWaypoints([start, end]);
+                } else {
+                    alert('Please enter valid locations for both start and end points.');
+                }
             }
-        });
-    }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    var reservationForm = document.getElementById('reservation-form');
-
-    if (reservationForm) {
-        reservationForm.addEventListener('submit', function(event) {
-            alert('Your reservation is being processed. You will be redirected to the Homepage.');
         });
     }
 });

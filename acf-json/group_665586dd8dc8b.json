@@ -280,7 +280,8 @@
                                         "attachment": "Media",
                                         "alternative_tourism": "Alternative Tourisms",
                                         "blog": "Blog",
-                                        "user_journey": "User Journeys"
+                                        "user_journey": "User Journeys",
+                                        "reservation": "Reservations"
                                     },
                                     "default_value": false,
                                     "return_format": "value",
@@ -1433,6 +1434,27 @@
                                     },
                                     "return_format": "array",
                                     "parent_repeater": "field_667bc41ce6327"
+                                },
+                                {
+                                    "key": "field_66a139837a694",
+                                    "label": "Location",
+                                    "name": "location",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_667bc41ce6327"
                                 }
                             ]
                         }
@@ -1629,5 +1651,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1721579785
+    "modified": 1721842068
 }
