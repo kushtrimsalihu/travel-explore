@@ -561,3 +561,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var loader = document.getElementById('loader');
+    loader.classList.remove('hidden');
+
+    setTimeout(function() {
+        loader.classList.add('hidden');
+    }, 1800); 
+});
