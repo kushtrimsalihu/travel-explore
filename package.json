@@ -24,6 +24,7 @@
   "dependencies": {
     "@fancyapps/fancybox": "^3.5.7",
     "@tailwindcss/typography": "^0.5.13",
+    "animate.css": "^4.1.1",
     "jquerry": "^0.0.1-security",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.4",
