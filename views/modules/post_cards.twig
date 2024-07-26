@@ -50,10 +50,19 @@
                         <path d="M20.9521 36.7982C20.7139 36.4854 20.598 36.0963 20.6264 35.7042L22.996 21.8838C23.1402 19.887 25.1653 19.9052 25.3095 21.902L27.6907 35.7042C27.719 36.0963 27.6032 36.4854 27.365 36.7982L25.4425 39.0096C24.5 39.5 24 39.5 22.8745 39.0096L20.9521 36.7982Z" fill="#333333"/>
                     </svg>
                 </div>
-                <a href="{{ site.url }}/reservation?image={{ card.image.url }}&title={{ card.title }}&duration={{ card.duration }}&description={{ card.description|url_encode }}&price={{ card.price }}" class="button bg-transparent text-nowrap w-fit text-light-p40 border border-light-p40 mt-8 py-2 px-4 rounded-2xl hover:bg-light-p40 hover:text-white-100">
+                <a href="#" class="button bg-transparent text-nowrap w-fit text-light-p40 border border-light-p40 mt-8 py-2 px-4 rounded-2xl hover:bg-light-p40 hover:text-white-100" onclick="window.submitBookingForm('{{ card.image.url }}', '{{ card.title }}', '{{ card.duration }}', '{{ card.description|url_encode }}', '{{ card.price }}')">
                     Book now
                 </a>
             </div>
         </div>
     {% endfor %}
 </section>
+
+
+<form id="bookingForm" action="{{ site.url }}/reservation" method="post" style="display:none;">
+    <input type="hidden" name="image" id="formImage">
+    <input type="hidden" name="title" id="formTitle">
+    <input type="hidden" name="duration" id="formDuration">
+    <input type="hidden" name="description" id="formDescription">
+    <input type="hidden" name="price" id="formPrice">
+</form>

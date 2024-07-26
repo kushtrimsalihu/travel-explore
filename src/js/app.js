@@ -571,3 +571,17 @@ document.addEventListener('DOMContentLoaded', function() {
         loader.classList.add('hidden');
     }, 1800); 
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    function submitBookingForm(image, title, duration, description, price) {
+        document.getElementById('formImage').value = image;
+        document.getElementById('formTitle').value = title;
+        document.getElementById('formDuration').value = duration;
+        document.getElementById('formDescription').value = description;
+        document.getElementById('formPrice').value = price;
+        document.getElementById('bookingForm').submit();
+    }
+
+    
+    window.submitBookingForm = submitBookingForm;
+});
