@@ -25,6 +25,8 @@ Travel Explore is built using WordPress, PHP, and Timber to provide a flexible t
 - **Admin Approval Workflow**: Ensure reservations are only finalized and emailed after admin approval.
 - **Responsive Design**: Fully responsive design using Tailwind CSS for a seamless user experience across all devices.
 - **User Journey Post Type**: Users can log in and add posts about their travel experiences related to any offer.
+- **Alternative Tourism Post Type**: This post type is designed for adding and showcasing diverse travel activities, such as biking, hiking, and other unique experiences. It allows you to feature various adventure options, helping travelers discover exciting activities during their trips.
+- **Blog Post Type**: Share articles, tips, and news related to travel.
 - **Star Ratings**: Provide star ratings for travels to help users make informed decisions.
 - **Map Guideline**: Show locations and provide guidelines on how to get to them using an integrated map feature.
 
@@ -111,12 +113,16 @@ Travel Explore is built using WordPress, PHP, and Timber to provide a flexible t
 2. **Add a Post:**
     - Logged-in users can add posts and reviews about their travel experiences related to any offer.
 
-## Contribution Guidelines
+### Alternative Tourism
 
-We welcome contributions to Travel Explore! To contribute, please follow these steps:
+1. **Add an Alternative Tourism Post:**
+    - Go to the WordPress admin dashboard and add a new post under the 'Alternative Tourism' post type.
 
-1. **Fork the repository.**
-2. **Create a new branch** for your feature or bugfix.
-3. **Commit your changes** with clear and concise messages.
-4. **Push to your branch**.
-5. **Create a pull request** detailing your changes.
+2. **Display Alternative Tourism Posts:**
+    - These posts can be featured on your site's activities page or a dedicated section to highlight unique travel experiences.
+
+### Blog Post Type
+
+1. **Add a Blog Post:**
+    - Navigate to the WordPress admin dashboard and create a new post under the 'Blog' post type.
+    - Share articles, tips, and news related to travel to engage with your audience.
