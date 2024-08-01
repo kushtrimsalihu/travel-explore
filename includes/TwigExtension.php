@@ -45,6 +45,9 @@ class TwigExtension {
         }));
         $twig->addFunction(new TwigFunction('get_categories_and_posts', [$this->setup, 'get_categories_and_posts']));
 
+        $twig->addFunction(new Twig\TwigFunction('do_shortcode', function($content) {
+            return do_shortcode($content);
+        }));
 
         return $twig;
     }
