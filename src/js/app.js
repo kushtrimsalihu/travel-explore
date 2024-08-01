@@ -585,3 +585,15 @@ document.addEventListener('DOMContentLoaded', function () {
     
     window.submitBookingForm = submitBookingForm;
 });
+
+document.getElementById('closeButton').addEventListener('click', function() {
+    document.getElementById('modal').style.display = 'none';
+});
+
+document.querySelectorAll('input[name="_mc4wp_action"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        const subscribeRadio = document.querySelector('input[name="_mc4wp_action"]:checked').value;
+        const submitButton = document.getElementById('submitButton');
+        submitButton.value = subscribeRadio.charAt(0).toUpperCase() + subscribeRadio.slice(1);
+    });
+});
