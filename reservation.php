@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Reservation 
+ * Template Name: Reservation Page
  */
 
  use Timber\Timber;

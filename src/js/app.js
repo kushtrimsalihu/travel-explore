@@ -597,3 +597,14 @@ document.querySelectorAll('input[name="_mc4wp_action"]').forEach(function(radio)
         submitButton.value = subscribeRadio.charAt(0).toUpperCase() + subscribeRadio.slice(1);
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var reservationForm = document.getElementById('reservation-form');
+
+    if (reservationForm) {
+        reservationForm.addEventListener('submit', function(event) {
+            alert('Your reservation is being processed. You will be redirected to the Homepage.');
+        });
+    }
+});

@@ -5,6 +5,7 @@ use PostType;
 use Timber\Site;
 use TwigExtension;
 
+
 class Init extends Site {
 
     public function __construct() {
@@ -49,7 +50,9 @@ class Init extends Site {
         add_action('admin_init', [new Setup(),'restrict_reservation_management']);
         add_action('wp_insert_post', [new Setup(),'send_admin_new_reservation_notification'], 10, 3);
         add_action('init', [new Setup(), 'handle_contact_us_click']);
-        
+        add_action('wp_insert_post', [new Setup(), 'generate_unique_reservation_code'], 10, 3);
+       
+
         add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
         add_action('wp_authenticate', [new Setup(), 'custom_login_errors'], 1);
         add_action('transition_post_status', [new Setup(),'set_approver_name_on_publish'], 10, 3);
