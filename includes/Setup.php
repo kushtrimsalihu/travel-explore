@@ -3,7 +3,7 @@
 namespace App;
 use WP_Query;
 use Timber\Timber;
-use TCPDF;
+
 
 class Setup {
 
@@ -899,12 +899,13 @@ class Setup {
                 echo esc_html(get_post_meta($post_id, 'reservation_type', true));  
                 break;
             case 'report':
-                $pdf_path = wp_upload_dir()['basedir'] . "/reservation_report_{$post_id}.pdf";
-                if (file_exists($pdf_path)) {
-                    $pdf_url = wp_upload_dir()['baseurl'] . "/reservation_report_{$post_id}.pdf";
-                    echo '<a href="' . esc_url($pdf_url) . '" target="_blank">View Report</a>';
+                    $reservation_code = get_post_meta($post_id, 'reservation_code', true);
+                    $pdf_path = wp_upload_dir()['basedir'] . "/reservation-report-{$reservation_code}.pdf";
+                    if (file_exists($pdf_path)) {
+                        $pdf_url = wp_upload_dir()['baseurl'] . "/reservation-report-{$reservation_code}.pdf";
+                        echo '<a href="' . esc_url($pdf_url) . '" target="_blank">View Report</a>';
                 } else {
-                    echo '';
+                        echo '';
                 }
                 break;
             case 'reservation_date':
@@ -1174,90 +1175,70 @@ class Setup {
     public function generate_reservation_report_pdf($reservation_id) {
         $reservation = get_post($reservation_id);
         $meta = get_post_meta($reservation_id);
+        
+       
+        if (!isset($meta['reservation_code'][0])) {
+            return false; 
+        }
+        
+        $reservation_code = $meta['reservation_code'][0];
     
-        $pdf = new TCPDF();
+        $mpdf = new \Mpdf\Mpdf([
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 10,
+            'margin_bottom' => 10,
+        ]);
     
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Your Site Name');
-        $pdf->SetTitle('Reservation Report');
-        $pdf->SetSubject('Reservation Report');
-        $pdf->SetKeywords('TCPDF, PDF, reservation, report');
-  
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $mpdf->SetCreator('Travel Explore');
+        $mpdf->SetAuthor('Travel Explore');
+        $mpdf->SetTitle('Reservation Report');
+        $mpdf->SetSubject('Reservation Report');
+        $mpdf->SetKeywords('mPDF, PDF, reservation, report');
     
-        $pdf->AddPage();
-
-        $background_image = get_template_directory() . '/assets/images/report.jpg'; 
-        $pdf->Image($background_image, 10, 10, 190, 80, '', '', '', false, 300, '', false, false, 0); 
+        $mpdf->AddPage();
     
-        $logo = get_template_directory() . '/assets/images/logo.png'; 
-        $pdf->Image($logo, 160, 250, 40, 20, '', '', '', false, 300, '', false, false, 0); 
+        $background_image = get_template_directory() . '/assets/images/report.jpg';
+        $mpdf->Image($background_image, 0, 0, 210, 100, 'jpg', '', true, false);
     
-        $pdf->SetFont('helvetica', 'B', 16);
-        $pdf->SetTextColor(0, 0, 0); 
-    
-        $pdf->SetXY(10, 100); 
-        $pdf->Cell(0, 0, 'Reservation Report', 0, 1, 'C');
-    
-        $pdf->SetFont('helvetica', '', 12);
-        $pdf->SetXY(10, 110); 
-        $pdf->Cell(0, 0, 'Reservation Code: ' . $meta['reservation_code'][0], 0, 1, 'C');
-
+        
         $html = "
-            <style>
-                .details {
-                    font-size: 10px; 
-                    line-height: 1.2; 
-                }
-                .details strong {
-                    font-weight: bold;
-                }
-                table {
-                    width: 100%;
-                }
-                td {
-                    vertical-align: top;
-                    padding: 5px;
-                }
-                .comments-section {
-                    padding: 5px;
-                    width: 100%;
-                    margin-top: 5px;
-                }
-            </style>
-            <div class='details'>
-                <table>
+            <div style='text-align: center; margin-top: 10mm;'>
+                <h2 style='font-size: 24px;'>Reservation Report</h2>
+                <p style='font-size: 18px;'>Reservation Code: {$reservation_code}</p>
+                <table style='width: 100%; font-size: 16px; margin-top: 20px; border-spacing: 0 10px;'>
                     <tr>
-                        <td width='50%'>
-                            <p><strong>Name:</strong> {$reservation->post_title}</p>
-                            <p><strong>Number of People:</strong> {$meta['persons'][0]}</p>
-                            <p><strong>Email:</strong> {$meta['email'][0]}</p>
-                        </td>
-                        <td width='50%'>
-                            <p><strong>Reservation Type:</strong> {$meta['reservation_type'][0]}</p>
-                            <p><strong>Price:</strong> {$meta['total_price'][0]} €</p>
-                            <p><strong>Date:</strong> " . date('Y/m/d', strtotime($meta['reservation_date'][0])) . "</p>
-                        </td>
+                        <td style='text-align: left; width: 50%;'><strong>Name:</strong> {$reservation->post_title}</td>
+                        <td style='text-align: left; width: 50%;'><strong>Reservation Type:</strong> {$meta['reservation_type'][0]}</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: left; width: 50%;'><strong>Number of People:</strong> {$meta['persons'][0]}</td>
+                        <td style='text-align: left; width: 50%;'><strong>Price:</strong> {$meta['total_price'][0]} €</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: left; width: 50%;'><strong>Email:</strong> {$meta['email'][0]}</td>
+                        <td style='width: 50%;'></td>
+                    </tr>
+                    <tr>
+                        <td colspan='2' style='text-align: left;'><strong>Comments:</strong> {$reservation->post_content}</td>
                     </tr>
                 </table>
             </div>
-            <div class='comments-section'>
-                <p><strong>Comments:</strong> {$reservation->post_content}</p>
-            </div>
-            ";
-
-        $pdf->SetXY(10, 120); 
-        $pdf->writeHTMLCell(190, 0, 10, 120, $html, 0, 1, 0, true, '', true);
-  
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->SetXY(10, 250); 
-        $pdf->MultiCell(140, 20, 'Your safety is our top priority. Stay safe and travel smart with Travel Explore.', 0, 'L', 0, 1, '', '', true);
+        ";
     
-        $pdf_path = wp_upload_dir()['basedir'] . "/reservation_report_{$reservation_id}.pdf";
-        $pdf->Output($pdf_path, 'F');
+        $mpdf->WriteHTML($html);
+    
+        $logo = get_template_directory() . '/assets/images/logo.png';
+        $mpdf->SetY(-30); 
+        $mpdf->Image($logo, 160, 250, 40, 20, 'png', '', true, false);
+        $mpdf->WriteHTML("<div style='text-align: left; font-size: 12px; margin-bottom: 10mm;'>Your safety is our top priority. Stay safe and travel smart with Travel Explore.</div>");
+    
+        $pdf_path = wp_upload_dir()['basedir'] . "/reservation-report-{$reservation_code}.pdf";
+        $mpdf->Output($pdf_path, 'F');
     
         return $pdf_path;
     }
+
 }
 
 
