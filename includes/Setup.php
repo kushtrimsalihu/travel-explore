@@ -3,6 +3,7 @@
 namespace App;
 use WP_Query;
 use Timber\Timber;
+use TCPDF;
 
 class Setup {
 
@@ -875,27 +876,42 @@ class Setup {
         $new_columns = [
             'cb' => $columns['cb'],
             'title' => __('Name'),
-            'reservation_type' => __('Type of Reservation'), 
+            'reservation_type' => __('Type of Reservation'),
+            'reservation_code' => __('Reservation Code'), // Add this line
             'reservation_date' => __('Reservation Date'),
             'email' => __('Email'),
             'phone' => __('Phone'),
             'status' => __('Status'),
-            'persons' => __('Number of Persons'), 
+            'persons' => __('Number of Persons'),
             'total_price' => __('Total Price'),
             'notes' => __('Notes'),
             'username' => __('User'),
-            'date' => $columns['date']  
+            'report' => __('Report'), 
+            'date' => $columns['date']
         ];
         return $new_columns;
     }
+    
     
     function custom_reservation_column_content($column, $post_id) {
         switch ($column) {
             case 'reservation_type':
                 echo esc_html(get_post_meta($post_id, 'reservation_type', true));  
                 break;
+            case 'report':
+                $pdf_path = wp_upload_dir()['basedir'] . "/reservation_report_{$post_id}.pdf";
+                if (file_exists($pdf_path)) {
+                    $pdf_url = wp_upload_dir()['baseurl'] . "/reservation_report_{$post_id}.pdf";
+                    echo '<a href="' . esc_url($pdf_url) . '" target="_blank">View Report</a>';
+                } else {
+                    echo '';
+                }
+                break;
             case 'reservation_date':
-                echo esc_html(get_post_meta($post_id, 'reservation_date', true));
+                $date = get_post_meta($post_id, 'reservation_date', true);
+                if ($date) {
+                    echo esc_html(date_i18n(get_option('date_format'), strtotime($date)));
+                }
                 break;
             case 'email':
                 echo esc_html(get_post_meta($post_id, 'email', true));
@@ -914,7 +930,7 @@ class Setup {
             case 'persons':
                 echo esc_html(get_post_meta($post_id, 'persons', true)); 
                 break;
-                case 'total_price':
+            case 'total_price':
                     $total_price = get_post_meta($post_id, 'total_price', true);  
                     if (!empty($total_price)) {
                         echo esc_html($total_price); 
@@ -923,13 +939,17 @@ class Setup {
                     }
                     break;
             case 'notes':
-                echo esc_html(get_post_meta($post_id, 'notes', true));
-                break;
+                        $notes = esc_html(get_post_meta($post_id, 'notes', true));
+                        echo wp_trim_words($notes, 4, '...'); 
+                        break;
             case 'username':
                 $post = get_post($post_id);
                 $user = get_userdata($post->post_author);
                 echo esc_html($user->user_login);
                 break;
+            case 'reservation_code':
+                echo esc_html(get_post_meta($post_id, 'reservation_code', true)); 
+            break;
         }
     }
     
@@ -979,36 +999,37 @@ class Setup {
         wp_mail($admin_email, $subject, $html_message, $headers);
     }
     
-    function notify_user_of_reservation_status_change($post_id, $post, $update) {
-
+    public function notify_user_of_reservation_status_change($post_id, $post, $update) {
         if ($post->post_type != 'reservation' || !$update) {
             return;
         }
-    
+
         $new_status = get_post_meta($post_id, 'reservation_status', true);
         $old_status = get_post_meta($post_id, '_previous_reservation_status', true);
-    
+
         if ($new_status == $old_status) {
             return;
         }
-    
+
         update_post_meta($post_id, '_previous_reservation_status', $new_status);
-    
+
         $user_email = sanitize_email(get_post_meta($post_id, 'email', true));
-    
+        $pdf_path = $this->generate_reservation_report_pdf($post_id);
+
         if ($new_status == 'approved') {
             $subject = 'Your Reservation Has Been Approved';
             $message = '<html><body>';
-            $message .= '<p>Your reservation has been approved.</p>';
+            $message .= '<p>Your reservation has been approved. Please find the attached report.</p>';
             $message .= '<p>Thank you for choosing our service!</p>';
             $message .= '</body></html>';
-    
+
             $headers = [
                 'From: Notification <noreply@yoursite.com>',
                 'Content-Type: text/html; charset=UTF-8'
             ];
-            wp_mail($user_email, $subject, $message, $headers);
-    
+
+            $attachments = [$pdf_path];
+            wp_mail($user_email, $subject, $message, $headers, $attachments);
         } elseif ($new_status == 'rejected') {
             $subject = 'Your Reservation Has Been Rejected';
             $message = '<html><body>';
@@ -1133,8 +1154,113 @@ class Setup {
     }
     
     
-}
+    private function generate_numeric_code($length = 4) {
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function generate_unique_reservation_code($post_id, $post, $update) {
+        if ($post->post_type == 'reservation' && !$update) {
+            $unique_code = 'RES_' . $this->generate_numeric_code(4); 
+            update_post_meta($post_id, 'reservation_code', $unique_code);
+        }
+    }
+
+    public function generate_reservation_report_pdf($reservation_id) {
+        $reservation = get_post($reservation_id);
+        $meta = get_post_meta($reservation_id);
     
+        $pdf = new TCPDF();
+    
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Your Site Name');
+        $pdf->SetTitle('Reservation Report');
+        $pdf->SetSubject('Reservation Report');
+        $pdf->SetKeywords('TCPDF, PDF, reservation, report');
+  
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+    
+        $pdf->AddPage();
+
+        $background_image = get_template_directory() . '/assets/images/report.jpg'; 
+        $pdf->Image($background_image, 10, 10, 190, 80, '', '', '', false, 300, '', false, false, 0); 
+    
+        $logo = get_template_directory() . '/assets/images/logo.png'; 
+        $pdf->Image($logo, 160, 250, 40, 20, '', '', '', false, 300, '', false, false, 0); 
+    
+        $pdf->SetFont('helvetica', 'B', 16);
+        $pdf->SetTextColor(0, 0, 0); 
+    
+        $pdf->SetXY(10, 100); 
+        $pdf->Cell(0, 0, 'Reservation Report', 0, 1, 'C');
+    
+        $pdf->SetFont('helvetica', '', 12);
+        $pdf->SetXY(10, 110); 
+        $pdf->Cell(0, 0, 'Reservation Code: ' . $meta['reservation_code'][0], 0, 1, 'C');
+
+        $html = "
+            <style>
+                .details {
+                    font-size: 10px; 
+                    line-height: 1.2; 
+                }
+                .details strong {
+                    font-weight: bold;
+                }
+                table {
+                    width: 100%;
+                }
+                td {
+                    vertical-align: top;
+                    padding: 5px;
+                }
+                .comments-section {
+                    padding: 5px;
+                    width: 100%;
+                    margin-top: 5px;
+                }
+            </style>
+            <div class='details'>
+                <table>
+                    <tr>
+                        <td width='50%'>
+                            <p><strong>Name:</strong> {$reservation->post_title}</p>
+                            <p><strong>Number of People:</strong> {$meta['persons'][0]}</p>
+                            <p><strong>Email:</strong> {$meta['email'][0]}</p>
+                        </td>
+                        <td width='50%'>
+                            <p><strong>Reservation Type:</strong> {$meta['reservation_type'][0]}</p>
+                            <p><strong>Price:</strong> {$meta['total_price'][0]} €</p>
+                            <p><strong>Date:</strong> " . date('Y/m/d', strtotime($meta['reservation_date'][0])) . "</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class='comments-section'>
+                <p><strong>Comments:</strong> {$reservation->post_content}</p>
+            </div>
+            ";
+
+        $pdf->SetXY(10, 120); 
+        $pdf->writeHTMLCell(190, 0, 10, 120, $html, 0, 1, 0, true, '', true);
+  
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetXY(10, 250); 
+        $pdf->MultiCell(140, 20, 'Your safety is our top priority. Stay safe and travel smart with Travel Explore.', 0, 'L', 0, 1, '', '', true);
+    
+        $pdf_path = wp_upload_dir()['basedir'] . "/reservation_report_{$reservation_id}.pdf";
+        $pdf->Output($pdf_path, 'F');
+    
+        return $pdf_path;
+    }
+}
+
+
 
     
 
