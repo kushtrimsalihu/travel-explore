@@ -948,7 +948,7 @@ class Setup {
                 echo esc_html($user->user_login);
                 break;
             case 'reservation_code':
-                echo esc_html(get_post_meta($post_id, 'reservation_code', true)); // Display reservation code
+                echo esc_html(get_post_meta($post_id, 'reservation_code', true)); 
             break;
         }
     }
