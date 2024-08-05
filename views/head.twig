@@ -6,6 +6,12 @@
 	<link href="{{ "/assets/fonts/roboto-500.woff2" }}" as="font" crossorigin="anonymous">
 	<link href="{{ "/assets/fonts/roboto-700.woff2" }}" as="font" crossorigin="anonymous">
 	<link href="{{ "/assets/fonts/roboto-900.woff2" }}" as="font" crossorigin="anonymous">
+    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ "/assets/fonts/apple-touch-icon.png" }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ "/assets/fonts/favicon-32x32.png" }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ "/assets/fonts/favicon-16x16.png" }}">
+    <link rel="manifest" href="/site.webmanifest">
+
 	{% do action('get_header') %}
 	{{ function('wp_head') }}
 </head>
