@@ -3,7 +3,7 @@
         "timber/timber": "^2.2",
         "symfony/var-dumper": "^6.4",
         "phpmailer/phpmailer": "^6.9",
-        "mpdf/mpdf": "^8.2"
+        "mpdf/mpdf": "^8.0"
     }
 
 }
