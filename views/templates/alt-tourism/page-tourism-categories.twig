@@ -11,7 +11,7 @@
         {% for category in categories %}
             <div class="category-card bg-white border border-light-nv80 shadow-lg rounded-lg overflow-hidden">
                 {% if category.term.image %}
-                    <img class="w-full h-48 object-cover" src="{{ category.term.image }}" alt="{{ category.term.name }}">
+                    <a href="{{ category.term.link }}">  <img class="w-full h-48 object-cover" src="{{ category.term.image }}" alt="{{ category.term.name }}"></a>
                 {% endif %}
                 <div class="p-4">
                     <h2 class="text-xl font-semibold"><a href="{{ category.term.link }}">{{ category.term.name }}</a></h2>
