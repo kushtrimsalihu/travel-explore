@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const location = urlParams.get('location');
     if (location) {
-        document.getElementById('end').value = location;
+        document.getElementById('end-input').value = location;
     }
 
     if (document.getElementById('route-map')) {
@@ -490,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.getElementById('start-now').addEventListener('click', async function () {
-            var endInput = document.getElementById('end').value;
+            var endInput = document.getElementById('end-input').value;
 
             if (startLocationType === 'current') {
                 if (navigator.geolocation) {
@@ -511,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert('Geolocation is not supported by this browser.');
                 }
             } else {
-                var startInput = document.getElementById('start').value;
+                var startInput = document.getElementById('city-input').value;
                 start = await getCoordinates(startInput);
                 end = await getCoordinates(endInput);
 
@@ -586,9 +586,15 @@ document.addEventListener('DOMContentLoaded', function () {
     window.submitBookingForm = submitBookingForm;
 });
 
-document.getElementById('closeButton').addEventListener('click', function() {
-    document.getElementById('modal').style.display = 'none';
+document.addEventListener('DOMContentLoaded', () => {
+    const closeButton = document.getElementById('closeButton');
+    if (closeButton) {
+        closeButton.addEventListener('click', function() {
+            document.getElementById('modal').style.display = 'none';
+        });
+    }
 });
+
 
 document.querySelectorAll('input[name="_mc4wp_action"]').forEach(function(radio) {
     radio.addEventListener('change', function() {
@@ -607,4 +613,107 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Your reservation is being processed. You will be redirected to the Homepage.');
         });
     }
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const locationTypeSelect = document.getElementById('location-type');
+    const manualLocationDiv = document.getElementById('manual-location');
+
+    locationTypeSelect.addEventListener('change', () => {
+        if (locationTypeSelect.value === 'manual') {
+            manualLocationDiv.style.display = 'block';
+        } else {
+            manualLocationDiv.style.display = 'none';
+        }
+    });
+
+    const svgIcon = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C8.13401 2 5 5.13401 5 9C5 13.904 12 22 12 22C12 22 19 13.904 19 9C19 5.13401 15.866 2 12 2ZM12 11.5C10.6193 11.5 9.5 10.3807 9.5 9C9.5 7.61929 10.6193 6.5 12 6.5C13.3807 6.5 14.5 7.61929 14.5 9C14.5 10.3807 13.3807 11.5 12 11.5Z" fill="currentColor"/>
+        </svg>
+    `;
+
+    function setupSuggestions(inputElement, suggestionsContainer) {
+        if (inputElement) {
+            inputElement.addEventListener('input', function() {
+                const cityName = inputElement.value.trim();
+
+                if (cityName.length > 2) {
+                    fetch(`${ajaxurl.url}?action=fetch_city_data&city_name=${cityName}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            suggestionsContainer.innerHTML = '';
+                            if (data.success && data.data && data.data.length) {
+                                suggestionsContainer.classList.add('show');
+                                suggestionsContainer.style.width = `${inputElement.offsetWidth}px`; 
+                                data.data.forEach(city => {
+                                    const suggestionItem = document.createElement('div');
+                                    suggestionItem.classList.add('suggestion-item');
+
+                                    const containerDiv = document.createElement('div');
+                                    containerDiv.classList.add('flex', 'items-center');
+                                    containerDiv.innerHTML = svgIcon;
+
+                                    const country = city.country === 'XK' ? 'Kosovo' : city.country;
+
+                                    const highlightedText = city.name.replace(new RegExp(cityName, 'gi'), (match) => `<strong>${match}</strong>`);
+                                    const cityText = document.createElement('span');
+                                    cityText.innerHTML = ` ${highlightedText}, ${country}`;
+                                    containerDiv.appendChild(cityText);
+
+                                    suggestionItem.appendChild(containerDiv);
+
+                                    suggestionsContainer.appendChild(suggestionItem);
+
+                                    suggestionItem.addEventListener('click', function() {
+                                        inputElement.value = `${city.name}, ${country}`;
+                                        suggestionsContainer.innerHTML = '';
+                                        suggestionsContainer.classList.remove('show');
+
+                                        const event = new Event('input', {
+                                            bubbles: true,
+                                            cancelable: true,
+                                        });
+                                        inputElement.dispatchEvent(event);
+                                    });
+                                });
+                            } else {
+                                suggestionsContainer.classList.remove('show');
+                            }
+                        })
+                        .catch(error => {
+                            suggestionsContainer.classList.remove('show');
+                            console.error('Error fetching city data:', error);
+                        });
+                } else {
+                    suggestionsContainer.classList.remove('show');
+                }
+            });
+
+            inputElement.addEventListener('focus', function() {
+                suggestionsContainer.style.width = `${inputElement.offsetWidth}px`;
+            });
+        } else {
+            console.error('Input field not found');
+        }
+    }
+
+    const cityInput = document.getElementById('city-input');
+    const citySuggestions = document.getElementById('suggestions');
+    setupSuggestions(cityInput, citySuggestions);
+
+    const endInput = document.getElementById('end-input');
+    const endSuggestions = document.getElementById('end-suggestions');
+    setupSuggestions(endInput, endSuggestions);
+
+
+    window.addEventListener('resize', function() {
+        if (cityInput) {
+            citySuggestions.style.width = `${cityInput.offsetWidth}px`;
+        }
+        if (endInput) {
+            endSuggestions.style.width = `${endInput.offsetWidth}px`;
+        }
+    });
 });
