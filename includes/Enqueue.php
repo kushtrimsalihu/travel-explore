@@ -37,6 +37,9 @@ class Enqueue {
     
         wp_enqueue_style('leaflet-routing-machine-css', 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css');
         wp_enqueue_script('leaflet-routing-machine-js', 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js', array('leaflet-js'), null, true);
+    
+        wp_localize_script('theme-script', 'ajaxurl', array('url' => admin_url('admin-ajax.php')));
+
     }
 
     public function swiper_scripts() {
@@ -62,4 +65,7 @@ class Enqueue {
         wp_enqueue_script('fancybox', get_template_directory_uri() . '/node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.js', array('jquery'), '3.5.7', true);
 
     }
+
+
+    
 }

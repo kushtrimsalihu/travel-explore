@@ -1242,6 +1242,41 @@ class Setup {
     function admin_favicon() {
         echo '<link rel="icon" href="' . get_template_directory_uri() . '/assets/images/favicon.ico" type="image/x-icon">';
     }
+
+    public function fetch_city_data() {
+        if (isset($_GET['city_name'])) {
+            $city_name = sanitize_text_field($_GET['city_name']);
+            $api_url = 'https://api.api-ninjas.com/v1/city?name=' . urlencode($city_name) . '&limit=5'; 
+            $api_key = 'rMrgvRZCueKvp5NfE5d5tfH66CoveYdtDjSKLROs'; 
+    
+            $response = wp_remote_get($api_url, array(
+                'headers' => array(
+                    'X-Api-Key' => $api_key
+                )
+            ));
+    
+            if (is_wp_error($response)) {
+                wp_send_json_error('Error fetching data from the API');
+            } else {
+                $body = wp_remote_retrieve_body($response);
+                $data = json_decode($body, true);
+    
+                $cities = array();
+                foreach ($data as $city) {
+                    if (isset($city['name']) && isset($city['country'])) {
+                        $cities[] = array(
+                            'name' => $city['name'],
+                            'country' => $city['country']
+                        );
+                    }
+                }
+    
+                wp_send_json_success($cities);
+            }
+        } else {
+            wp_send_json_error('City name not provided');
+        }
+    }
 }
 
 

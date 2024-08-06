@@ -16,6 +16,7 @@ class Init extends Site {
         add_action('wp_enqueue_scripts', [$enqueue, 'enqueue_live_search_script']);
         add_action('wp_enqueue_scripts', [$enqueue, 'swiper_scripts']);
 
+
         add_action('wp_enqueue_scripts', [new Enqueue(), 'dequeueScripts' ]);
         add_action('wp_enqueue_scripts', [new Enqueue(), 'dequeueStyles' ]);
         add_action('wp_enqueue_scripts', [new Enqueue(), 'travel_enqueue_scripts']);
@@ -51,6 +52,9 @@ class Init extends Site {
         add_action('wp_insert_post', [new Setup(),'send_admin_new_reservation_notification'], 10, 3);
         add_action('init', [new Setup(), 'handle_contact_us_click']);
         add_action('wp_insert_post', [new Setup(), 'generate_unique_reservation_code'], 10, 3);
+        add_action('wp_ajax_nopriv_fetch_city_data', [new Setup(),'fetch_city_data']);
+        add_action('wp_ajax_fetch_city_data', [new Setup(),'fetch_city_data']);
+
         add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
         add_action('wp_authenticate', [new Setup(), 'custom_login_errors'], 1);
         add_action('transition_post_status', [new Setup(),'set_approver_name_on_publish'], 10, 3);
