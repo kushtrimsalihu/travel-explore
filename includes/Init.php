@@ -60,6 +60,9 @@ class Init extends Site {
         add_action('save_post', [new Setup(),'notify_user_of_reservation_status_change'], 10, 3);
         add_action('wp_footer', [new Setup(), 'check_user_posts_count']);
 
+        add_action('admin_head', [new Setup(), 'admin_favicon']);
+        add_action('login_head', [new Setup(), 'admin_favicon']);
+
         add_filter('get_robots', [new Setup(), 'remove_max_image_preview'], 10, 3);
         add_filter('acf/settings/save_json', [new Setup(), 'my_acf_json_save_point']);
         add_filter('acf/settings/load_json', [new Setup(), 'my_acf_json_load_point']);

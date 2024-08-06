@@ -1239,6 +1239,9 @@ class Setup {
         return $pdf_path;
     }
 
+    function admin_favicon() {
+        echo '<link rel="icon" href="' . get_template_directory_uri() . '/assets/images/favicon.ico" type="image/x-icon">';
+    }
 }
 
 
