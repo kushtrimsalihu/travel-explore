@@ -43,7 +43,7 @@ class PostType {
     }
 
     public function register_alternative_tourism_taxonomies() {
-        // Register Category taxonomy
+        
         $labels = [
             'name' => 'Alternative Tourism Categories',
             'singular_name' => 'Alternative Tourism Category',
@@ -70,7 +70,6 @@ class PostType {
         register_taxonomy('alternative_tourism_category', ['alternative_tourism'], $args_category);
 
 
-        // Register Tag taxonomy
         $labels = [
             'name' => 'Alternative Tourism Tags',
             'singular_name' => 'Alternative Tourism Tag',
@@ -132,6 +131,7 @@ class PostType {
             'menu_position' => null,
             'supports' => ['title', 'editor', 'custom-fields', 'thumbnail'],
             'taxonomies' => ['blog_category', 'blog_tag'],
+            'menu_icon' => 'dashicons-welcome-write-blog',
             'show_in_rest' => true,
         ];
 
@@ -139,7 +139,6 @@ class PostType {
     }
 
     public function blog_category() {
-        // Register Category taxonomy
         $labels = [
             'name' => 'Blog Categories',
             'singular_name' => 'Blog Category',
@@ -166,7 +165,6 @@ class PostType {
         register_taxonomy('blog_category', ['blog'], $args_category);
 
 
-        // Register Tag taxonomy
         $labels = [
             'name' => 'Blog Tags',
             'singular_name' => 'Blog Tag',

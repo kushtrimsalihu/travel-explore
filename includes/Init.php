@@ -51,15 +51,12 @@ class Init extends Site {
         add_action('wp_insert_post', [new Setup(),'send_admin_new_reservation_notification'], 10, 3);
         add_action('init', [new Setup(), 'handle_contact_us_click']);
         add_action('wp_insert_post', [new Setup(), 'generate_unique_reservation_code'], 10, 3);
-       
-
         add_action('admin_menu', [new Setup(), 'remove_acf_options_page_for_authors'], 100);
         add_action('wp_authenticate', [new Setup(), 'custom_login_errors'], 1);
         add_action('transition_post_status', [new Setup(),'set_approver_name_on_publish'], 10, 3);
         add_action('admin_menu', [new Setup(), 'add_users_with_more_than_50_approved_posts_menu']);
         add_action('save_post', [new Setup(),'notify_user_of_reservation_status_change'], 10, 3);
         add_action('wp_footer', [new Setup(), 'check_user_posts_count']);
-
         add_action('admin_head', [new Setup(), 'admin_favicon']);
         add_action('login_head', [new Setup(), 'admin_favicon']);
 
