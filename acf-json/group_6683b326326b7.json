@@ -9,7 +9,7 @@
             "aria-label": "",
             "type": "textarea",
             "instructions": "Describe your journey:",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -74,6 +74,28 @@
             "mime_types": "",
             "insert": "append",
             "preview_size": "thumbnail"
+        },
+        {
+            "key": "field_66a7863e6fb85",
+            "label": "Rating",
+            "name": "rating",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Rate your experience from 1-5",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 1,
+            "max": 5,
+            "placeholder": "",
+            "step": "0.5",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -94,5 +116,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1720614306
+    "modified": 1723103639
 }
