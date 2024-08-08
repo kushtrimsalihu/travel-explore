@@ -4,14 +4,39 @@
 {% block content %}
     <div class="user-journey">
         <div class="w-full h-96 overflow-hidden relative">
-            <div class="absolute bottom-0 left-0 m-6 md:m-12 z-10 flex flex-col gap-3">
+            <div class="absolute bottom-0 left-0 m-6 md:m-8 z-10 flex flex-col gap-1">
                 <div class="flex flex-row items-end gap-3">
                     {% if author_image %}
                         <img src="{{author_image.url}}" class="w-6 h-6 md:w-8 md:h-8 object-cover rounded-full">
                     {% endif %}
                     <h1 class="text-white-100 md:text-lg text-base">{{post.author.name}}</h1>
                 </div>
-                <p class="text-grey-450 md:text-lg text-sm">{{post.date|date("F j, Y")}}</p>
+                <p class="text-grey-450 md:text-base text-sm">{{post.date|date("F j, Y")}}</p>
+                <div class="star-rating">
+                            {% set rating = post.rating|default(0) %}
+                            {% set rating = rating < 0 ? 0 : rating %}
+                            {% set rating = rating > 5 ? 5 : rating %}
+
+                            {% set fullStars = rating|round(0, 'floor') %}
+                            {% set hasHalfStar = rating - fullStars >= 0.5 %}
+                            {% set emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0) %}
+
+                            {% if fullStars %}
+                                {% for i in 1..fullStars %}
+                                    <span class="star full"></span>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if hasHalfStar %}
+                                <span class="star half"></span>
+                            {% endif %}
+
+                            {% if emptyStars %}
+                                {% for i in 1..emptyStars %}
+                                    <span class="star"></span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
             </div>
             <img src="{{ featured_image ? featured_image : site.theme.link ~ '/assets/images/default.PNG' }}" class="w-screen h-full object-cover">
             <div class="absolute inset-0 bg-black opacity-60"></div>

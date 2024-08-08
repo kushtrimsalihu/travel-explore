@@ -10,15 +10,8 @@
                     <div class="text-gray-500 mb-2 px-2">
                         {{ card.duration }}
                     </div>
-                    <div class="lineHeight-32 line-clamp-3 mb-4">
+                    <div class="lineHeight-32 line-clamp-3 mb-4 mt-2">
                         {{ card.description|raw }}
-                    </div>
-                    <div class="flex items-center space-x-1 text-yellow-500 mb-2x">
-                        {% for i in (1..5) %}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.67a1 1 0 00.95.69h4.928c.969 0 1.371 1.24.588 1.81l-3.993 2.906a1 1 0 00-.364 1.118l1.518 4.67c.3.921-.755 1.688-1.54 1.118l-3.993-2.906a1 1 0 00-1.175 0l-3.993 2.906c-.784.57-1.839-.197-1.54-1.118l1.518-4.67a1 1 0 00-.364-1.118L2.976 9.098c-.783-.57-.381-1.81.588-1.81h4.928a1 1 0 00.95-.69l1.518-4.67z" />
-                            </svg>
-                        {% endfor %}
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4"></div>
                     <div class="mb-4">
@@ -49,7 +42,6 @@
                     </div>
                     <a href="#" class="button bg-transparent text-nowrap w-fit text-light-p40 border border-light-p40 mt-8 py-2 px-4 rounded-2xl hover:bg-light-p40 hover:text-white-100" onclick="window.submitBookingForm('{{ card.image.url }}', '{{ card.title }}', '{{ card.duration }}', '{{ card.description|url_encode }}', '{{ card.price }}')">
                         Book now
-                                        
                     </a>
                 </div>
             </div>
