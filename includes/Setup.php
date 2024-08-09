@@ -752,7 +752,7 @@ class Setup {
             ", $user->ID));
            
     
-            if ($post_count >= 50) {
+            if ($post_count >= 10) {
                 $filtered_users[] = [
                     'ID' => $user->ID,
                     'user_login' => $user->user_login,

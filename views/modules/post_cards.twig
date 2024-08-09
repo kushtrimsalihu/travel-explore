@@ -4,16 +4,15 @@
             <div class="relative flex-none w-full md:w-1/4 h-auto p-3">
                 <img src="{{ card.image.url }}" alt="{{ card.image.alt }}" class="w-full h-full object-cover rounded-lg"></div>
                 <div class="card-content p-4 flex-grow flex flex-col justify-between w-full">
-                    <h2 class="text-xl md:w-2/4 font-semibold mb-2 text-brown-750">
+                    <h2 class="text-xl md:w-3/4 font-semibold mb-2 text-brown-750">
                         {{ card.title }}
                     </h2>
                     <div class="text-gray-500 mb-2 px-2">
                         {{ card.duration }}
                     </div>
-                    <div class="lineHeight-32 line-clamp-3 mb-4 mt-2">
+                    <div class="lineHeight-32 line-clamp-2 mb-4 mt-2">
                         {{ card.description|raw }}
                     </div>
-                    <div class="flex flex-wrap gap-2 mb-4"></div>
                     <div class="mb-4">
                         <a href="{{ site.url }}/route?location={{ card.location }}" class="text-light-p40 hover:underline">
                             Get directions: 
