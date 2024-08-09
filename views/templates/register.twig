@@ -1,0 +1,66 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<div class="container mx-auto flex pb-12 justify-center min-h-screen px-4">
+    <div class="w-full md:w-3/4 xl:w-2/3 flex flex-col md:flex-row shadow-lg rounded-lg overflow-hidden">
+<div class="w-full md:w-1/2 bg-cover bg-center block h-64 md:h-auto" style="background-image: url('{{ site.theme.link }}/assets/images/signup.webp')"></div>
+        <div class="w-full md:w-1/2 bg-white p-8 md:p-12 flex items-center justify-center">
+            <div class="w-full max-w-md">
+                <h2 class="text-2xl font-semibold mb-6 text-center text-gray-900">Create a new account</h2>
+                {% if message %}
+                    <div class="px-4 py-3 rounded mb-6 {{ message.type == 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }}">
+                        <span class="block sm:inline">{{ message.message }}</span>
+                    </div>
+                {% endif %}
+                {% if errors %}
+                    <div class="errors bg-red-500 text-white px-4 py-3 rounded mb-6">
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <form action="{{ site.url }}/wp-admin/admin-post.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="user_journey_registration">
+                    {{ user_journey_registration_nonce | raw }}
+                    <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-900 mb-1" for="username">Name</label>
+                <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" id="username" name="username" type="text" required>
+            </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-900 mb-1" for="username">Username</label>
+                        <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" id="username" name="username" type="text" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-900 mb-1" for="email">Email</label>
+                        <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" id="email" name="email" type="email" required>
+                    </div>
+                 
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-900 mb-1" for="password">Password</label>
+                        <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" id="password" name="password" type="password" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-900 mb-1" for="verify_password">Verify Password</label>
+                        <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" id="verify_password" name="verify_password" type="password" required>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="show_passwords" class="mr-2">
+                            <label for="show_passwords" class="text-sm font-medium text-gray-900">Show Passwords</label>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <button name="submit" class="w-full py-3 px-6 bg-light-p40 text-white-100 rounded-md shadow-sm text-sm font-medium hover:bg-transparent hover:text-light-p40 hover:border-light-p40 focus:outline-none" type="submit">
+                            REGISTER
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

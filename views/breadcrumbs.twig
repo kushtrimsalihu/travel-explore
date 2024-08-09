@@ -1,0 +1,14 @@
+{% if breadcrumbs %}
+    <div class="breadcrumb flex gap-3 text-sm md:text-base flex-nowrap text-nowrap w-full line-clamp-1 p-6 items-center animate__animated animate__slideInLeft animate__delay-3s">
+        {% for crumb in breadcrumbs %}
+            {% if crumb.url %}
+                <a href="{{ crumb.url }}" {% if loop.last %}class="font-bold text-ellipsis overflow-hidden"{% endif %}>{{ crumb.title }}</a>
+            {% else %}
+                {{ crumb.title }}
+            {% endif %}
+            {% if not loop.last %}
+                <img src="{{ asset('/assets/images/breadcrumb-separator.png') }}" alt="Separator" class="w-1.5">
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}

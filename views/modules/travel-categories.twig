@@ -1,0 +1,14 @@
+ {% if alternative_tourism_categories %}
+    <div class="w-full overflow-auto" id="travel-categories">
+        <div class="bg-light-p40 h-28 min-w-fit flex flex-row justify-center items-center cursor-pointer">
+                {% for category in alternative_tourism_categories %}
+                    <a href="{{ site.url }}/tourism-category/{{ category.slug }}" class="flex items-center justify-center flex-col w-32 h-4/5 {{ loop.last ? '' : 'border-r border-black' }}">
+                    <div class="gap-3 text-white-100 group hover:scale-110 duration-200 flex items-center justify-center flex-col">
+                        <img src="{{ category.icon }}" alt="{{ category.name }}" class="w-8 h-8 filter invert">
+                        <span class="uppercase text-sm">{{ category.name }}</span>
+                    </div>
+                    </a>
+                {% endfor %}
+        </div>
+    </div>
+{% endif %}

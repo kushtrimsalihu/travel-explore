@@ -1,0 +1,16 @@
+<div id="popup-notification" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-40 p-6 md:p-0">
+    <div class="bg-white-100 py-6 px-4 md:px-12 rounded-lg shadow-lg text-center mx-auto w-full md:w-3/4 lg:w-1/2 flex flex-col items-center gap-3 relative animate__animated animate__zoomIn animate__delay-2s">
+        <img src="{{ asset('/assets/images/congrats icon.png') }}" class="w-20"/>
+        <h2 class="text-base md:text-lg font-medium">Congratulations!</h2>
+        <h2 class="font-bold text-2xl md:text-3xl mb-2">You won a free trip</h2>
+        <p class="opacity-80">You’ve won a free trip for reaching <span class="font-medium">50 posts</span> on your user journey. <br>Thank you for your dedication!</p>
+        <p class="mb-4 opacity-80">For more information about your prize, please contact us.</p>
+        <form method="POST" action="">
+            <input type="hidden" name="contact_us_clicked" value="1">
+            <button type="submit" class="border border-light-p40 hover:bg-light-p40 hover:text-white-100 px-12 py-2 rounded">Contact Us</button>
+        </form>        
+        <button id="close-popup" class="absolute top-10- right-10- bg-light-p40 hover:bg-light-s30 text-white-100 font-semibold px-2.5 w-fit rounded-full text-lg">
+            &times;
+        </button>
+    </div>
+</div>

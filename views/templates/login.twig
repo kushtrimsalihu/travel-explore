@@ -1,0 +1,50 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<div class="container mx-auto flex pb-12 justify-center min-h-screen px-4">
+    <div class="w-full lg:w-3/4 xl:w-2/3 flex flex-col md:flex-row shadow-lg rounded-lg overflow-hidden">
+        <div class="w-full md:w-1/2 bg-cover bg-center block h-64 md:h-auto" style="background-image: url('{{ site.theme.link }}/assets/images/login.jpg')"></div>
+        <div class="w-full md:w-1/2 bg-white p-8 md:p-12 flex items-center justify-center">
+            <div class="w-full">
+                <h2 class="text-2xl font-bold mb-6 text-center text-light-p10">Hi, good to have you back.</h2>
+
+                <form method="post" action="{{ site.url }}/wp-login.php">
+                    <input type="hidden" name="redirect_to" value="{{ site.url }}/wp-admin/edit.php?post_type=user_journey">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-light-p10" for="username">Email or Username</label>
+                        <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" id="username" name="log" type="text" placeholder="Email or Username" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-light-p10" for="password">Password</label>
+                        <input class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" id="password" name="pwd" type="password" placeholder="Password" required>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="show_passwords" class="mr-2">
+                            <label for="show_passwords" class="text-sm font-medium text-gray-700 mt-1">Show Password</label>
+                        </div>
+                        {% if login_failed %}
+                            <p class="text-red-600 text-sm text-center text-nowrap mt-2">{{ login_failed }}</p>
+                        {% endif %}
+                        {% if login_required %}
+                            <p class="text-red-600 text-sm text-center text-nowrap mt-2">{{ login_required }}</p>
+                        {% endif %}
+                        <a href="{{ site.url }}/wp-login.php?action=lostpassword" class="text-sm text-gray-900 hover:text-gray-400 float-right mt-1 ">Forgot your password?</a>
+                    </div>
+
+                    <div class="flex items-center justify-center  pt-5">
+                        <button class="flex justify-center py-2.5 px-6 rounded-full shadow-sm text-sm font-medium bg-light-p40 border text-white-100 hover:bg-transparent hover:text-light-p40 hover:border-light-p40 w-3/4 text-center" type="submit">
+                            LOGIN
+                        </button>
+                    </div>
+                    
+                </form>
+                <div class="mt-2 text-center">
+                    <p class="text-sm text-gray-600 pb-2">Don't have an account?</p>
+                    <div class="flex justify-center">
+                        <a href="{{ home_url() }}/registration-page" class="py-2.5 px-6 rounded-full shadow-md text-sm font-medium border bg-transparent text-light-p40 border-light-p40 w-3/4 text-center  hover:shadow-xl transition-shadow duration-300">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

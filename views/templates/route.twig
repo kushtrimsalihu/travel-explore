@@ -1,0 +1,43 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<div class="flex flex-col lg:flex-row mb-20 mx-6 shadow-lg">
+    <div class="route-form-container bg-white rounded p-4 shadow-md w-full lg:w-1/3"> 
+        <div class="mb-4">
+            <label for="location-type" class="block text-gray-700 text-sm font-bold mb-2">Start Location Type:</label>
+            <select id="location-type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="current">Use Current Location</option>
+                <option value="manual">Enter Location</option>
+            </select>
+        </div>
+
+        <div class="mb-4" id="manual-location" style="display: none;">
+            <label for="city-input" class="block text-gray-700 text-sm font-bold mb-2">Start:</label>
+            <input type="text" id="city-input" placeholder="Enter start location" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <div id="suggestions" class="absolute bg-white border border-gray-300 max-h-48 overflow-y-auto w-full mt-1 z-10"></div>
+        </div>
+
+        <div class="mb-4">
+            <label for="end" class="block text-gray-700 text-sm font-bold mb-2">End:</label>
+            <input type="text" id="end-input" placeholder="Enter end location" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            <div id="end-suggestions" class="absolute bg-white border border-gray-300 max-h-48 overflow-y-auto w-full mt-1 z-10"></div>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button id="start-now" class="bg-transparent text-light-p40 py-1 px-6 rounded-sm border border-light-p40 text-center hover:bg-light-p40 hover:text-white-100">
+                Get Directions
+            </button>
+            <button id="start-navigation" class="bg-light-p40 text-white-100 py-1 px-6 rounded-sm border border-light-p40 text-center hover:bg-transparent hover:text-light-p40" style="display: none;">
+                Start
+            </button>
+        </div>
+        <div id="route-info" class="mt-4 p-4 bg-gray-100 rounded shadow-lg text-gray-700 text-sm font-bold flex justify-between items-center" style="display: none;">
+            <p class="distance"></p>
+            <p class="duration font-semibold"></p>
+        </div>
+    </div>
+    <div id="route-map" class="w-full z-30 h-64 lg:h-450">
+    </div>
+</div>
+
+{% endblock %}

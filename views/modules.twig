@@ -1,7 +1,26 @@
 {% for data in flexible_content %}
-    <section class="{{ data.acf_fc_layout ~ '-module' }} ">
-        <div class="flex mx-auto px-4 py-12 2xl:px-0 max-w-screen-lg">
-            {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
-        </div>
+    <section class="{{ data.acf_fc_layout ~ '-module' }}">
+        {% if data.acf_fc_layout == 'post_display_settings' %}
+            <div class="flex mx-auto pb-12 w-full"> 
+                {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
+            </div>
+        {% else %}
+            <div class="flex mx-auto px-4 py-12 2xl:px-0 max-w-screen-lg">
+                {% if data.acf_fc_layout|e == 'cards_module' %}
+                    {% set post_type = data.cards_module.post_type_selector %}
+                    {% set posts = get_posts_by_type(post_type) %}
+                    {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data, posts: posts }, ignore_missing = true) }}
+                {% else %}
+                    {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
+                {% endif %}
+            </div>
+        {% endif %}
     </section>
+    {% if loop.index == 1 and function('is_front_page') %}
+        <section class="travel-categories-module">
+            <div class="flex mx-auto px-0 py-0 w-full">
+                {{ include('modules/travel-categories.twig', ignore_missing = true) }}
+            </div>
+        </section>
+    {% endif %}
 {% endfor %}

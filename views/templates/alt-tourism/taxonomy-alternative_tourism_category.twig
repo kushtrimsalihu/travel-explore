@@ -1,0 +1,46 @@
+{% extends "base.twig" %}
+{% set breadcrumbs_included = true %}
+
+{% block content %}
+{% if current_category.image %}
+    <div class="h-60 bg-cover bg-center" style="background-image: url('{{ current_category.image }}');">
+        <header class="text-white-100 text-center py-12 bg-black bg-opacity-50 h-60">
+            <h1 class="text-4xl font-bold animate__animated animate__fadeIn animate__delay-2s">{{ title }}</h1>
+            {% if term_description %}
+                <div class="text-base md:text-xl mt-4 max-w-screen-xl line-clamp-4 mx-auto animate__animated animate__fadeInUp animate__delay-2s">{{ term_description }}</div>
+            {% endif %}
+        </header>
+    </div>
+{% else %}
+    <div class="h-60 bg-cover bg-center" style="background-color: #ccc;">
+        <header class="text-white text-center py-12 bg-black bg-opacity-50 h-60">
+            <h1 class="text-4xl font-bold animate__animated animate__fadeIn animate__delay-2s">{{ title }}</h1>
+            {% if term_description %}
+                <div class="text-base md:text-xl mt-4 max-w-screen-xl line-clamp-4 mx-auto animate__animated animate__fadeInUp animate__delay-2s">{{ term_description }}</div>
+            {% endif %}
+        </header>
+    </div>
+{% endif %}
+
+
+{% if posts %}
+    <div class="py-4">
+
+        {% include 'breadcrumbs.twig' %}
+        {% for post in posts %}
+            <article>
+                <div class="flex justify-center items-center animate__animated animate__fadeInUp animate__delay-3s">
+                    {% for module in post.meta('flexible_content') %}
+                    <div class="flex mx-auto px-4 py-4 2xl:px-0 max-w-screen-lg">
+                        {% include "modules/#{ module.acf_fc_layout }.twig" with { data: module } %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+    <div class="pagination flex">
+        {{ function('the_posts_pagination') }}
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,96 @@
+{% if data.display_mode == 'latest_c' %}
+
+{% set all_latest_posts = get_latest_posts(data.latest_post) %}
+
+{% for post_type, posts in all_latest_posts %}
+    <h2 class="text-2xl font-bold mb-6 line-clamp-1">{{ post_type }}</h2>
+    {% if posts %}
+        <section class="carousel-module w-full">
+            <div class="swiper-container carousel w-full h-full">
+                <div class="swiper-wrapper flex">
+                    {% for post in posts %}
+                        <div class="swiper-slide carousel-slide" style="background-image: url('{{ post.post_thumbnail_url }}');">
+                            <div class="carousel-overlay absolute inset-0 bg-black bg-opacity-50"></div>
+                            <div class="carousel-content text-center text-white-99 flex flex-col justify-center items-center relative">
+                                <h2 class="carousel-title text-5xl lg:text-6xl xl:text-7xl px-5 italic font-bold mb-4 text-white-99">{{ post.post_title }}</h2>
+                                <p class="carousel-excerpt text-lg lg:text-xl mb-6 px-20 text-white-99 lg:px-20 line-clamp-4">{{ post.post_content }}</p>
+                                <a href="{{ post.guid }}" class="carousel-button py-3 px-6 transition transform hover:scale-105 hover:shadow-2xl bg-transparent backdrop-blur-md text-white-100 uppercase rounded-md text-center border border-white">Discover</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </section>
+    {% endif %}
+{% endfor %}
+
+{% elseif data.display_mode == 'latest'%}
+
+{% set all_latest_posts = get_latest_posts(data.latest_post) %}
+
+<div class="flex mx-auto px-4  2xl:px-0 max-w-screen-lg">
+    {% for post_type, posts in all_latest_posts %}
+        <div class="px-4 md:px-8 lg:px-12">
+            <div class="md:col-span-2 col-span-1 lg:col-span-3 xl:col-span-3 pt-12 pb-5 cards-content mb-2.5">
+                <h2 class="text-3xl text-light-p10">Latest User Journeys</h2>
+                <p class="text-light-p10 mt-4 ">Explore inspiring travel stories from our community.</p>
+            </div>
+            <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for post in posts %}
+                    <li class="bg-white rounded shadow-md transform transition-transform duration-300 hover:scale-105">
+                        <a href="{{ post.guid }}">
+                            {% if post.post_thumbnail_url %}
+                                <img src="{{ post.post_thumbnail_url }}"  class="w-full h-48 object-cover rounded-t transform transition-transform duration-300 hover:scale-110">
+                            {% else %}
+                                <img src="{{ asset('assets/images/default.jpg') }}" alt="Default Image" class="w-full h-48 object-cover rounded-t transform transition-transform duration-300 hover:scale-110">
+                            {% endif %}
+                        </a>
+                        <div class="p-4">
+                            <a href="{{ post.guid }}">
+                                <h3 class="text-xl font-semibold">{{ post.post_title }}</h3>
+                            </a>
+                            <p class="text-sm text-gray-600">Published on: {{ post.post_date|date("F j, Y") }}</p>
+                            <a href="{{ post.guid }}" class="lineHeight-20 text-light-p30 hover:underline">Read More</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% elseif data.display_mode == 'filter_by_category' %}
+
+{% set all_modules_categories_and_posts = get_categories_and_posts() %}
+
+<div class="flex flex-col items-center w-full">
+    {% for module in all_modules_categories_and_posts %}
+        
+            {% for category_item in module.categories_and_posts %}
+                <div class="w-full">
+                    <h2 class="text-2xl font-bold mb-4 pt-4 text-center">{{ category_item.category }}</h2>
+                    {% for item in category_item.posts %}
+                        {% set post = item.post %}
+                        {% for data in item.flexible_content %}
+                            <div class="w-full px-4 mb-8">
+                                <section class="{{ data.acf_fc_layout ~ '-module' }}">
+                                    <div class="flex mx-auto px-4  2xl:px-0 max-w-screen-lg">
+                                        {{ include("modules/#{ data.acf_fc_layout|e }.twig", { data: data }, ignore_missing = true) }}
+                                    </div>
+                                </section>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        
+    {% endfor %}
+</div>
+
+{% elseif data.display_mode == 'filter_by_author' %}
+	<h3>Filter by Author</h3>
+
+{% endif %}

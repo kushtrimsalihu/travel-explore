@@ -15,11 +15,11 @@
 
 <header class="main">
 	<div class="navbar-top w-full h-11 flex flex-row items-center lg:justify-center justify-center gap-7 pl-7 bg-light-p40">
-		<div class="phone-number flex flex-row items-center justify-center gap-2">
+		<div class="phone-number flex flex-row items-center justify-center gap-2 animate__animated animate__fadeInDown animate__delay-3s">
 			<img src="{{ asset('/assets/images/phone.png') }}" alt="Logo" class="w-4" alt="">
 			<a href="#" class="text-white-100 lg:text-sm text-xs">25210 38111</a>
 		</div>
-		<div class="email flex flex-row items-center justify-center gap-2">
+		<div class="email flex flex-row items-center justify-center gap-2 animate__animated animate__fadeInDown animate__delay-3s">
 			<img src="{{ asset('/assets/images/mail.png') }}" alt="Logo" class="w-4" alt="">
 			<a href="#" class="text-white-100 lg:text-sm text-xs">info@travelexplore.gr</a>
 		</div>
@@ -42,8 +42,11 @@
 
 			<div class="right-side lg:w-auto w-full flex lg:flex-row flex-row lg:justify-between justify-center lg:gap-3 gap-5">
 				<div class="buttons lg:inline-flex flex items-center justify-center">
-					<a href="#" class="font-roboto text-light-p40 font-medium lg:text-sm text-sm border border-light-p40 lg:px-6 lg:py-2.5 px-6 py-2.5 rounded-full">Login</a>
-					<a href="#" id="signup" class="font-roboto text-nowrap text-white-100 font-medium lg:text-sm text-sm lg:px-6 lg:py-2.5 px-6 py-2.5 rounded-full bg-light-p40 ml-3 lg:ml-3">Sign Up</a>
+				
+				<a href="{{ home_url() }}/login" id="loginButton" class="font-roboto text-light-p40 font-medium lg:text-sm text-sm border border-light-p40 lg:px-6 lg:py-2.5 px-6 py-2.5 rounded-full {{ function ('is_user_logged_in') ? 'invisible' : '' }}">Login</a>
+				<a href="{{ home_url() }}/registration-page" id="signupButton" class="font-roboto text-nowrap text-white-100 font-medium lg:text-sm text-sm lg:px-6 lg:py-2.5 px-6 py-2.5 rounded-full bg-light-p40 ml-3 lg:ml-3 {{ function ('is_user_logged_in') ? 'invisible' : '' }}">Sign Up</a>
+
+				
 				</div>
 
 				<div class="search lg:flex hidden items-center justify-center" id="search-Icon">

@@ -1,21 +1,34 @@
 <!DOCTYPE html>
 <html {{ site.language_attributes }}>
-	{% include "head.twig" %}
-	<body class="{{ body_class }}">
-		{% include "HeaderNavigation.twig" %}
-		{{ function('wp_body_open') }}
+    {% include "head.twig" %}
+    <body class="{{ body_class }}">
+        {% include "HeaderNavigation.twig" %}
+        {{ function('wp_body_open') }}
 
-		
-			{% if is_404 %}
-				{% include "templates/errors/404.twig" %}
-			{% endif %}
-			{% block content %}
-				{% include 'modules.twig' %}
-			{% endblock %}
-		
+        {% if not breadcrumbs_included and not function('is_front_page') %}
+            {% include 'breadcrumbs.twig' %}
+        {% endif %}
 
-		{% include 'footer.twig' %}
-		{{ function('wp_footer') }}
-		{% do action('get_footer') %}
-	</body>
+        {% include 'cookies.twig' %}
+
+        {% include 'loader.twig' %}
+
+        {% if function('is_front_page') %}
+            {% include 'winning-popup.twig' %}
+            {% include 'subscription_form.twig' %}
+        {% endif %}
+
+        {% include 'inform-users-modal.twig' %}
+
+        {% if is_404 %}
+            {% include "templates/errors/404.twig" %}
+        {% endif %}
+        {% block content %}
+            {% include 'modules.twig' %}
+        {% endblock %}
+
+        {% include 'footer.twig' %}
+        {{ function('wp_footer') }}
+        {% do action('get_footer') %}
+    </body>
 </html>

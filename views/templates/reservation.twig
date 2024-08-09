@@ -1,0 +1,52 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<section class="reservation-module flex flex-wrap gap-6 w-full mb-12 animate__animated animate__fadeIn animate__delay-2s">
+    <div class="flex flex-col md:flex-row bg-white border-light-nv80 shadow-2xl overflow-hidden w-full mx-4 md:mx-0">
+        <div class="relative flex-none w-full md:w-1/2 h-auto">
+            <img src="{{ card_image_url }}" alt="{{ card_title }}" class="w-full h-full object-cover">
+        </div>
+        <div class="card-content p-8 md:p-12 flex-grow flex flex-col justify-between w-full md:w-1/2">
+            <h2 class="text-2xl md:w-full font-semibold mb-2 text-light-p40 text-center">{{ card_title }}</h2>
+            <div class="text-gray-500 mb-2 px-2 text-center">from:</div>
+            <div id="price" data-base-price="{{ card_price }}" class="text-4xl font-bold text-gray-800 mb-5 text-center">{{ card_price }}</div>
+            <div class="lineHeight-32 mb-4 text-center">{{ card_description }}</div>
+            <form action="{{ site.url }}/wp-admin/admin-post.php" method="post" class="space-y-4" id="reservation-form">
+                <input type="hidden" name="action" value="submit_reservation">
+                <input type="hidden" name="card_image_url" value="{{ card_image_url }}">
+                <input type="hidden" name="card_title" value="{{ card_title }}">
+                <input type="hidden" name="card_duration" value="{{ card_duration }}">
+                <input type="hidden" name="card_description" value="{{ card_description }}">
+                <input type="hidden" name="card_price" id="card_price" value="{{ card_price }}">
+                <input type="hidden" name="total_price" id="total_price" value="">
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+                    <div class="relative mb-4 col-span-2 lg:col-span-1">
+                        <input type="text" id="name" name="name" required class="input-field w-full border-b border-gray-300 focus:outline-none focus:border-light-p40 p-2" placeholder="Name">
+                    </div>
+                    <div class="relative mb-4 col-span-2 lg:col-span-1">
+                        <input type="email" id="email" name="email" required class="input-field w-full border-b border-gray-300 focus:outline-none focus:border-light-p40 p-2" placeholder="Email">
+                    </div>
+                    <div class="relative mb-4 col-span-2 lg:col-span-1">
+                        <input type="tel" id="phone" name="phone" required class="input-field w-full border-b border-gray-300 focus:outline-none focus:border-light-p40 p-2" placeholder="Phone (please add prefix)">
+                    </div>
+                    <div class="relative mb-4 col-span-2 lg:col-span-1">
+                        <input type="date" id="date" name="date" required class="input-field w-full border-b border-gray-300 focus:outline-none focus:border-light-p40 p-2">
+                    </div>
+                    <div class="relative mb-4"><p>Number of persons:</p>
+                        <input type="number" id="persons" name="persons" min="1" value="1" required class="input-field w-full border-b border-gray-300 focus:outline-none focus:border-light-p40 p-2" placeholder="Person" oninput="updateTotalPrice()">
+                    </div>
+                    <div class="relative mb-4 col-span-2">
+                        <textarea id="comments" name="comments" class="textarea-field w-full border-b border-gray-300 focus:outline-none focus:border-light-p40" placeholder="Comments"></textarea>
+                    </div>
+                </div>
+                <div id="total-price-display" class="text-xl font-bold text-gray-800 mb-5 text-center">{{ card_price }}</div>
+                <div class="flex justify-center">
+                    <button type="submit" class="text-nowrap btn-submit border border-light-p40 font-semibold bg-light-p40 hover:text-light-p40 hover:bg-transparent text-white-100 py-2.5 px-14 rounded-sm text-base md:text-lg">Submit Reservation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.twig" %}
+{% set breadcrumbs_included = true %}
+
+{% block content %}
+{% include 'breadcrumbs.twig' %}
+<h1 class="text-center text-brown-750 animate__animated animate__fadeInDown animate__delay-2s"> {{title}}</h1>
+<div class="flex mx-auto px-4 py-4 2xl:px-0 max-w-screen-lg animate__animated animate__fadeIn animate__delay-2s">
+
+    <div class="categories grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        {% for category in categories %}
+            <div class="category-card bg-white border border-light-nv80 shadow-lg rounded-lg overflow-hidden">
+                {% if category.term.image %}
+                    <a href="{{ category.term.link }}">  <img class="w-full h-48 object-cover" src="{{ category.term.image }}" alt="{{ category.term.name }}"></a>
+                {% endif %}
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold"><a href="{{ category.term.link }}">{{ category.term.name }}</a></h2>
+                    <div class="text-gray-700 mt-2 line-clamp-4">
+                        {{ category.term.description }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

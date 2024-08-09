@@ -1,0 +1,97 @@
+{% if post.password_required %}
+    <p>{{ __('This post is password protected. Enter the password to view any comments.', 'textdomain') }}</p>
+{% else %}
+    <div id="comments" class="comments-area w-full md:w-3/4 mx-auto p-4">
+        <hr class="mb-8">
+
+        {% if not function('is_user_logged_in') %}
+            <h1 class="text-2xl font-medium mb-4">Comments</h1>
+        {% endif %}
+
+        {% if post.comments is empty %}
+            <p class="">There are no comments in this post</p>
+        {% endif %}
+
+        {% if function('is_user_logged_in') %}
+            <h1 class="text-2xl font-medium mb-4">Leave a comment</h1>
+            <form action="{{ site.url }}/wp-comments-post.php" method="post" id="commentform" class="flex flex-col gap-4">
+                <textarea name="comment" id="comment" placeholder="Leave a comment" required class="w-full lg:w-2/3 h-20 p-3 border border-gray-300 rounded-xl"></textarea>
+                <div class="flex justify-end w-full lg:w-2/3">
+                    <button type="submit" class="w-fit text-sm py-2 px-4 bg-light-p40 hover:bg-light-s30 text-white-100 rounded-full">Add Comment</button>
+                </div>
+                {{ function('comment_id_fields') }}
+                {{ function('wp_nonce_field', 'comment_form') }}
+            </form>
+        {% endif %}
+
+
+        {% if post.comments %}
+            <div class="comment-list flex flex-col gap-8 pt-8 pb-12">
+                {% set sorted_comments = post.comments|sort((a, b) => a.comment_date_gmt < b.comment_date_gmt ? 1 : -1) %}
+                {% for comment in sorted_comments %}
+                    {% if comment.comment_approved == 1 %}
+                        <div class="comment flex flex-col gap-2" id="comment-{{ comment.ID }}">
+                            <div class="flex flex-row gap-2 items-center">
+                                <img src="{{ profile_image }}" class="avatar w-6 h-6 rounded-full">
+                                <span class="comment-author text-md text-gray-700">{{ comment.author.name }}</span>
+                                <span class="comment-meta text-sm text-gray-500">
+                                    {% set comment_timestamp = comment.comment_date_gmt|date('U') %}
+                                    {% set current_timestamp = 'now'|date('U') %}
+                                    {{ function('human_time_diff', comment_timestamp, current_timestamp, 'timestamp') }} ago
+                                </span>
+                        </div>
+                            <h2 class="comment-content border border-gray-400 py-4 px-3 w-full lg:w-2/3 rounded-xl text-grey-650 shadow-md">{{ comment.content }}</h2>
+                            <div class="w-full lg:w-2/3 px-3 flex flex-row justify-between items-center">
+                                {% if function('is_user_logged_in') %}
+                                    <span class="text-xs text-grey-600 flex flex-row gap-1 cursor-pointer reply-toggle" data-comment-id="{{ comment.ID }}"><img src="{{ asset('/assets/images/reply-icon.png') }}" class="w-4" />Reply</span>
+                                {% endif %}
+                                {% if comment.children %}
+                                    <span class="text-sm text-grey-600 font-semibold show-replies cursor-pointer" data-comment-id="{{ comment.ID }}">Show replies</span>
+                                {% endif %}
+                            </div>
+                            {% if function('is_user_logged_in') %}
+                                <form action="{{ site.url }}/wp-comments-post.php" method="post" id="reply-form-{{ comment.ID }}" class="comment-form flex flex-col gap-4 reply-form hidden ml-4">
+                                    <textarea name="comment" id="reply-comment-{{ comment.ID }}" placeholder="Reply to {{ comment.author.name }}" required class="w-full lg:w-2/3 h-20 p-3 border border-gray-300 rounded-xl"></textarea>
+                                    <div class="flex justify-end w-full lg:w-2/3 gap-2">
+                                        <button type="button" class="w-fit text-xs py-2 px-4 border border-light-p40 text-light-p40 rounded-full cancel-reply">Cancel</button>
+                                        <button type="submit" class="w-fit text-xs py-2 px-4 bg-light-p40 hover:bg-light-s30 text-white-100 rounded-full">Add Comment</button>
+                                    </div>
+                                    {{ function('comment_id_fields') }}
+                                    {{ function('wp_nonce_field', 'comment_form') }}
+                                    <input type="hidden" name="comment_parent" value="{{ comment.ID }}">
+                                </form>
+                            {% endif %}
+
+                            {% if comment.children %}
+                                <div class="w-full lg:w-2/3 flex flex-col items-end mt-2 gap-4 replies-container hidden" id="replies-{{ comment.ID }}">
+                                    {% for reply in comment.children %}
+                                        {% if reply.comment_approved == 1 %}
+                                            <div class="comment flex flex-col gap-2 w-full pl-6 md:pl-0 md:w-3/4" id="comment-{{ reply.ID }}">
+                                                <div class="flex flex-row gap-2 items-center line-clamp-1 text-nowrap">
+                                                    <img src="{{ profile_image }}" class="avatar w-6 h-6 rounded-full">
+                                                    <span class="comment-author text-sm text-gray-700 text-ellipsis overflow-hidden">Reply from: {{ reply.author.name }}</span>
+                                                    <span class="comment-meta text-sm text-gray-500">
+                                                        {% set comment_timestamp = reply.comment_date_gmt|date('U') %}
+                                                        {% set current_timestamp = 'now'|date('U') %}
+                                                        {{ function('human_time_diff', comment_timestamp, current_timestamp, 'timestamp') }} ago
+                                                    </span>
+                                                </div>
+                                                <h2 class="comment-content border border-gray-400 py-3 px-3 w-full rounded-xl text-grey-650 shadow-md">{{ reply.content }}</h2>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {{ function('the_comments_navigation') }}
+        {% endif %}
+    </div>
+{% endif %}
+
+<script type="text/javascript">
+    var currentUserId = {{ current_user_id }};
+    var postAuthorId = {{ post_author_id }};
+</script>
