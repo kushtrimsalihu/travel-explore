@@ -1573,10 +1573,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(255 251 255 / var(--tw-text-opacity));
 }
-.text-blue-500{
-  --tw-text-opacity: 1;
-  color: rgb(128 176 222 / var(--tw-text-opacity));
-}
 .underline{
   text-decoration-line: underline;
 }
