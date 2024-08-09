@@ -30,9 +30,13 @@
 
 {% set all_latest_posts = get_latest_posts(data.latest_post) %}
 
-<div class="flex mx-auto px-4 pb-12 2xl:px-0 max-w-screen-lg">
+<div class="flex mx-auto px-4  2xl:px-0 max-w-screen-lg">
     {% for post_type, posts in all_latest_posts %}
         <div class="px-4 md:px-8 lg:px-12">
+            <div class="md:col-span-2 col-span-1 lg:col-span-3 xl:col-span-3 pt-12 pb-5 cards-content mb-2.5">
+                <h2 class="text-3xl text-light-p10">Latest User Journeys</h2>
+                <p class="text-light-p10 mt-4 ">Explore inspiring travel stories from our community.</p>
+            </div>
             <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% for post in posts %}
                     <li class="bg-white rounded shadow-md transform transition-transform duration-300 hover:scale-105">
